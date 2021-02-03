@@ -1,0 +1,65 @@
+header {
+  background-color: #cce4ff4d;
+  background-image: url(../img/cabecera.png);
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  margin-bottom: 1em;
+  padding-top: 0x;
+  height: 10em;
+}
+
+.datepicker {
+	z-index: 2051 !important;
+}
+.form-control.datepicker {
+	position:unset
+}
+
+body { 
+	background-color: #cce4ff4d; 
+} 
+
+h1, h2, h3, h4 { 
+	text-align: center; 
+} 
+
+#menu {
+	padding: 10px;
+	border-bottom: 1px solid #cccccc;
+}
+
+div.botonera {
+	padding-bottom: 10px;
+}
+
+.mainBody { 
+	padding: 5px; 
+/* 	border: 1px solid #555555;  */
+} 
+
+.disclaimer { 
+	text-align: center; 
+	border-top: 1px solid #cccccc; 
+	margin-top: 40px; 
+	font-size: smaller; 
+} 
+
+label.error {
+	float: none;
+	color: red;
+	padding-left: .5em;
+	vertical-align: middle;
+	font-size: 12px;
+}
+
+.modal-header {
+	background-color: #446E9B;
+}
+
+.modal-header .modal-title {
+	color: #FFFFFF;
+}
+
+.form-group .col-form-label {
+	font-weight: bold;	
+}

@@ -1,0 +1,19 @@
+<div class="container">
+	<div class="row">
+	</div>
+	<div class="col-md-offset-1 col-md-10">
+		{{#each menu}}
+			<div class="btn-group">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{descripcion}}</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						{{#each menus}}
+							<c:url var="pagina" value="{{pagina}}" />
+							<a class="dropdown-item" href="{{context}}{{pagina}}">{{descripcion}}</a>
+						{{/each}}
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>
