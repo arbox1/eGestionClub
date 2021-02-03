@@ -76,7 +76,7 @@ var ventana=null;
 		
 		/* */
 		"obtener": function(url, data, callback) {
-/*			Date.prototype.toJSON = function(){ return moment(this).format('DD/mm/yyyy'); }*/
+/*			Date.prototype.toJSON = function(){ console.log(this);return moment(this).format('DD/mm/yyyy'); }*/
 		    $.ajax({
 		    	type : "POST",
 				contentType : "application/json",
@@ -93,18 +93,18 @@ var ventana=null;
 //		        			'       <span class="fa fa-exclamation-circle text-danger fa-5x"></span> ' +
 //		        			' 	</div> ' +
 //		        			' 	<div class="col-xs-8 text-justify"> ' +
-//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicaci√≥n podr√≠a no ' +
+//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicaciÛn podrÌa no ' +
 //		        			' 		funcionar correctamente. El mensaje de error ha sido el siguiente:</p> ' +
 //		        			' 		<ul> ' +
 //		        			' 		{{#each mensajes}} ' +
 //		        			' 			<li>{{mensaje}}</li> ' +
 //		        			' 		{{/each}} ' +
 //		        			' 		</ul> ' +
-//		        			' 		<p>Por favor, contacte con el soporte t√©cnico.</p> ' +
+//		        			' 		<p>Por favor, contacte con el soporte tÈcnico.</p> ' +
 //		        			' 	</div> ' +
 //		        			' </div> '	
 //		        	);
-		        	bootbox.alert(html("ERROR: ", e));
+		        	bootbox.alert($.toHtml("ERROR: ", e));
 		        },
 		       done: function(e){
 		    	   console.log("DONE");
@@ -149,9 +149,9 @@ var ventana=null;
 		/* */
 		"createButton": function(options) {
 			var settings = $.extend({}, {
-				libreria: 'fa', /* librer√≠a de iconos. Puede ser 'glyphicon' o 'fa' */
-				prefijo: 'fa', /* prefijo de los nombres de iconos que usa la librer√≠a (por defecto igual que la libreria) */
-				icono: '', /* nombre icono tras el nombre de la librer√≠a */
+				libreria: 'fa', /* librerÌa de iconos. Puede ser 'glyphicon' o 'fa' */
+				prefijo: 'fa', /* prefijo de los nombres de iconos que usa la librerÌa (por defecto igual que la libreria) */
+				icono: '', /* nombre icono tras el nombre de la librerÌa */
 				texto: '',
 				clases: '',
 				title: '',
@@ -290,9 +290,9 @@ var ventana=null;
     		        } else if($(this).hasClass('porcentaje')) {
     		            valor = valor + '%';
     		        }else if($(this).hasClass('sino')) {
-    		        	valor = valor == 'S' ? 'S√≠' : 'No';
+    		        	valor = valor == 'S' ? 'SÌ' : 'No';
 	    	    	}else if($(this).hasClass('truefalse')) {
-			        	valor = valor == 'true' ? 'S√≠' : 'No';
+			        	valor = valor == 'true' ? 'SÌ' : 'No';
 			        }else if($(this).hasClass('importe')) {
     		        	if(valor==0 || (valor!=null && valor!='')) {
 							var $an = $('<span>').autoNumeric({aSep: '.', aDec: ',', aSign: '', pSign: 's', vMin: '-999999999.99'});
@@ -345,7 +345,7 @@ var ventana=null;
     						'title': value,
     					});
     					
-    					//si el bot√≥n tenia btn-block, pasar la clase al tooltip-wrapper
+    					//si el botÛn tenia btn-block, pasar la clase al tooltip-wrapper
     					if($button.is('.btn-block')) {
     						wrapper.addClass('btn-block');
     					}
@@ -367,10 +367,10 @@ var ventana=null;
     				var value = $.nvl(settings.datos[prop]);
     				if (value instanceof Object){
     					for(res in value) {
-    						$(document).procesaDato(value[res], res, prop+'_');
+    						$(this).procesaDato(value[res], res, prop+'_');
     					}
     				} else {
-    					$(document).procesaDato(value, prop, '');
+    					$(this).procesaDato(value, prop, '');
     				}
     			}
     			for(prop in settings.datos) {
@@ -498,7 +498,7 @@ var ventana=null;
 						        	if(button)
 						        		button.button('reset');
 						        	
-						        	//Si la petici√≥n es correcta, guarda en elemento una bandera que se comprobar√° luego con la funci√≥n "checkUpdated"
+						        	//Si la peticiÛn es correcta, guarda en elemento una bandera que se comprobar· luego con la funciÛn "checkUpdated"
 						        	if((data.ok && data.ok==='S') || (data.correcto && data.correcto==='S')) {
 						        		element.data('updated', 'S');
 						        	}
@@ -589,14 +589,14 @@ var ventana=null;
 //					alwaysShow: true
 //				});
 				
-				// prepara un input para formatear n√∫meros autom√°ticamente
+				// prepara un input para formatear n˙meros autom·ticamente
 				$('input.autonumeric', this).each(function() {
 					return $(this).each(function() {
 						$(this).autoNumeric({aSep: '.', aDec: ',', vMin: '-999999999.99'}).on('change blur', function(){
 							var fvElement = $(this).closest(".validation");
 							if(fvElement.length > 0) {
 								var fv = fvElement.data('formValidation');
-								if(fv.getFieldElements($(this).attr('name')) != null) //TODO no revalidar si no est√° en el formulario
+								if(fv.getFieldElements($(this).attr('name')) != null) //TODO no revalidar si no est· en el formulario
 									fv.revalidateField($(this));
 							}
 						});
@@ -625,7 +625,7 @@ var ventana=null;
 				});
 				
 				// un boton con data-form-limpiar limpiar el formulario asociado, ya sea indicado por el atributo
-				// data-form-limpiar, o bien el formulario en donde est√° incluido el bot√≥n.
+				// data-form-limpiar, o bien el formulario en donde est· incluido el botÛn.
 				$('button[data-limpiar]', this).each(function() {
 					var $this = $(this); 
 					var form = $this.data('limpiar') ? $($this.data('limpiar')) : $(this).closest('form'); 
@@ -670,6 +670,10 @@ var ventana=null;
 		
 		$('table.extendida').DataTable({
 		});
+		
+		$.validator.addMethod("fechaValida", function(value, element) {
+        	return this.optional(element) || moment(value,"DD/MM/YYYY").isValid();
+    	}, "Por favor introduce una fecha v&aacute;lida con el formato DD/MM/YYYY");
 		
 		$.extend($.validator.messages, {
 		  required: "Este campo es obligatorio.",

@@ -248,7 +248,7 @@
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-offset-1 col-md-11">
+			<div class="col-md-12">
 				<div class="row botonera">
 					<div class="col-md-12" >
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Socio</button>

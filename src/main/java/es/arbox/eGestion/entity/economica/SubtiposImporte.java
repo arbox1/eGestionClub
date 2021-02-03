@@ -70,4 +70,8 @@ public class SubtiposImporte extends BaseEntidad{
 	public void setTipoImporte(TiposImporte tipoImporte) {
 		this.tipoImporte = tipoImporte;
 	}
+	
+	public String getDescripcionLarga() {
+		return String.format("%2$s - %1$s", descripcion, tipoImporte.getDescripcion());
+	}
 }
