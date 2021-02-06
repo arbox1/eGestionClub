@@ -34,12 +34,24 @@ public class IngresosGastosController extends BaseController {
 	IngresosGastosService ingresosGastosService;
 	
 	@GetMapping("/")
-	public String listaSocios(Model model) {
-		model.addAttribute("ingresos", ingresosGastosService.obtenerTodos(IngresosGastos.class));
-		model.addAttribute("tipos", ingresosGastosService.obtenerTodos(SubtiposImporte.class));
+	public String listaSocios(Model model, @ModelAttribute("buscador") IngresosGastos ingresoGasto) {
+		model.addAttribute("ingresos", ingresosGastosService.obtenerTodosOrden(IngresosGastos.class, " fecha desc, descripcion "));
+		model.addAttribute("tipos", ingresosGastosService.obtenerTodosOrden(SubtiposImporte.class, " tipoImporte.descripcion, descripcion"));
 		model.addAttribute("nuevo", new IngresosGastos());
+		model.addAttribute("buscador", ingresoGasto == null ? new IngresosGastos() : ingresoGasto);
 		return "/economica/ingresosGastos";
 	}
+	
+	@PostMapping("/buscar")
+    public String buscar(Model model, @ModelAttribute("buscador") IngresosGastos ingresoGasto, RedirectAttributes redirectAttrs) {
+		
+		model.addAttribute("ingresos", ingresosGastosService.getBusqueda(ingresoGasto));
+		model.addAttribute("tipos", ingresosGastosService.obtenerTodosOrden(SubtiposImporte.class, " tipoImporte.descripcion, descripcion"));
+		model.addAttribute("nuevo", new IngresosGastos());
+		model.addAttribute("buscador", ingresoGasto);
+		
+		return "/economica/ingresosGastos";
+    }
 	
 	@PostMapping("/guardar")
     public String guardar(@ModelAttribute("nuevo") IngresosGastos ingresoGasto, RedirectAttributes redirectAttrs) {

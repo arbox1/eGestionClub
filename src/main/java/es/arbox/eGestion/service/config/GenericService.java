@@ -2,6 +2,9 @@ package es.arbox.eGestion.service.config;
 
 import java.util.List;
 
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface GenericService {
@@ -14,5 +17,9 @@ public interface GenericService {
 	
 	public <T> List<T> obtenerTodos(Class<T> clazz);
 	
+	public <T> List<T> obtenerTodosOrden(Class<T> clazz, String orden);
+	
 	public String serializa(Object o) throws JsonProcessingException;
+
+	public <T> List<T> obtenerFiltros(Class<T> clazz, List<Predicate> where, List<Order> order);
 }

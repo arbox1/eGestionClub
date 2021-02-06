@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
-<title>Gastos</title>
+<title>Acceso eGestion</title>
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
@@ -14,7 +14,7 @@
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
-		<div class="row">
+		<div class="row buscador">
 			<div class="col-sm-12">
 				<form:form action="logar2" cssClass="form-horizontal validation" modelAttribute="usuario" id="form">
 					<div class="form-group row">
@@ -31,7 +31,7 @@
 					</div>
 					<div class="form-group row">
 						<div class="col-sm-10">
-							<button type="button" class="btn btn-primary" data-submit="#form">Aceptar</button>
+							<button type="button" class="btn btn-primary" data-submit=".buscador form">Aceptar</button>
 						</div>
 					</div>
 				</form:form>

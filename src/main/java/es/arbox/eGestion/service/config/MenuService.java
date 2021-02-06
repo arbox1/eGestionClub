@@ -4,6 +4,6 @@ import java.util.List;
 
 import es.arbox.eGestion.entity.config.MenuEstructura;
 
-public interface MenuService {
+public interface MenuService extends GenericService {
 	public List<MenuEstructura> getMenuEstructura(Integer idTipoMenu);
 }

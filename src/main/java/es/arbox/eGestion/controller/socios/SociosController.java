@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
@@ -34,8 +35,8 @@ import es.arbox.eGestion.service.socios.SociosService;
 
 @Controller
 @RequestMapping("/socios/socios")
-public class SociosController {
-
+public class SociosController extends BaseController {
+	
 	@Autowired
 	private SociosService sociosService;
 	

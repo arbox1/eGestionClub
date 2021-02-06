@@ -93,14 +93,14 @@ var ventana=null;
 //		        			'       <span class="fa fa-exclamation-circle text-danger fa-5x"></span> ' +
 //		        			' 	</div> ' +
 //		        			' 	<div class="col-xs-8 text-justify"> ' +
-//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicación podría no ' +
+//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicaciï¿½n podrï¿½a no ' +
 //		        			' 		funcionar correctamente. El mensaje de error ha sido el siguiente:</p> ' +
 //		        			' 		<ul> ' +
 //		        			' 		{{#each mensajes}} ' +
 //		        			' 			<li>{{mensaje}}</li> ' +
 //		        			' 		{{/each}} ' +
 //		        			' 		</ul> ' +
-//		        			' 		<p>Por favor, contacte con el soporte técnico.</p> ' +
+//		        			' 		<p>Por favor, contacte con el soporte tï¿½cnico.</p> ' +
 //		        			' 	</div> ' +
 //		        			' </div> '	
 //		        	);
@@ -149,9 +149,9 @@ var ventana=null;
 		/* */
 		"createButton": function(options) {
 			var settings = $.extend({}, {
-				libreria: 'fa', /* librería de iconos. Puede ser 'glyphicon' o 'fa' */
-				prefijo: 'fa', /* prefijo de los nombres de iconos que usa la librería (por defecto igual que la libreria) */
-				icono: '', /* nombre icono tras el nombre de la librería */
+				libreria: 'fa', /* librerï¿½a de iconos. Puede ser 'glyphicon' o 'fa' */
+				prefijo: 'fa', /* prefijo de los nombres de iconos que usa la librerï¿½a (por defecto igual que la libreria) */
+				icono: '', /* nombre icono tras el nombre de la librerï¿½a */
 				texto: '',
 				clases: '',
 				title: '',
@@ -290,9 +290,9 @@ var ventana=null;
     		        } else if($(this).hasClass('porcentaje')) {
     		            valor = valor + '%';
     		        }else if($(this).hasClass('sino')) {
-    		        	valor = valor == 'S' ? 'Sí' : 'No';
+    		        	valor = valor == 'S' ? 'Sï¿½' : 'No';
 	    	    	}else if($(this).hasClass('truefalse')) {
-			        	valor = valor == 'true' ? 'Sí' : 'No';
+			        	valor = valor == 'true' ? 'Sï¿½' : 'No';
 			        }else if($(this).hasClass('importe')) {
     		        	if(valor==0 || (valor!=null && valor!='')) {
 							var $an = $('<span>').autoNumeric({aSep: '.', aDec: ',', aSign: '', pSign: 's', vMin: '-999999999.99'});
@@ -345,7 +345,7 @@ var ventana=null;
     						'title': value,
     					});
     					
-    					//si el botón tenia btn-block, pasar la clase al tooltip-wrapper
+    					//si el botï¿½n tenia btn-block, pasar la clase al tooltip-wrapper
     					if($button.is('.btn-block')) {
     						wrapper.addClass('btn-block');
     					}
@@ -498,7 +498,7 @@ var ventana=null;
 						        	if(button)
 						        		button.button('reset');
 						        	
-						        	//Si la petición es correcta, guarda en elemento una bandera que se comprobará luego con la función "checkUpdated"
+						        	//Si la peticiï¿½n es correcta, guarda en elemento una bandera que se comprobarï¿½ luego con la funciï¿½n "checkUpdated"
 						        	if((data.ok && data.ok==='S') || (data.correcto && data.correcto==='S')) {
 						        		element.data('updated', 'S');
 						        	}
@@ -589,14 +589,14 @@ var ventana=null;
 //					alwaysShow: true
 //				});
 				
-				// prepara un input para formatear números automáticamente
+				// prepara un input para formatear nï¿½meros automï¿½ticamente
 				$('input.autonumeric', this).each(function() {
 					return $(this).each(function() {
 						$(this).autoNumeric({aSep: '.', aDec: ',', vMin: '-999999999.99'}).on('change blur', function(){
 							var fvElement = $(this).closest(".validation");
 							if(fvElement.length > 0) {
 								var fv = fvElement.data('formValidation');
-								if(fv.getFieldElements($(this).attr('name')) != null) //TODO no revalidar si no está en el formulario
+								if(fv.getFieldElements($(this).attr('name')) != null) //TODO no revalidar si no estï¿½ en el formulario
 									fv.revalidateField($(this));
 							}
 						});
@@ -625,7 +625,7 @@ var ventana=null;
 				});
 				
 				// un boton con data-form-limpiar limpiar el formulario asociado, ya sea indicado por el atributo
-				// data-form-limpiar, o bien el formulario en donde está incluido el botón.
+				// data-form-limpiar, o bien el formulario en donde estï¿½ incluido el botï¿½n.
 				$('button[data-limpiar]', this).each(function() {
 					var $this = $(this); 
 					var form = $this.data('limpiar') ? $($this.data('limpiar')) : $(this).closest('form'); 
@@ -660,15 +660,56 @@ var ventana=null;
 		
 		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
 		
-		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+		
+//		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
 		$('.datepicker').datepicker({
             todayBtn: "linked",
+            format: 'dd/mm/yyyy',
+            language: 'es',
             container: container,
             todayHighlight: true,
             autoclose: true
 		});
 		
 		$('table.extendida').DataTable({
+			"footerCallback": function ( row, data, start, end, display ) {
+	            var api = this.api(), data;
+	            var column = $('table.extendida .sumatorio').data("column")
+	            
+	            var pattern = ' ';
+	            var replacement = '';
+	            
+	            // Remove the formatting to get integer data for summation
+	            var intVal = function ( i ) {
+	            	return typeof i === 'string' ?
+	            			parseFloat(i.substring(0,i.length-2).replace(',', '.')) :
+		                    typeof i === 'number' ?
+		                        i : 0;
+	            };
+	            
+	            console.log($('table.extendida .sumatorio').data("column"));
+	            
+	            // Total over all pages
+	            total = api
+	                .column(column)
+	                .data()
+	                .reduce( function (a, b) {
+	                    return intVal(a) + intVal(b);
+	                }, 0 );
+	            
+	            // Total over this page
+	            pageTotal = api
+	                .column(column, { page: 'current'} )
+	                .data()
+	                .reduce( function (a, b) {
+	                    return intVal(a) + intVal(b) ;
+	                }, 0 );
+	 
+	            // Update footer
+	            $(api.column(2).footer() ).html(
+	                (pageTotal +'&euro; ('+ total +'&euro; total)').replace('.', ',')
+	            );
+	        }
 		});
 		
 		$.validator.addMethod("fechaValida", function(value, element) {

@@ -19,15 +19,16 @@
 <link rel="shortcut icon" href="${context}resources/favicon.ico">
 
 <!-- CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css"/> -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/> -->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
  
 <link rel="stylesheet" href="${context}resources/css/bootstrap.min.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/bootstrap.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/animate.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/eGestion.css" type="text/css"/>
+<link rel="stylesheet" href="${context}resources/css/datatable.css" type="text/css"/>
 <script src="https://kit.fontawesome.com/16db5e2eb8.js" crossorigin="anonymous"></script>
 
 <!-- JS -->

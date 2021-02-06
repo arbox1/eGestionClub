@@ -2,6 +2,8 @@ package es.arbox.eGestion.service.config;
 
 import java.util.List;
 
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,19 @@ public class GenericServiceImpl implements GenericService{
 	@Override
 	@Transactional
 	public <T> List<T> obtenerTodos(Class<T> clazz) {
-		return genericDAO.obtenerTodos(clazz);
+		return genericDAO.obtenerTodosOrden(clazz, null);
+	}
+	
+	@Override
+	@Transactional
+	public <T> List<T> obtenerTodosOrden(Class<T> clazz, String orden) {
+		return genericDAO.obtenerTodosOrden(clazz, orden);
+	}
+	
+	@Override
+	@Transactional
+	public <T> List<T> obtenerFiltros(Class<T> clazz, List<Predicate> where, List<Order> order){
+		return genericDAO.obtenerFiltros(clazz, where, order);
 	}
 	
 	public String serializa(Object o) throws JsonProcessingException {

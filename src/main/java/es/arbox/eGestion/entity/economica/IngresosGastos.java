@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -37,6 +38,12 @@ public class IngresosGastos extends BaseEntidad {
 	
 	@Column(name = "ig_fecha")
 	protected Date fecha;
+	
+	@Transient
+	protected Date fechaDesde;
+	
+	@Transient
+	protected Date fechaHasta;
 
 	public Integer getId() {
 		return id;
@@ -84,5 +91,21 @@ public class IngresosGastos extends BaseEntidad {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
 	}
 }

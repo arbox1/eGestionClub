@@ -10,12 +10,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
+import es.arbox.eGestion.entity.Errores;
 import es.arbox.eGestion.entity.config.MenuEstructura;
 import es.arbox.eGestion.service.config.MenuService;
 
@@ -36,6 +41,17 @@ public class BaseController {
 	
 	@Autowired
 	private MenuService menuService;
+	
+	@ExceptionHandler(Exception.class)
+    public String genericErrorPage(Model model, HttpServletRequest req, Exception e) {
+		Errores error = new Errores(e.getMessage());
+		
+		menuService.guardar(error);
+		
+		model.addAttribute("error", error.getId());
+			
+        return "/error";
+    }
 	
 	@InitBinder
 	public void bigDecimalCustomBinder(WebDataBinder bind) {
@@ -72,7 +88,7 @@ public class BaseController {
 	@InitBinder
 	public void dateCustomBinder(WebDataBinder bind) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	    bind.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	    bind.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 	
 	@ResponseBody

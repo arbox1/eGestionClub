@@ -11,7 +11,7 @@ import es.arbox.eGestion.dao.config.MenuDAO;
 import es.arbox.eGestion.entity.config.MenuEstructura;
 
 @Service
-public class MenuServiceImpl implements MenuService {
+public class MenuServiceImpl extends GenericServiceImpl implements MenuService {
 	
 	@Autowired
 	private MenuDAO menuDAO;

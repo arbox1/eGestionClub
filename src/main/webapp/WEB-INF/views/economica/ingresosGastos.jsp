@@ -48,13 +48,54 @@
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
+		<div class="row buscador">
+			<div class="col-md-12">
+				<form:form action="buscar" cssClass="form-horizontal" method="post" modelAttribute="buscador">
+					<div class="row form-group">
+						<label for="tipo" class="col-sm-1 col-form-label">Tipo</label>
+						<div class="col-md-5">
+							<form:select path="subTipo.id" cssClass="form-control" >
+								<form:option value="" label="--Selecciona un tipo"/>
+								<form:options items="${tipos}" itemValue="id" itemLabel="descripcionLarga"/>
+							</form:select>
+						</div>
+						<label for="descripcion" class="col-sm-1 col-form-label">Descripci&oacute;n</label>
+						<div class="col-sm-5">
+							<form:input path="descripcion" cssClass="form-control" />
+						</div>
+					</div>
+					<div class="row form-group">
+						<label for="fecha" class="col-sm-1 col-form-label">Desde</label>
+						<div class="col-md-5">
+							<form:input path="fechaDesde" 
+									data-date-format="mm/dd/yyyy"
+									data-date-container='#container'
+									cssClass="form-control fecha_corta fecha fechaValida datepicker required" 
+									placeholder="dd/mm/aaaa"/>
+						</div>
+						<label for="fecha" class="col-sm-1 col-form-label">Hasta</label>
+						<div class="col-md-5">
+							<form:input path="fechaHasta" 
+									data-date-format="mm/dd/yyyy"
+									data-date-container='#container'
+									cssClass="form-control fecha_corta fecha fechaValida datepicker required" 
+									placeholder="dd/mm/aaaa"/>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-6" >
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Ingreso / Gasto</button>
+						</div>
+						<div class="col-md-6 text-right">
+							<button type="button" class="btn btn-primary" data-limpiar=".buscador form">Limpiar</button>
+							<button type="button" class="btn btn-primary" data-submit=".buscador form">Buscar</button>
+						</div>
+					</div>
+				</form:form>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="row botonera">
-					<div class="col-md-12" >
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo</button>
-					</div>
-				</div>
 				<div class="panel panel-info">
 					<div class="panel-body">
 						<table class="table table-striped table-bordered extendida ingresos" id="tablaIngreso">
@@ -62,7 +103,7 @@
 								<tr>
 									<th class="text-center">Tipo</th>
 									<th class="text-center">Descripcion</th>
-									<th class="text-center">Importe</th>
+									<th class="text-center sumatorio" data-column="2" >Importe</th>
 									<th class="text-center">Fecha</th>
 									<th></th>
 								</tr>
@@ -72,7 +113,7 @@
 									<tr>
 										<td class="text-center">${ingreso.subTipo.descripcion}</td>
 										<td>${ingreso.descripcion}</td>
-										<td class="text-right"><fmt:formatNumber pattern="#,##0.00" value="${ingreso.importe}"/> &euro;</td>
+										<td class="text-right" name="importe"><fmt:formatNumber pattern="#,##0.00" value="${ingreso.importe}"/> &euro;</td>
 										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy" value = "${ingreso.fecha}" /></td>
 										<td class="text-center text-nowrap">
 											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${ingreso.id}"><i class="fas fa-pencil-alt"></i></button>
@@ -81,6 +122,13 @@
 									</tr>
 								</c:forEach>
 							</tbody>
+							<tfoot>
+								<tr>
+									<th colspan="4" style="text-align:right" rowspan="1">
+										Total:
+									</th>
+									<th rowspan="1" colspan="1"></th></tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>

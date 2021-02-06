@@ -428,16 +428,20 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="row botonera">
-						<div class="col-md-12">
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inscripcion">Inscribir Socio</button>
+					<div class="panel panel-info">
+						<div class="panel-body">
+							<table class="table table-striped table-bordered dataTable no-footer detalle">
+							</table>
 						</div>
 					</div>
-					<table class="table table-striped table-bordered detalle">
-					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inscripcion">Inscribir Socio</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -540,15 +544,17 @@
 				</div>
 				<div class="modal-body">
 					<div class="row botonera">
-						<div class="col-md-12">
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevaCuota">Nueva cuota</button>
-						</div>
 					</div>
-					<table class="table table-striped table-bordered detalle">
+					<table class="table table-striped table-bordered dataTable no-footer detalle">
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevaCuota">Nueva cuota</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
