@@ -33,6 +33,7 @@
 		    });
 			
 			$('#editar').on("reload", function(e, data){
+				e.stopPropagation();
 		    	$.obtener(data.accion, {
 		    		"id": data.id
 		    	}, function(res){
@@ -40,13 +41,24 @@
 		    			datos: res.resultados.socio
 		    		});
 		    	});
-		    }).on('hide.bs.modal', function(e){
+		    }).on('shown.bs.modal', function(e) {
+// 			    e.stopPropagation();
+			    $('.datepicker').datepicker({
+		            format: "dd/mm/yyyy",
+		            todayBtn: "linked",
+		            container: '#editar .modal-body',
+		            language: "es",
+		            autoclose: true,
+		            todayHighlight: true
+		        });
+			}).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
 		    });
 			
 			$('#detalle').on("reload", function(e, data){
+				e.stopPropagation();
 				$('#inscripcion .idSocio').val(data.id);
 		    	$.obtener(data.accion, {
 		    		"id": data.id
@@ -60,7 +72,7 @@
 		    });
 			
 			$('#inscripcion').on("reload", function(e, data){
-		    	
+				e.stopPropagation();
 		    }).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
@@ -194,6 +206,7 @@
     		});
 			
 			$('#cuotas').on("reload", function(e, data){
+				e.stopPropagation();
 				$('#nuevaCuota .idSocioCurso').val(data.id);
 		    	$.obtener(data.accion, {
 		    		"id": data.id
@@ -330,7 +343,7 @@
 											<form:input path="fechaNacimiento" 
 												data-date-format="mm/dd/yyyy"
 												data-date-container='#editar'
-												cssClass="form-control fecha_corta fechaNacimiento required" 
+												cssClass="form-control fecha_corta fechaNacimiento datepicker required" 
 												placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>

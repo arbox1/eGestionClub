@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.SociosCurso;
 
 @Repository
@@ -22,6 +23,15 @@ public class SociosCursoDAOImpl implements SociosCursoDAO{
 		Session session = sessionFactory.getCurrentSession();
         TypedQuery<SociosCurso> query = session.createNamedQuery("socios_curso", SociosCurso.class);
         query.setParameter("idSocio", idSocio);
+		return query.getResultList();
+	}
+	
+	public List<SociosCurso> obtenerSociosFiltro(Integer idCurso, Integer idEscuela, Integer idCategoria) {
+		Session session = sessionFactory.getCurrentSession();
+        TypedQuery<SociosCurso> query = session.createNamedQuery("socios_filtro", SociosCurso.class);
+        query.setParameter("idCurso", idCurso);
+        query.setParameter("idEscuela", idEscuela);
+        query.setParameter("idCategoria", idCategoria);
 		return query.getResultList();
 	}
 	
@@ -46,10 +56,10 @@ public class SociosCursoDAOImpl implements SociosCursoDAO{
 //		return query.getResultList();
 //	}
 //	
-//	@Override
-//	public List<Meses> getMeses() {
-//		Session session = sessionFactory.getCurrentSession();
-//		TypedQuery<Meses> query = session.createNamedQuery("meses", Meses.class);
-//		return query.getResultList();
-//	}
+	@Override
+	public List<Meses> getMeses() {
+		Session session = sessionFactory.getCurrentSession();
+		TypedQuery<Meses> query = session.createNamedQuery("meses", Meses.class);
+		return query.getResultList();
+	}
 }

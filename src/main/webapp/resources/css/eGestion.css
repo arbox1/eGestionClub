@@ -9,7 +9,7 @@ header {
 }
 
 .datepicker {
-	z-index: 2051 !important;
+	z-index: 100000 !important;
 }
 .form-control.datepicker {
 	position:unset

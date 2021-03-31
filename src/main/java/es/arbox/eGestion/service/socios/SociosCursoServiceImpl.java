@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.arbox.eGestion.dao.socios.SociosCursoDAO;
+import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.SociosCurso;
 import es.arbox.eGestion.service.config.GenericServiceImpl;
 
@@ -21,6 +22,12 @@ public class SociosCursoServiceImpl extends GenericServiceImpl implements Socios
 	@Transactional
 	public List<SociosCurso> getSociosCurso(Integer idSocio) {
 		return sociosCursoDAO.getSociosCurso(idSocio);
+	}
+	
+	@Override
+	@Transactional
+	public List<SociosCurso> obtenerSociosFiltro(Integer idCurso, Integer idEscuela, Integer idCategoria) {
+		return sociosCursoDAO.obtenerSociosFiltro(idCurso, idEscuela, idCategoria);
 	}
 
 //	@Override
@@ -38,9 +45,10 @@ public class SociosCursoServiceImpl extends GenericServiceImpl implements Socios
 //		return sociosCursoDAO.getCategorias();
 //	}
 //
-//	@Override
-//	public List<Meses> getMeses() {
-//		return sociosCursoDAO.getMeses();
-//	}
+	@Override
+	@Transactional
+	public List<Meses> getMeses() {
+		return sociosCursoDAO.getMeses();
+	}
 
 }

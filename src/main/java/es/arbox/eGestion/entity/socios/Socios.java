@@ -160,4 +160,8 @@ public class Socios extends BaseEntidad{
 	public void setLopd(Integer lopd) {
 		this.lopd = lopd;
 	}
+	
+	public String getNombreCompleto() {
+		return apellidos + ", " + nombre;
+	}
 }

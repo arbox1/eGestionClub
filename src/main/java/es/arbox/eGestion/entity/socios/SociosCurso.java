@@ -1,5 +1,7 @@
 package es.arbox.eGestion.entity.socios;
 
+import java.util.Map;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -17,7 +20,16 @@ import es.arbox.eGestion.entity.BaseEntidad;
 	@NamedQuery(
 			name="socios_curso",
 				query="SELECT sc FROM SociosCurso sc where sc.socio.id = :idSocio order by sc.curso.id desc, sc.escuela.descripcion asc, sc.categoria.id asc "
-			)
+			),
+	@NamedQuery(
+			name="socios_filtro",
+				query="SELECT sc "
+				    + "  FROM SociosCurso sc "
+					+ " WHERE sc.curso.id = :idCurso "
+					+ "   AND sc.escuela.id = :idEscuela "
+					+ "   AND sc.categoria.id = :idCategoria "
+					+ "ORDER BY sc.socio.apellidos, sc.socio.nombre "
+			),
 }) 
 
 @Entity
@@ -52,6 +64,9 @@ public class SociosCurso extends BaseEntidad{
 	@ManyToOne
 	@JoinColumn(name = "sc_m_salida")
 	protected Meses salida;
+	
+	@Transient
+	protected Map<Integer, Cuota> cuotas;
 
 	public Integer getId() {
 		return id;
@@ -107,5 +122,25 @@ public class SociosCurso extends BaseEntidad{
 
 	public void setSalida(Meses salida) {
 		this.salida = salida;
+	}
+
+	public Map<Integer, Cuota> getCuotas() {
+		return cuotas;
+	}
+
+	public void setCuotas(Map<Integer, Cuota> cuotas) {
+		this.cuotas = cuotas;
+	}
+	
+	public Cuota cuota(Integer mes) {
+		return cuotas.get(mes) != null ? cuotas.get(mes) : new Cuota();
+	}
+	
+	public Double getTotal() {
+		Double total = new Double(0);
+		for(Integer key : cuotas.keySet()) {
+			total += cuotas.get(key).importe;
+		}
+		return total;
 	}
 }

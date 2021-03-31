@@ -662,14 +662,23 @@ var ventana=null;
 		
 		
 //		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
-		$('.datepicker').datepicker({
-            todayBtn: "linked",
-            format: 'dd/mm/yyyy',
-            language: 'es',
-            container: container,
-            todayHighlight: true,
-            autoclose: true
-		});
+//		$('.datepicker').datepicker({
+//            todayBtn: "linked",
+//            format: 'dd/mm/yyyy',
+//            language: 'es',
+//            container: container,
+//            todayHighlight: true,
+//            autoclose: true
+//		});
+		
+//		$('.datepicker').datepicker({
+//            format: "dd/mm/yyyy",
+//            todayBtn: "linked",
+//            container: "body",
+//            language: "es",
+//            autoclose: true,
+//            todayHighlight: true
+//        });
 		
 		$('table.extendida').DataTable({
 			"footerCallback": function ( row, data, start, end, display ) {
@@ -686,8 +695,6 @@ var ventana=null;
 		                    typeof i === 'number' ?
 		                        i : 0;
 	            };
-	            
-	            console.log($('table.extendida .sumatorio').data("column"));
 	            
 	            // Total over all pages
 	            total = api

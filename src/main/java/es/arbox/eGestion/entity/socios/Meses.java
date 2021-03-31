@@ -14,7 +14,7 @@ import es.arbox.eGestion.entity.BaseEntidad;
 @NamedQueries({
 	@NamedQuery(
 			name="meses",
-				query="SELECT m FROM Meses m order by m.orden "
+				query="SELECT m FROM Meses m WHERE m.orden IS NOT NULL order by m.orden "
 			)
 })
 
@@ -34,6 +34,9 @@ public class Meses extends BaseEntidad{
 	
 	@Column(name="m_orden")
 	protected Integer orden;
+	
+	@Column(name="m_codigo")
+	protected String codigo;
 	
 	public Integer getId() {
 		return id;
@@ -65,5 +68,13 @@ public class Meses extends BaseEntidad{
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 }
