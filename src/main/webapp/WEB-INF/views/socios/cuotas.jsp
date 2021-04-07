@@ -7,6 +7,18 @@
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
+			$('.buscador').on('click', '.accion', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				
+				$('.buscador form').prop('action', data.accion).submit();
+				
+			}).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, "form").limpiar();
+		    });
+			
 			$('#tablaSocios').on("click", 'td.cuota', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
@@ -20,6 +32,7 @@
 				e.stopPropagation();
 				var data = $(this).data();
 				$('#editar').enviar(data.accion, function(res){
+					$('#editar').modal("hide");
 					$('.buscador form').submit();
 				});
 			}).on('hide.bs.modal', function(e){
@@ -60,9 +73,12 @@
 						</div>
 					</div>
 					<div class="row form-group">
-						<div class="col-md-12 text-right">
+						<div class="col-md-6 text-left">
+							<button type="button" class="btn btn-primary accion" data-accion="exportarExcel">Excel</button>
+						</div>
+						<div class="col-md-6 text-right">
 							<button type="button" class="btn btn-primary" data-limpiar=".buscador form">Limpiar</button>
-							<button type="button" class="btn btn-primary" data-submit=".buscador form">Buscar</button>
+							<button type="button" class="btn btn-primary accion" data-accion="buscar">Buscar</button>
 						</div>
 					</div>
 				</form:form>
@@ -117,7 +133,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Editar Socio</h5>
+					<h5 class="modal-title">Editar Cuota</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>

@@ -559,8 +559,11 @@ var ventana=null;
 											}, settings);
 										});
 									}
+									
+									$.loaded();
 						        },
 						        error: function(e) {
+						        	$.loaded();
 						        	console.log("ERROR: ", e);
 						        	if(button)
 						        		button.button('reset');
@@ -575,6 +578,7 @@ var ventana=null;
 //									bootbox.alert(html("ERROR: ", e));
 						        },
 						       done: function(e){
+						    	   $.loaded();
 						    	   console.log("DONE");
 						       }
 						    });
