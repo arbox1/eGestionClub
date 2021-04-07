@@ -1,6 +1,24 @@
 var ventana=null;
 
 (function($) {
+	var HTML_LOADING = Handlebars.compile(
+			'<div class="modal" data-backdrop="static">' +
+			'	<div class="modal-dialog modal-dialog-centered modal-sm">' +
+			'		<div class="modal-content">' +
+			'        	<div class="modal-body">' +
+			'		      	<div class="row">' +
+			'		      		<div class="col-sm-2 text-center">' +
+			'		      			<span class="fa fa-spinner fa-spin fa-5x"></span>' +
+			'		      		</div>' +
+			'		      		<div class="col-sm-10">' +
+			'		      			<h2 class="mensaje"></h2>' +
+			'		      		</div>' +
+			'		      	</div>' +
+			'			</div>' +
+			'		</div>' +
+			'	</div>' +
+			'</div>'
+		);
 	
 	// datetimepicker: Establecer valores por defecto comunes a todos los datepicker
 	/*
@@ -66,7 +84,29 @@ var ventana=null;
         ]
 	});
 	
+	var $loading = null;
 	$.extend({
+		/* */
+		"loading": function(message) {
+			if($loading == null) {
+				$loading = $(HTML_LOADING({})).appendTo('body').modal().on('hidden.bs.modal', function() {
+                	if($('.modal').hasClass('in')) {
+                		$('body').addClass('modal-open');
+                	}
+                    $(this).remove();
+                });
+				$loading.find('.mensaje').html(message);
+			} else {
+				$loading.find('.mensaje').html(message);
+			}
+		},
+		
+		/* */
+		"loaded": function() {
+			$loading.modal('hide');
+			$loading = null;
+		},
+		
 		/* */
 		"nvl": function(string, notnull) {
 			if(!notnull)
@@ -458,7 +498,7 @@ var ventana=null;
     	"enviar": function(url, callback) {
     		return this.each(function() {
     			var element = $(this);
-    			var button = element.find('.btn-fv-submit, .btn-bv-submit');
+    			var button = element.find('.btn-fv-submit');
     			var $form = element.is('form') ? element : $('form', element);
     			if(button.length == 0)
     				button = element.closest('.modal').find('.btn-fv-submit, .btn-bv-submit');
@@ -466,10 +506,11 @@ var ventana=null;
     			var fv;
     			if($form.hasClass('validation')) {
 					fv = $form.validate();
+//					console.log($form.valid());
 				}
     			
     			$(document).esperarAjax(function() {
-	    			if(!fv || fv.isValid()) {
+	    			if(!$form.hasClass('validation') || $form.valid()) {
 	    				
 	    				if($form.length == 0) {
 	    					$form = $('<form enctype="multipart/form-data">');
@@ -478,7 +519,7 @@ var ventana=null;
 	    				}
 	    				
 	    				if(button) 
-	    					button.button('loading');
+	    					$.loading('Enviando...');
 	    				
 	    				var $disabledControls = $(':input:disabled', $form).prop('disabled', false);
 	    				
