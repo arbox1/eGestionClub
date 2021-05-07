@@ -22,7 +22,7 @@ public class AppContext {
 
     @Autowired
     private Environment environment;
-
+    
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

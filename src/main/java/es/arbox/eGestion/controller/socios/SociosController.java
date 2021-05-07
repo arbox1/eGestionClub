@@ -1,6 +1,7 @@
 package es.arbox.eGestion.controller.socios;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,19 @@ import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
+import es.arbox.eGestion.entity.documento.Documento;
+import es.arbox.eGestion.entity.documento.TipoDocumento;
 import es.arbox.eGestion.entity.socios.Categoria;
 import es.arbox.eGestion.entity.socios.Cuota;
 import es.arbox.eGestion.entity.socios.Curso;
+import es.arbox.eGestion.entity.socios.DocumentoSocio;
 import es.arbox.eGestion.entity.socios.Escuela;
 import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.Socios;
 import es.arbox.eGestion.entity.socios.SociosCurso;
 import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.socios.CuotaService;
+import es.arbox.eGestion.service.socios.DocumentoSocioService;
 import es.arbox.eGestion.service.socios.SociosCursoService;
 import es.arbox.eGestion.service.socios.SociosService;
 
@@ -46,14 +51,19 @@ public class SociosController extends BaseController {
 	@Autowired
 	private CuotaService cuotaService;
 	
+	@Autowired
+	private DocumentoSocioService documentoSocioService;
+	
 	@GetMapping("/")
 	public String listaSocios(Model model) {
 		model.addAttribute("socios", sociosService.getSocios());
 		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
 		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
 		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
+		model.addAttribute("tiposDocumentos", sociosCursoService.obtenerTodos(TipoDocumento.class));
 		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
 		model.addAttribute("nuevo", new Socios());
+		model.addAttribute("valor", new ValoresDTO());
 		return "/socios/socios";
 	}
 	
@@ -90,6 +100,11 @@ public class SociosController extends BaseController {
 		
 		result.setResultado("socio", socio.getMapa());
 		
+		Documento documento = sociosService.obtenerPorId(Documento.class, 26);
+		
+		result.setResultado("imagen", Base64.getEncoder().encodeToString(documento.getFichero()));
+		result.setResultado("mime", documento.getMime());
+		
 		return sociosService.serializa(result);
 	}
 	
@@ -106,12 +121,19 @@ public class SociosController extends BaseController {
 		return sociosService.serializa(result);
 	}
 	
-	@ResponseBody
-	@PostMapping(value = "/guardarInscripcion", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String guardarInscripcion(@RequestBody SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+	@PostMapping(value = "/guardarInscripcion")
+    public @ResponseBody RespuestaAjax guardarInscripcion(@ModelAttribute SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = inscripcion.getId() != null ? "actualizada" : "realizada";
+		
+		if(inscripcion.getEntrada() != null && inscripcion.getEntrada().getId() == null) {
+			inscripcion.setEntrada(null);
+		}
+		
+		if(inscripcion.getSalida() != null && inscripcion.getSalida().getId() == null) {
+			inscripcion.setSalida(null);
+		}
 		
 		sociosCursoService.guardar(inscripcion);
 		
@@ -122,12 +144,11 @@ public class SociosController extends BaseController {
 		mensajes.mensaje(TiposMensaje.success, String.format("Inscripcion %1$s correctamente.", opcion));
 		result.setMensajes(mensajes.getMensajes());
 		
-        return sociosService.serializa(result);
+		return result;
     }
 	
-	@ResponseBody
-	@PostMapping(value = "/eliminarInscripcion", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String eliminarInscripcion(@RequestBody SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+	@PostMapping(value = "/eliminarInscripcion")
+    public @ResponseBody RespuestaAjax eliminarInscripcion(@ModelAttribute SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		sociosCursoService.eliminar(SociosCurso.class, inscripcion.getId());;
@@ -138,7 +159,7 @@ public class SociosController extends BaseController {
 		mensajes.mensaje(TiposMensaje.success, "Inscripcion eliminada correctamente.");
 		result.setMensajes(mensajes.getMensajes());
 		
-        return sociosCursoService.serializa(result);
+        return result;
     }
 	
 	@ResponseBody
@@ -167,9 +188,8 @@ public class SociosController extends BaseController {
 		return cuotaService.serializa(result);
 	}
 	
-	@ResponseBody
 	@PostMapping(value = "/guardarCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String guardarCuota(@RequestBody Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = cuota.getId() != null ? "actualizada" : "realizada";
@@ -183,12 +203,11 @@ public class SociosController extends BaseController {
 		mensajes.mensaje(TiposMensaje.success, String.format("Cuota %1$s correctamente.", opcion));
 		result.setMensajes(mensajes.getMensajes());
 		
-        return cuotaService.serializa(result);
+        return result;
     }
 	
-	@ResponseBody
 	@PostMapping(value = "/eliminarCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String eliminarCuota(@RequestBody Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax eliminarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		cuotaService.eliminar(Cuota.class, cuota.getId());;
@@ -199,7 +218,7 @@ public class SociosController extends BaseController {
 		mensajes.mensaje(TiposMensaje.success, "Cuota eliminada correctamente.");
 		result.setMensajes(mensajes.getMensajes());
 		
-        return cuotaService.serializa(result);
+        return result;
     }
 	
 	@ResponseBody
@@ -214,4 +233,54 @@ public class SociosController extends BaseController {
 		
 		return cuotaService.serializa(result);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/documentos", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String documentos(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		List<DocumentoSocio> documentoSocio = documentoSocioService.getDocumentos(valores.getId());
+		
+		result.setResultado("documento", DocumentoSocio.getListaMapa(documentoSocio));
+		
+		return documentoSocioService.serializa(result);
+	}
+	
+	@PostMapping(value = "/guardarDocumento", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoSocio documentoSocio, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		String opcion = documentoSocio.getId() != null ? "actualizado" : "realizado";
+		
+		documentoSocioService.guardar(documentoSocio.getDocumento());
+		documentoSocioService.guardar(documentoSocio);
+		
+		result.setResultado("id", documentoSocio.getSocio().getId());
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, String.format("Documento %1$s correctamente.", opcion));
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@PostMapping(value = "/eliminarDocumento", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax eliminarDocumento(@ModelAttribute DocumentoSocio documentoSocio, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		Integer idDocumento = documentoSocio.getDocumento().getId();
+
+		documentoSocioService.eliminar(DocumentoSocio.class, documentoSocio.getId());
+		documentoSocioService.eliminar(Documento.class, idDocumento);
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Documento eliminado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
 }

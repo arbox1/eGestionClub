@@ -506,7 +506,6 @@ var ventana=null;
     			var fv;
     			if($form.hasClass('validation')) {
 					fv = $form.validate();
-//					console.log($form.valid());
 				}
     			
     			$(document).esperarAjax(function() {
@@ -521,28 +520,30 @@ var ventana=null;
 	    				if(button) 
 	    					$.loading('Enviando...');
 	    				
-	    				var $disabledControls = $(':input:disabled', $form).prop('disabled', false);
+//	    				var $disabledControls = $(':input:disabled', $form).prop('disabled', false);
 	    				
-	    				var params = $form.formData();
-	    				params = $.extend({}, params, {'iehack': '&#9760;'});
+	    				var data2 = new FormData($form[0]);
+	    				data2.append('iehack', "&#9760;");
+	    				
 						if(1==1){
 						 $.ajax({
 								type : "POST",
-								contentType : "application/json",
+								contentType : false,
+								processData: false,
 								url : url,
-								data : JSON.stringify(params),
-								dataType : 'json',
+								data : data2,
+//								dataType : 'json',
 								timeout : 100000,
 						        success: function(data) {
-						        	$disabledControls.prop('disabled', true);
+//						        	$disabledControls.prop('disabled', true);
 						        	
-						        	if(button)
-						        		button.button('reset');
+//						        	if(button)
+//						        		button.button('reset');
 						        	
 						        	//Si la petici�n es correcta, guarda en elemento una bandera que se comprobar� luego con la funci�n "checkUpdated"
-						        	if((data.ok && data.ok==='S') || (data.correcto && data.correcto==='S')) {
-						        		element.data('updated', 'S');
-						        	}
+//						        	if((data.ok && data.ok==='S') || (data.correcto && data.correcto==='S')) {
+//						        		element.data('updated', 'S');
+//						        	}
 						        	
 									if(callback && typeof callback==='function') {
 										callback.call(element, data);
@@ -599,7 +600,8 @@ var ventana=null;
 						var atributos = _.split(item.name, '.' );
 						var contador = 0;
 						$.each(atributos, function( index, value ) {
-							anterior[value] = {};
+							if(!anterior[value])
+								anterior[value] = {};
 							if(contador >= atributos.length-1){
 								anterior[value] = item.value;
 							}else{

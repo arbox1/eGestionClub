@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -86,9 +85,8 @@ public class CuotasController {
 		return "/socios/cuotas";
     }
 	
-	@ResponseBody
 	@PostMapping(value = "/guardarCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String guardarCuota(@RequestBody Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = cuota.getId() != null ? "actualizada" : "realizada";
@@ -101,7 +99,7 @@ public class CuotasController {
 		mensajes.mensaje(TiposMensaje.success, String.format("Cuota %1$s correctamente.", opcion));
 		result.setMensajes(mensajes.getMensajes());
 		
-        return cuotaService.serializa(result);
+        return result;
     }
 	
 	@PostMapping("/exportarExcel")

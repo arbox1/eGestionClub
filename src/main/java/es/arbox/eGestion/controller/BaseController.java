@@ -1,5 +1,6 @@
 package es.arbox.eGestion.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
@@ -15,12 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +38,7 @@ import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.Errores;
 import es.arbox.eGestion.entity.config.MenuEstructura;
+import es.arbox.eGestion.entity.documento.Documento;
 import es.arbox.eGestion.service.config.MenuService;
 
 @Controller
@@ -104,5 +110,22 @@ public class BaseController {
 		
 		ObjectMapper Obj = new ObjectMapper();
 		return Obj.writeValueAsString(result);
+	}
+	
+	@PostMapping("/documento")
+	public HttpEntity<byte[]> getDocumento(@ModelAttribute("valor") ValoresDTO valores) throws IOException {
+      Documento documento = menuService.obtenerPorId(Documento.class, valores.getId());
+      
+//      response.setContentType(documento.getMime());
+//      response.setHeader("Content-Disposition", String.format("attachment; filename=\"%1$s\"", documento.getNombre()));
+//      
+//      IOUtils.copy(new ByteArrayInputStream(documento.getFichero()), response.getOutputStream());
+//      response.flushBuffer();
+
+      MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+      header.add("Content-disposition", "form-data; name=filex; filename=" + documento.getNombre());
+      header.add("Content-type", documento.getMime());
+      
+      return new HttpEntity<byte[]>(documento.getFichero(), header);
 	}
 }
