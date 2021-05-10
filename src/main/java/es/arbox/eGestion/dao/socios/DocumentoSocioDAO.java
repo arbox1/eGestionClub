@@ -7,4 +7,6 @@ import es.arbox.eGestion.entity.socios.DocumentoSocio;
 public interface DocumentoSocioDAO {
 
 	public List<DocumentoSocio> getDocumentos(Integer idSocio);
+	
+	public DocumentoSocio getDocumentoFoto(Integer idSocio);
 }

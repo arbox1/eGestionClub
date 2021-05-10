@@ -137,7 +137,7 @@ public class SociosCurso extends BaseEntidad{
 	}
 	
 	public Double getTotal() {
-		Double total = new Double(0);
+		Double total = (double) 0;
 		for(Integer key : cuotas.keySet()) {
 			total += cuotas.get(key).importe;
 		}

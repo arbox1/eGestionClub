@@ -19,6 +19,10 @@ import es.arbox.eGestion.entity.documento.Documento;
 			name="documentos_socio",
 				query="SELECT d FROM DocumentoSocio d WHERE d.socio.id = :idSocio order by d.documento.tipo.id, d.documento.id "
 			),
+	@NamedQuery(
+			name="documento_foto",
+				query="SELECT d FROM DocumentoSocio d WHERE d.socio.id = :idSocio and d.documento.tipo.id = 1 order by d.id desc "
+			)
 }) 
 
 @Entity

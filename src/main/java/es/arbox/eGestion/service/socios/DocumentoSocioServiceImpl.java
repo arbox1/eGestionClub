@@ -22,4 +22,10 @@ public class DocumentoSocioServiceImpl extends GenericServiceImpl implements Doc
 	public List<DocumentoSocio> getDocumentos(Integer idSocio){
 		return documentoSocioDAO.getDocumentos(idSocio);
 	}
+	
+	@Override
+	@Transactional
+	public DocumentoSocio getDocumentoFoto(Integer idSocio){
+		return documentoSocioDAO.getDocumentoFoto(idSocio);
+	}
 }

@@ -100,10 +100,12 @@ public class SociosController extends BaseController {
 		
 		result.setResultado("socio", socio.getMapa());
 		
-		Documento documento = sociosService.obtenerPorId(Documento.class, 26);
+		DocumentoSocio documentoSocio = documentoSocioService.getDocumentoFoto(valores.getId());
 		
-		result.setResultado("imagen", Base64.getEncoder().encodeToString(documento.getFichero()));
-		result.setResultado("mime", documento.getMime());
+		if(documentoSocio != null) {
+			result.setResultado("imagen", Base64.getEncoder().encodeToString(documentoSocio.getDocumento().getFichero()));
+			result.setResultado("mime", documentoSocio.getDocumento().getMime());
+		}
 		
 		return sociosService.serializa(result);
 	}

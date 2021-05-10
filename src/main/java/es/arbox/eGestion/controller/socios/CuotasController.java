@@ -59,7 +59,7 @@ public class CuotasController {
 	@PostMapping("/buscar")
     public String buscar(Model model, @ModelAttribute("buscador") SociosCurso socio, RedirectAttributes redirectAttrs) {
 		
-		Double totales = new Double(0);
+		Double totales = (double) 0;
 		List<SociosCurso> sociosCurso = sociosCursoService.obtenerSociosFiltro(
 				socio.getCurso().getId()/*Curso*/,
 				socio.getEscuela().getId()/*Escuela*/,

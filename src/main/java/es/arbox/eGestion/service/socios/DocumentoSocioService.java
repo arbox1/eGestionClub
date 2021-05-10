@@ -8,4 +8,6 @@ import es.arbox.eGestion.service.config.GenericService;
 public interface DocumentoSocioService extends GenericService {
 	
 	public List<DocumentoSocio> getDocumentos(Integer idSocio);
+	
+	public DocumentoSocio getDocumentoFoto(Integer idSocio);
 }

@@ -23,4 +23,12 @@ public class DocumentoSocioDAOImpl implements DocumentoSocioDAO {
         query.setParameter("idSocio", idSocio);
 		return query.getResultList();
 	}
+	
+	public DocumentoSocio getDocumentoFoto(Integer idSocio) {
+		Session session = sessionFactory.getCurrentSession();
+        TypedQuery<DocumentoSocio> query = session.createNamedQuery("documento_foto", DocumentoSocio.class);
+        query.setParameter("idSocio", idSocio);
+        List<DocumentoSocio> lista = query.getResultList(); 
+		return lista != null && lista.size() > 0 ? lista.get(0) : null;
+	}
 }
