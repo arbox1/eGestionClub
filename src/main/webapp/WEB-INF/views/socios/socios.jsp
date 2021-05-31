@@ -188,9 +188,19 @@
     			columns: [
     	            { data: "mes.descripcion", title: "Mes" },
     	            { data: "importe", title: "Importe", render: $.fn.dataTable.render.importe()},
+    	            { data: "notificado", title: "Notificado", render: $.fn.dataTable.render.sino() },
     	            { data: "observaciones", title: "Observaciones" },
     	            { data: function ( row, type, val, meta ) {
 						var $buttons = $('<p>').addBoton({
+								tipo: 'link',
+								icono: 'envelope',
+								clases: 'enviar',
+								title: 'Enviar notificación',
+								data: {
+									id: row.id,
+									accion: 'enviarMailCuota'
+								}
+							}).addBoton({
 								tipo: 'link',
 								icono: 'pencil-alt',
 								clases: 'editar',
@@ -252,6 +262,19 @@
 		    			});
 		    		}
 		    	});
+			}).on('click', '.enviar', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea el correo de pago de cuota?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax($data.accion, {
+		    				"id": $data.id
+		    			}, function(res){
+		    				$('#cuotas').trigger("reload", {id: $('#nuevaCuota form .idSocioCurso').val(), accion: "cuotas"});
+		    			});
+		    		}
+		    	});
 			});
 			
 			$('#nuevaCuota').on('click', '.guardar', function(e){
@@ -265,6 +288,10 @@
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
+		    }).on('show.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	if($("#nuevaCuota .fecha").val() == '')
+		    		$("#nuevaCuota .fecha").val(moment().format('DD/MM/YYYY'));
 		    });
 			
 			$('#documentos table.detalle').DataTable({
@@ -716,6 +743,17 @@
 										<span class="input-group-text">&euro;</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="fechaNacimiento" class="col-sm-3 col-form-label">Fecha.:</label>
+							<div class="col-sm-9">
+									<input type="text" name="fecha" 
+										data-date-format="mm/dd/yyyy"
+										data-date-container='#nuevaCuota'
+										class="form-control fecha_corta fecha required" 
+										placeholder="dd/mm/aaaa"/>
 							</div>
 						</div>
 						

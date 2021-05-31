@@ -11,4 +11,13 @@
 	        return '';
 	    };
 	};
+	
+	$.fn.dataTable.render.sino = function() {
+	    return function (data, type, row) {
+	        if ( type === 'display' ) {
+				return data == 'S' ? 'Si' : 'No';
+	        }
+	        return '';
+	    };
+	};
 })(jQuery);

@@ -130,7 +130,7 @@
 	</div>
 	
 	<div class="modal" id="editar" tabindex="-1" role="dialog" aria-labelledby="Editar Cuota" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Editar Cuota</h5>
@@ -163,8 +163,13 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-					<button type="button" class="btn btn-primary btn-fv-submit guardar" data-accion="guardarCuota">Guardar</button>
+					<div class="row">
+						<div class="col-sm-12">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+							<button type="button" class="btn btn-primary btn-fv-submit guardar" data-accion="enviarMailCuota">Guardar y Notificar</button>
+							<button type="button" class="btn btn-primary btn-fv-submit guardar" data-accion="guardarCuota">Guardar</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
