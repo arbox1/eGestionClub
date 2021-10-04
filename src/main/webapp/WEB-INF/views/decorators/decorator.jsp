@@ -80,6 +80,11 @@
 					}));
 			});
     	});
+    	
+    	$('.row .logout').click(function(e){
+    		e.stopPropagation();
+    		location.href=context+"login/logout";
+    	});
 	});
 	
 	$.notifyDefaults({
@@ -102,8 +107,13 @@
 <body>
 	<header>
 		<div class="container">
-<!-- 			<h1>CD Atletico Albadida</h1> -->
-<!-- 			<h2>CONTRATOS ISE</h2> -->
+			<div class="row">
+				<div class="col-sm-10">
+				</div>
+				<div class="col-sm-2 text-right" style="background-color: #dddddd; border-radius: 10px;">
+					<button type="button" class="btn btn-link logout"><i class="fas fa-2x fa-sign-out-alt"></i></button>
+				</div>
+			</div>
 		</div>
 	</header>
 	<div id="menu"></div>

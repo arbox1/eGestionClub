@@ -118,7 +118,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<th colspan="12"></th>
+									<th colspan="13"></th>
 									<th class="text-right text-nowrap"><fmt:formatNumber pattern="#,##0.00" value="${totales}"/> &euro;</th>
 								</tr>
 							</tfoot>

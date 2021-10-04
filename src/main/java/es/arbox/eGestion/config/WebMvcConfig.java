@@ -1,5 +1,6 @@
 package es.arbox.eGestion.config;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -24,7 +24,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.service.config.MenuService;
+import es.arbox.eGestion.utils.Utilidades;
 
 @Configuration
 @EnableWebMvc
@@ -95,11 +97,26 @@ implements WebMvcConfigurer {
 		return resolver;
 	}
 	
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new PasswordEncoder() {
+	        @Override
+	        public String encode(CharSequence charSequence) {
+	            return Utilidades.getMd5(charSequence.toString());
+	        }
+
+	        @Override
+	        public boolean matches(CharSequence charSequence, String s) {
+	            return Utilidades.getMd5(charSequence.toString()).equals(s);
+	        }
+	    };
+	}
+	
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //    	auth.userDetailsService(usuariosAccesoService);
@@ -107,6 +124,13 @@ implements WebMvcConfigurer {
         auth.inMemoryAuthentication()
         .passwordEncoder(passwordEncoder)
         .withUser("Albaida").password(passwordEncoder.encode("club")).roles("USER");
+        
+        List<Usuario> usuarios = menuService.obtenerTodos(Usuario.class);
+        for(Usuario usuario : usuarios) {
+        	auth.inMemoryAuthentication()
+            .passwordEncoder(passwordEncoder)
+            .withUser(usuario.getIdentificador()).password(usuario.getPassword()).roles("USER");
+        }
         /**/
     }
     

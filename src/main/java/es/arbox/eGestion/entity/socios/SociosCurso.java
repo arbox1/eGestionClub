@@ -26,8 +26,8 @@ import es.arbox.eGestion.entity.BaseEntidad;
 				query="SELECT sc "
 				    + "  FROM SociosCurso sc "
 					+ " WHERE sc.curso.id = :idCurso "
-					+ "   AND sc.escuela.id = :idEscuela "
-					+ "   AND sc.categoria.id = :idCategoria "
+					+ "   AND (sc.escuela.id = :idEscuela OR -1 = :idEscuela)"
+					+ "   AND (sc.categoria.id = :idCategoria OR -1 = :idCategoria) "
 					+ "ORDER BY sc.socio.apellidos, sc.socio.nombre "
 			),
 }) 

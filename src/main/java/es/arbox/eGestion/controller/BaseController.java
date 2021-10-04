@@ -46,7 +46,7 @@ import es.arbox.eGestion.service.config.MenuService;
 public class BaseController {
 	
 	@Autowired
-	private MenuService menuService;
+	public MenuService menuService;
 	
 	@ExceptionHandler(Exception.class)
     public String genericErrorPage(Model model, HttpServletRequest req, Exception e) {

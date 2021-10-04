@@ -38,6 +38,9 @@ public class Meses extends BaseEntidad{
 	@Column(name="m_codigo")
 	protected String codigo;
 	
+	@Column(name="m_numero")
+	protected Integer numero;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -76,5 +79,13 @@ public class Meses extends BaseEntidad{
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
 	}
 }

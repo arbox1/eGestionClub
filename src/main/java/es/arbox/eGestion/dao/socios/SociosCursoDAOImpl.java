@@ -29,9 +29,9 @@ public class SociosCursoDAOImpl implements SociosCursoDAO{
 	public List<SociosCurso> obtenerSociosFiltro(Integer idCurso, Integer idEscuela, Integer idCategoria) {
 		Session session = sessionFactory.getCurrentSession();
         TypedQuery<SociosCurso> query = session.createNamedQuery("socios_filtro", SociosCurso.class);
-        query.setParameter("idCurso", idCurso);
-        query.setParameter("idEscuela", idEscuela);
-        query.setParameter("idCategoria", idCategoria);
+        query.setParameter("idCurso", idCurso != null ? idCurso : -1);
+        query.setParameter("idEscuela", idEscuela != null ? idEscuela : -1);
+        query.setParameter("idCategoria", idCategoria != null ? idCategoria : -1);
 		return query.getResultList();
 	}
 	

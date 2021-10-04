@@ -774,11 +774,11 @@
 		</div>
 	</div>
 	
-	<div class="modal" id="documentos" tabindex="-1" role="dialog" aria-labelledby="Cuotas" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal" id="documentos" tabindex="-1" role="dialog" aria-labelledby="Documentos" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Cuotas</h5>
+					<h5 class="modal-title">Documentos</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>

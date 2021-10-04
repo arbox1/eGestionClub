@@ -524,7 +524,7 @@ var ventana=null;
 	    				
 	    				var data2 = new FormData($form[0]);
 	    				data2.append('iehack', "&#9760;");
-	    				
+	    				console.log(data2);
 						if(1==1){
 						 $.ajax({
 								type : "POST",
