@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
-<title>Socios</title>
+<title>Usuarios</title>
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {

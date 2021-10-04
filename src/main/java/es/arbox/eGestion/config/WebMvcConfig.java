@@ -144,7 +144,7 @@ implements WebMvcConfigurer {
         http.authorizeRequests()
             .antMatchers("/**").hasRole("USER")
             .antMatchers("/resources/**", "/decorators/**").permitAll()
-            .and().formLogin().loginPage("/login/").loginProcessingUrl("/login/logar2")//.defaultSuccessUrl("/gestion/gastos/")
+            .and().formLogin().loginPage("/login/").loginProcessingUrl("/login/logar2").defaultSuccessUrl("/principal/")
             .and().logout().logoutSuccessUrl("/login/").permitAll()
             .and().csrf().disable();
     }

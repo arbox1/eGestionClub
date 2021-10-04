@@ -2,6 +2,6 @@
 <head><%@ page isELIgnored="false"%>
 </head>
 <body>
-<% response.sendRedirect("socios/socios/"); %>
+<% response.sendRedirect("principal/"); %>
 </body>
 </html>
