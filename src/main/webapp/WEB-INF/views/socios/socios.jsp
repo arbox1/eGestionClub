@@ -461,6 +461,12 @@
 										<form:input path="apellidos" cssClass="form-control apellidos required" />
 									</div>
 								</div>
+								<div class="form-group row">
+									<label for="apellidos" class="col-sm-2 col-form-label">DNI</label>
+									<div class="col-sm-10">
+										<form:input path="dni" cssClass="form-control dni" />
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">

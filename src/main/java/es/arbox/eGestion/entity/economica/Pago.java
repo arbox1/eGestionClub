@@ -44,7 +44,7 @@ public class Pago {
 	private Double importe;
 	
 	@Column(name = "p_cantidad")
-	private Integer cantidad;
+	private Double cantidad;
 	
 	@Column(name = "p_observacion")
 	private String observacion;
@@ -92,11 +92,11 @@ public class Pago {
 		this.importe = importe;
 	}
 
-	public Integer getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Integer cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
