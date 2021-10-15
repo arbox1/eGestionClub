@@ -2,13 +2,10 @@ package es.arbox.eGestion.controller.socios;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -37,11 +34,11 @@ import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.Socios;
 import es.arbox.eGestion.entity.socios.SociosCurso;
 import es.arbox.eGestion.enums.TiposMensaje;
+import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.service.socios.CuotaService;
 import es.arbox.eGestion.service.socios.DocumentoSocioService;
 import es.arbox.eGestion.service.socios.SociosCursoService;
 import es.arbox.eGestion.service.socios.SociosService;
-import es.arbox.eGestion.utils.Utilidades;
 
 @Controller
 @RequestMapping("/socios/socios")
@@ -60,7 +57,7 @@ public class SociosController extends BaseController {
 	private DocumentoSocioService documentoSocioService;
 	
 	@Autowired
-    private JavaMailSender mailSender;
+    private MailService mailService;
 	
 	@GetMapping("/")
 	public String listaSocios(Model model) {
@@ -222,36 +219,10 @@ public class SociosController extends BaseController {
 		Mensajes mensajes = new Mensajes();
 		
 		cuota = cuotaService.obtenerPorId(Cuota.class, cuota.getId());
-		String mail = cuota.getSocioCurso().getSocio().getEmail();
 		
-		if(!StringUtils.isEmpty(mail)) {
-			SimpleMailMessage message = new SimpleMailMessage(); 
-	        message.setFrom("atleticoalbaida@gmail.com");
-	        message.setTo(mail); 
-	        message.setCc("atleticoalbaida@gmail.com");
-	        message.setSubject(String.format("[RECIBO CUOTA] %1$s %2$s: %3$s %4$s", 
-	        		cuota.getMes().getDescripcion(), 
-	        		cuota.getSocioCurso().getCurso().getDescripcion(),
-	        		cuota.getSocioCurso().getSocio().getNombre(),
-	        		cuota.getSocioCurso().getSocio().getApellidos())); 
-	        message.setText(String.format("Confirmación de pago realizado:\n\n"
-	        		+ "- Socio: %1$s %7$s \n"
-	        		+ "- Curso: %4$s \n"
-	        		+ "- Mes: %3$s \n"
-	        		+ "- Escuela: %5$s \n"
-	        		+ "- Categoría: %6$s \n"
-	        		+ "- Importe: %2$s € \n"
-	        		+ "- Fecha: %8$s",
-	        		cuota.getSocioCurso().getSocio().getNombre(),
-	        		cuota.getImporte(),
-	        		cuota.getMes().getDescripcion(),
-	        		cuota.getSocioCurso().getCurso().getDescripcion(),
-	        		cuota.getSocioCurso().getEscuela().getDescripcion(),
-	        		cuota.getSocioCurso().getCategoria().getDescripcion(),
-	        		cuota.getSocioCurso().getSocio().getApellidos(),
-	        		Utilidades.formatDateToString(cuota.getFecha() != null ? cuota.getFecha() : new Date())));
-	        
-	        mailSender.send(message);
+		if(!StringUtils.isEmpty(cuota.getSocioCurso().getSocio().getEmail())) {
+			mailService.correoPagoSocio(cuota);
+			
 	        cuota.setNotificado("S");
 	        cuotaService.guardar(cuota);
 	        mensajes.mensaje(TiposMensaje.success, String.format("Correo enviado corréctamente"));

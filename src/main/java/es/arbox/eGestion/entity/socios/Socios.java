@@ -67,6 +67,9 @@ public class Socios extends BaseEntidad{
 	
 	@Column(name="so_dni")
 	protected String dni;
+	
+	@Column(name="so_email2")
+	protected String email2;
 
 	public Integer getId() {
 		return id;
@@ -170,6 +173,14 @@ public class Socios extends BaseEntidad{
 
 	public void setDni(String dni) {
 		this.dni = dni;
+	}
+
+	public String getEmail2() {
+		return email2;
+	}
+
+	public void setEmail2(String email2) {
+		this.email2 = email2;
 	}
 
 	public String getNombreCompleto() {

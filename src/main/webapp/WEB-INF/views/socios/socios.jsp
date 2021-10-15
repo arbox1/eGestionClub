@@ -472,7 +472,13 @@
 						<div class="form-group row">
 							<label for="email" class="col-sm-2 col-form-label">Email:</label>
 							<div class="col-sm-10">
-								<form:input path="email" cssClass="form-control email required email" placeholder="ejemplo@host.com" />
+								<form:input path="email" cssClass="form-control email required" placeholder="ejemplo@host.com" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="email" class="col-sm-2 col-form-label">Email 2:</label>
+							<div class="col-sm-10">
+								<form:input path="email2" cssClass="form-control email2" placeholder="ejemplo@host.com" />
 							</div>
 						</div>
 						<div class="row">
