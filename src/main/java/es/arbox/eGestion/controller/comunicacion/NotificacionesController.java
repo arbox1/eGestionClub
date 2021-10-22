@@ -13,8 +13,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
+import es.arbox.eGestion.entity.socios.Categoria;
 import es.arbox.eGestion.entity.socios.Curso;
+import es.arbox.eGestion.entity.socios.Escuela;
+import es.arbox.eGestion.entity.socios.SociosCurso;
+import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.service.socios.SociosCursoService;
 
@@ -31,16 +36,20 @@ public class NotificacionesController {
 	@GetMapping("/")
 	public String listaSocios(Model model) {
 		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
+		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
+		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
 		return "/comunicacion/notificaciones";
 	}
 	
 	@PostMapping(value = "/recordatorio", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax recordatorio(@ModelAttribute Curso curso, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax recordatorio(@ModelAttribute SociosCurso socioCurso, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
-		curso = sociosCursoService.obtenerPorId(Curso.class, curso.getId());
+		mailService.recordatorio(socioCurso);
 		
-		mailService.recordatorio(curso);
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, String.format("Notificación realizada corréctamente"));
+		result.setMensajes(mensajes.getMensajes());
 		
         return result;
     }

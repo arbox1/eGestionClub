@@ -481,6 +481,12 @@
 								<form:input path="email2" cssClass="form-control email2" placeholder="ejemplo@host.com" />
 							</div>
 						</div>
+						<div class="form-group row">
+							<label for="email" class="col-sm-2 col-form-label">Talla:</label>
+							<div class="col-sm-10">
+								<form:input path="talla" cssClass="form-control talla"/>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group row">

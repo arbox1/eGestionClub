@@ -11,10 +11,14 @@
 			$('#recordatorio').on('click', '.guardar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
-				$('#recordatorio').enviar(data.accion, function(res){
-					$('#recordatorio').modal("hide");
-					$('.buscador form').submit();
-				});
+				bootbox.confirm("¿Está seguro que desea realizar la notificación?", function(result){
+		    		if(result){
+		    			$('#recordatorio').enviar(data.accion, function(res){
+							$('#recordatorio').modal("hide");
+							$('.buscador form').submit();
+						});
+		    		}
+		    	});
 			}).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
@@ -50,10 +54,32 @@
 								<div class="form-group row">
 									<label for="importe" class="col-sm-4 col-form-label">Curso:</label>
 									<div class="col-sm-8">
-										<select name="id" class="form-control required">
+										<select name="curso.id" class="form-control required">
 											<option value=""></option>
 											<c:forEach var="curso" items="${cursos}">
 												<option value="${curso.id}">${curso.descripcion}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="importe" class="col-sm-4 col-form-label">Escuela:</label>
+									<div class="col-sm-8">
+										<select name="escuela.id" class="form-control required">
+											<option value=""></option>
+											<c:forEach var="escuela" items="${escuelas}">
+												<option value="${escuela.id}">${escuela.descripcion}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="importe" class="col-sm-4 col-form-label">Categoría:</label>
+									<div class="col-sm-8">
+										<select name="categoria.id" class="form-control required">
+											<option value=""></option>
+											<c:forEach var="categoria" items="${categorias}">
+												<option value="${categoria.id}">${categoria.descripcion}</option>
 											</c:forEach>
 										</select>
 									</div>

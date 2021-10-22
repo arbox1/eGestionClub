@@ -70,6 +70,9 @@ public class Socios extends BaseEntidad{
 	
 	@Column(name="so_email2")
 	protected String email2;
+	
+	@Column(name="so_talla")
+	protected String talla;
 
 	public Integer getId() {
 		return id;
@@ -185,5 +188,13 @@ public class Socios extends BaseEntidad{
 
 	public String getNombreCompleto() {
 		return apellidos + ", " + nombre;
+	}
+
+	public String getTalla() {
+		return talla;
+	}
+
+	public void setTalla(String talla) {
+		this.talla = talla;
 	}
 }

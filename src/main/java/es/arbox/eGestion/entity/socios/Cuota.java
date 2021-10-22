@@ -19,7 +19,8 @@ import es.arbox.eGestion.converter.StringDoubleConverter;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @NamedQueries({
-		@NamedQuery(name = "cuotas", query = "SELECT cu FROM Cuota cu where cu.socioCurso.id = :idSocioCurso order by cu.mes.orden asc ") })
+		@NamedQuery(name = "cuotas", query = "SELECT cu FROM Cuota cu where cu.socioCurso.id = :idSocioCurso order by cu.mes.orden asc ")
+})
 
 @Entity
 @Table(name = "cuotas")

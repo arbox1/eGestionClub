@@ -22,5 +22,4 @@ public class CuotaServiceImpl extends GenericServiceImpl implements CuotaService
 	public List<Cuota> getCuotas(Integer idSocioCurso) {
 		return CuotaDAO.getCuotas(idSocioCurso);
 	}
-
 }

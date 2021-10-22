@@ -1,6 +1,10 @@
 package es.arbox.eGestion.service.config;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -9,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import es.arbox.eGestion.entity.socios.Cuota;
-import es.arbox.eGestion.entity.socios.Curso;
+import es.arbox.eGestion.entity.socios.Meses;
+import es.arbox.eGestion.entity.socios.SociosCurso;
+import es.arbox.eGestion.service.socios.CuotaService;
+import es.arbox.eGestion.service.socios.SociosCursoService;
 import es.arbox.eGestion.utils.Utilidades;
 
 @Service
@@ -17,6 +24,12 @@ public class MailService {
 
 	@Autowired
     private JavaMailSender mailSender;
+	
+	@Autowired
+	SociosCursoService sociosCursoService;
+	
+	@Autowired
+	CuotaService cuotaService;
 	
 	public void correoPagoSocio(Cuota cuota) {
 		SimpleMailMessage message = new SimpleMailMessage(); 
@@ -55,15 +68,84 @@ public class MailService {
         mailSender.send(message);
 	}
 	
-	public void recordatorio(Curso curso) {
-		SimpleMailMessage message = new SimpleMailMessage(); 
-        message.setFrom("atleticoalbaida@gmail.com");
-        message.setTo("lacobrailio@gmail.com"); 
+	public void recordatorio(SociosCurso buscador) {
+        List<Meses> meses = cuotaService.obtenerTodosOrden(Meses.class, " m_numero "); 
         
-        message.setSubject(String.format("[RESUMEN DE CUOTA PENDIENTE] %1$s", 
-        		curso.getId())); 
-        message.setText(String.format("Prueba envío correo:\n\n"));
+        GregorianCalendar calendar = new GregorianCalendar();
+        Meses mesActual = cuotaService.obtenerPorId(Meses.class, calendar.get(Calendar.MONTH)+1);
         
-        mailSender.send(message);
+        for(SociosCurso socioCurso : sociosCursoService.obtenerSociosFiltro(buscador.getCurso().getId(), buscador.getEscuela().getId(), buscador.getCategoria().getId())) {
+    		boolean pendiente = false;
+    		SimpleMailMessage message = new SimpleMailMessage(); 
+            message.setFrom("atleticoalbaida@gmail.com");
+            
+            message.setTo(socioCurso.getSocio().getEmail());
+            if(!StringUtils.isEmpty(socioCurso.getSocio().getEmail2())) {
+            	String [] cc = {socioCurso.getSocio().getEmail2()};
+            	message.setCc(cc);
+            }
+    	
+        	StringBuilder cuerpo = new StringBuilder();
+        	
+        	message.setSubject(String.format("[RESUMEN DE CUOTAS PENDIENTE] %1$s", 
+            		socioCurso.getSocio().getNombreCompleto()));
+        	
+        	cuerpo.append(String.format("Desde el Club Atletico Albaida le recordamos las mensualidades que están pendiente de pago por el socio %1$s hasta la fecha actual: \n\n", socioCurso.getSocio().getNombreCompleto()));
+        	
+        	Meses mesInicial = cuotaService.obtenerPorId(Meses.class, 9);
+        	if(socioCurso.getEntrada() != null && socioCurso.getEntrada().getOrden() > mesInicial.getOrden()) {
+        		mesInicial = socioCurso.getEntrada();
+        	}
+        	
+        	Meses mesFinal = cuotaService.obtenerPorId(Meses.class, 5);
+        	if(socioCurso.getSalida() != null && socioCurso.getSalida().getOrden() < mesFinal.getOrden()) {
+        		mesFinal = socioCurso.getSalida();
+        	}
+        	
+        	if(mesActual.getOrden() < mesFinal.getOrden())
+        		mesFinal = mesActual;
+        	
+        	List<Cuota> cuotas = cuotaService.getCuotas(socioCurso.getId());
+        	
+        	boolean matricula = false;
+        	Meses mesMatricula = cuotaService.obtenerPorId(Meses.class, 13);
+			Iterator<Cuota> it = cuotas.iterator();
+			while(it.hasNext() && !matricula) {
+				Cuota cuota = (Cuota)it.next();
+				if(cuota.getMes().getId() == mesMatricula.getId()) {
+					matricula = true;
+				}
+			}
+			
+			if(!matricula) {
+				pendiente = true;
+				cuerpo.append(String.format("\t\t - %1$s", mesMatricula.getDescripcion()));
+			}
+				
+        	
+        	for(Meses mes : meses) {
+        		if(mes.getOrden() >= mesInicial.getOrden() && mes.getOrden() <= mesFinal.getOrden()) {
+        			boolean encontrado = false;
+        			it = cuotas.iterator();
+        			while(it.hasNext() && !encontrado) {
+        				Cuota cuota = (Cuota)it.next();
+        				if(cuota.getMes().getId() == mes.getId()) {
+        					encontrado = true;
+        				}
+        			}
+        			
+        			if(!encontrado) {
+        				pendiente = true;
+        				cuerpo.append(String.format("\t\t - %1$s", mes.getDescripcion()));
+        			}
+        		}
+        	}
+        	
+        	if(!pendiente)
+        		cuerpo = new StringBuilder(String.format("Desde el Club Atletico Albaida le recordamos que el socio %1$s esta al corriente de pagos hasta la fecha actual: \n\n", socioCurso.getSocio().getNombreCompleto()));
+        	
+        	message.setText(cuerpo.toString());
+        	mailSender.send(message);
+        }
 	}
 }
