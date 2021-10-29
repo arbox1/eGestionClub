@@ -5,11 +5,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import es.arbox.eGestion.entity.BaseEntidad;
+
+@NamedQueries({
+	@NamedQuery(
+			name="tipo_documento_familia",
+				query="SELECT d FROM TipoDocumento d WHERE d.familia = :familia order by d.id "
+			)
+}) 
 
 @Entity
 @Table(name = "tipos_documentos")
-public class TipoDocumento {
+public class TipoDocumento extends BaseEntidad {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="td_id")
@@ -20,6 +31,9 @@ public class TipoDocumento {
 	
 	@Column(name="td_descripcion")
 	protected String descripcion;
+	
+	@Column(name="td_familia")
+	protected String familia;
 
 	public Integer getId() {
 		return id;
@@ -43,5 +57,13 @@ public class TipoDocumento {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+
+	public void setFamilia(String familia) {
+		this.familia = familia;
 	}
 }

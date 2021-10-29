@@ -125,3 +125,10 @@ text-transform: none;
 user-select: none;
 vertical-align: middle;
 }
+
+div.buscador {
+	border: 2px solid #4582EC;
+	border-radius: 15px;
+    margin-bottom: 10px;
+    padding-top: 12px;
+}

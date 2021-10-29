@@ -15,9 +15,11 @@ import javax.persistence.Transient;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import es.arbox.eGestion.entity.BaseEntidad;
+
 @Entity
 @Table(name = "documentos")
-public class Documento {
+public class Documento extends BaseEntidad{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

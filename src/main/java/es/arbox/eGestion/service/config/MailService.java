@@ -6,12 +6,20 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import es.arbox.eGestion.entity.actividades.DocumentoActividad;
+import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.socios.Cuota;
 import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.SociosCurso;
@@ -147,5 +155,87 @@ public class MailService {
         	message.setText(cuerpo.toString());
         	mailSender.send(message);
         }
+	}
+	
+	public void correoActividadSalida(Participante participante, List<DocumentoActividad> documentos) throws MessagingException {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(participante.getEmail()); 
+        
+//        message.setCc("atleticoalbaida@gmail.com");
+        message.setSubject(String.format("[Realización Actividad] %1$s del próximo %2$s", 
+        		participante.getActividad().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getActividad().getFechaInicio())));
+        
+        StringBuilder cuerpo = new StringBuilder(String.format("Desde el Club Atletico Albaida le queremos notificar que la persona %10$s figura inscrita para la próxima actividad de \"%1$s\". \n\n"
+        		+ "\t\t- Lugar de salida: %9$s \n"
+        		+ "\t\t- Fecha y Hora de inicio: %2$s %3$s \n"
+        		+ "\t\t- Fecha y Hora de fin: %4$s %5$s \n"
+        		+ "\t\t- Participantes: %6$s \n"
+        		+ "\t\t- Importe: %7$s \n"
+        		+ "\t\t- Pagado: %8$s",
+        		participante.getActividad().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getActividad().getFechaInicio()),
+        		Utilidades.formatDateToStringHora(participante.getActividad().getFechaInicio()),
+        		Utilidades.formatDateToString(participante.getActividad().getFechaFin()),
+        		Utilidades.formatDateToStringHora(participante.getActividad().getFechaFin()),
+        		participante.getCantidad(),
+        		participante.getImporte(),
+        		"S".equals(participante.getPagado()) ? "Si" : "No",
+        		participante.getActividad().getLugarSalida(),
+        		participante.getNombre()));
+        
+        if(!StringUtils.isEmpty(participante.getActividad().getContenido())) {
+        	cuerpo.append(String.format("\n\n Desde el Club queremos hacer constar las siguientes indicaciones: \n\n"
+        			+ "\t\t %1$s", participante.getActividad().getContenido()));
+        }
+        
+        if(documentos != null && documentos.size() > 0) {
+        	cuerpo.append("\n\n Se adjunta documentación relacionada con la actividad que esperamos sea de vuestro interés. \n\n");
+        }
+        
+        cuerpo.append("\n\n Atentamente un cordial saludo. Club Atletico Albaida");
+        
+        message.setText(cuerpo.toString());
+       
+        for(DocumentoActividad documentoActividad : documentos) {
+        	final InputStreamSource attachment = new ByteArrayResource(documentoActividad.getDocumento().getFichero());
+        	message.addAttachment(documentoActividad.getDocumento().getNombre(), attachment);
+        }
+        
+        mailSender.send(mimeMessage);
+	}
+	
+	public void correoActividadLlegada(Participante participante, List<DocumentoActividad> documentos) throws MessagingException {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(participante.getEmail()); 
+        
+//        message.setCc("atleticoalbaida@gmail.com");
+        message.setSubject(String.format("[Finalización Actividad] %1$s del pasado %2$s", 
+        		participante.getActividad().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getActividad().getFechaInicio())));
+        
+        StringBuilder cuerpo = new StringBuilder(String.format("Tras la realización de la actividad %1$s realizada el pasado día %2$s el Club Atletico Albaida quiere darle las gracias por participar en la misma. \n\n"
+        		+ "Del mismo modo le anima a seguir participando con nosotros en cuantas actividades realiciemos. \n",
+        		participante.getActividad().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getActividad().getFechaInicio())));
+        
+        if(documentos != null && documentos.size() > 0) {
+        	cuerpo.append("\n\n Se adjunta documentación relacionada con la actividad que esperamos sea de vuestro interés. \n\n");
+        }
+        
+        cuerpo.append("\n\n Atentamente un cordial saludo. Club Atletico Albaida");
+        
+        message.setText(cuerpo.toString());
+       
+        for(DocumentoActividad documentoActividad : documentos) {
+        	final InputStreamSource attachment = new ByteArrayResource(documentoActividad.getDocumento().getFichero());
+        	message.addAttachment(documentoActividad.getDocumento().getNombre(), attachment);
+        }
+        
+        mailSender.send(mimeMessage);
 	}
 }

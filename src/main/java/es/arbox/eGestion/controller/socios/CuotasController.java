@@ -51,7 +51,7 @@ public class CuotasController {
 	MailService mailService;
 	
 	@GetMapping("/")
-	public String listaSocios(Model model, @ModelAttribute("buscador") SociosCurso socio) {
+	public String inicio(Model model, @ModelAttribute("buscador") SociosCurso socio) {
 		model.addAttribute("totales", 0);
 		model.addAttribute("sociosCurso", new ArrayList<SociosCurso>());
 		model.addAttribute("escuelas", cuotaService.obtenerTodosOrden(Escuela.class, "descripcion"));

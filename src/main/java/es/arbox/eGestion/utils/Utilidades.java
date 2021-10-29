@@ -13,6 +13,11 @@ public class Utilidades {
 		return format.format(date);
 	}
 	
+	public static String formatDateToStringHora (Date date) {
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		return format.format(date);
+	}
+	
 	public static String getMd5(String input) {
 	    try {
 	        // Static getInstance method is called with hashing SHA

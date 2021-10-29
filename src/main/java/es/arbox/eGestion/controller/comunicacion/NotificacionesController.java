@@ -34,7 +34,7 @@ public class NotificacionesController {
 	MailService mailService;
 
 	@GetMapping("/")
-	public String listaSocios(Model model) {
+	public String inicio(Model model) {
 		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
 		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
 		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));

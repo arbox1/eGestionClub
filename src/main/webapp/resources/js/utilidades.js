@@ -326,14 +326,14 @@ var ventana=null;
     		        } else if($(this).hasClass('hora_larga')) {
     		        	valor = valor.substring(11,19);
     		        } else if($(this).hasClass('hora_corta')) {
-    		            valor = valor.substring(11,16);
+    		            valor = moment(valor).format('HH:mm');
     		        } else if($(this).hasClass('porcentaje')) {
     		            valor = valor + '%';
     		        }else if($(this).hasClass('sino')) {
     		        	valor = valor == 'S' ? 'S�' : 'No';
 	    	    	}else if($(this).hasClass('truefalse')) {
 			        	valor = valor == 'true' ? 'S�' : 'No';
-			        }else if($(this).hasClass('importe')) {
+			        }else if($(this).hasClass('importe') && !$(this).hasClass('noformat')) {
     		        	if(valor==0 || (valor!=null && valor!='')) {
 							var $an = $('<span>').autoNumeric({aSep: '.', aDec: ',', aSign: '', pSign: 's', vMin: '-999999999.99'});
 							$an.autoNumeric('set', valor);
