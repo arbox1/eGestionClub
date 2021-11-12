@@ -20,22 +20,6 @@ var ventana=null;
 			'</div>'
 		);
 	
-	// datetimepicker: Establecer valores por defecto comunes a todos los datepicker
-	/*
-	$.fn.datepicker.defaults = $.extend({}, $.fn.datepicker.defaults, {
-		format: 'dd/mm/yyyy', 
-		language: 'es',
-		autoclose: true
-	});
-	console.log($.fn.datepicker.defaults);
-	*/
-/*	
-	$.fn.datetimepicker.defaults = $.extend({}, $.fn.datetimepicker.defaults, {
-		locale: 'es',
-		format: 'DD/MM/YYYY',
-		useCurrent: false
-	});
-*/	
 //	$.fn.tooltip.Constructor.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
 //		container: 'body'
 //	});
@@ -695,25 +679,23 @@ var ventana=null;
 		
 		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
 		
-		
-//		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
-//		$('.datepicker').datepicker({
-//            todayBtn: "linked",
-//            format: 'dd/mm/yyyy',
-//            language: 'es',
-//            container: container,
-//            todayHighlight: true,
-//            autoclose: true
-//		});
-		
-//		$('.datepicker').datepicker({
-//            format: "dd/mm/yyyy",
-//            todayBtn: "linked",
-//            container: "body",
-//            language: "es",
-//            autoclose: true,
-//            todayHighlight: true
-//        });
+		// datetimepicker: Establecer valores por defecto comunes a todos los datepicker
+		$.fn.datepicker.defaults = $.extend({}, $.fn.datepicker.defaults, {
+			format: 'dd/mm/yyyy', 
+			language: 'es',
+			autoclose: true
+		});
+		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+		$('.datepicker').datepicker({
+            format: "dd/mm/yyyy",
+            todayBtn: "linked",
+            container: "body",
+            language: "es",
+            autoclose: true,
+            todayHighlight: true
+        }).on('hide', function(e) {
+	            e.stopPropagation();
+	    }).css('z-index', 1500);
 		
 		$('table.extendida').DataTable({
 			"footerCallback": function ( row, data, start, end, display ) {

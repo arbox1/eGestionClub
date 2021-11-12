@@ -477,7 +477,7 @@
 										<input type="text" name="fechaInicio" 
 											data-date-format="mm/dd/yyyy"
 											data-date-container='#editar'
-											class="form-control fecha_corta fechaInicio fechaValida required" 
+											class="form-control datepicker fecha_corta fechaInicio fechaValida required" 
 											placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>
@@ -504,7 +504,7 @@
 										<input type="text" name="fechaFin" 
 											data-date-format="mm/dd/yyyy"
 											data-date-container='#editar'
-											class="form-control fecha_corta fechaFin fechaValida required" 
+											class="form-control datepicker fecha_corta fechaFin fechaValida required" 
 											placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>

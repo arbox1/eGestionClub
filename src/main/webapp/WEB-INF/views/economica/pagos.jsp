@@ -214,7 +214,7 @@
 								<div class="form-group row">
 									<label for="fecha" class="col-sm-4 col-form-label">Fecha:</label>
 									<div class="col-sm-8">
-										<input type="text" name="stringFecha" class="fecha form-control required"
+										<input type="text" name="stringFecha" class="fecha datepicker form-control required"
 											data-date-format="mm/dd/yyyy"
 											data-date-container="#pago"
 											placeholder="dd/mm/aaaa"

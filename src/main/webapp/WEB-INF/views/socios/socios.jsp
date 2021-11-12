@@ -7,6 +7,7 @@
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
+			
 			$("#tablaSocios").on("click", ".cargar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
@@ -53,17 +54,7 @@
 		    			$('#editar .foto').show();
 		    		}
 		    	});
-		    }).on('shown.bs.modal', function(e) {
-// 			    e.stopPropagation();
-// 			    $('.datepicker').datepicker({
-// 		            format: "dd/mm/yyyy",
-// 		            todayBtn: "linked",
-// 		            container: '#editar .modal-body',
-// 		            language: "es",
-// 		            autoclose: true,
-// 		            todayHighlight: true
-// 		        });
-			}).on('hide.bs.modal', function(e){
+		    }).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	$('#editar .foto').hide();
 		    	$(this, "form").limpiar();
@@ -495,7 +486,7 @@
 											<form:input path="fechaNacimiento" 
 												data-date-format="mm/dd/yyyy"
 												data-date-container='#editar'
-												cssClass="form-control fecha_corta fechaNacimiento required" 
+												cssClass="form-control datepicker fecha_corta fechaNacimiento required" 
 												placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>
@@ -765,12 +756,12 @@
 						</div>
 						
 						<div class="form-group row">
-							<label for="fechaNacimiento" class="col-sm-3 col-form-label">Fecha.:</label>
+							<label for="fecha" class="col-sm-3 col-form-label">Fecha.:</label>
 							<div class="col-sm-9">
-									<input type="text" name="fecha" 
+									<input type="text" name="fecha"
+										class="form-control fecha_corta datepicker fecha required" 
 										data-date-format="mm/dd/yyyy"
 										data-date-container='#nuevaCuota'
-										class="form-control fecha_corta fecha required" 
 										placeholder="dd/mm/aaaa"/>
 							</div>
 						</div>

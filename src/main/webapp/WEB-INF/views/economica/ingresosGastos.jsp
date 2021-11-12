@@ -276,7 +276,7 @@
 								<form:input path="fecha" 
 									data-date-format="mm/dd/yyyy"
 									data-date-container='#editar'
-									cssClass="form-control fecha_corta fecha fechaValida required" 
+									cssClass="form-control datepicker fecha_corta fecha fechaValida required" 
 									placeholder="dd/mm/aaaa"/>
 							</div>
 						</div>
