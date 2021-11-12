@@ -4,9 +4,19 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utilidades {
+	
+	public static Date asignarHora (Date fecha, String hora) {
+		String [] h = hora.split(":");
+	    Calendar c = Calendar.getInstance();
+	    c.setTime(fecha);
+	    c.set(Calendar.HOUR_OF_DAY, new Integer(h[0]));
+	    c.set(Calendar.MINUTE, new Integer(h[1]));
+	    return c.getTime();
+	}
 
 	public static String formatDateToString (Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");

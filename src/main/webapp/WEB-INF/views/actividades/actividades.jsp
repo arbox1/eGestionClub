@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -41,7 +41,7 @@
 		    	e.stopPropagation();
 		    	var data = $(this).data();
 
-		    	bootbox.confirm("¿Está seguro que desea eliminar la actividad?", function(result){
+		    	bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar la actividad?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax(data.accion, {
 		    				"id": data.id
@@ -54,7 +54,7 @@
 		    	e.stopPropagation();
 		    	var data = $(this).data();
 
-		    	bootbox.confirm("¿Está seguro que desea enviar la notificación?", function(result){
+		    	bootbox.confirm("Â¿EstÃ¡ seguro que desea enviar la notificaciÃ³n?", function(result){
 		    		if(result){
 		    			$.loading("Enviando...")
 		    			$.enviarFormAjax(data.accion, {
@@ -113,11 +113,11 @@
 			
 			$('#detalle table.detalle').DataTable({
 				language: {
-					"emptyTable": "la actividad no tiene ningún participante"
+					"emptyTable": "la actividad no tiene ningÃºn participante"
 				},
     			columns: [
     	            { data: "nombre", title: "Nombre" },
-    	            { data: "telefono", title: "Teléfono" },
+    	            { data: "telefono", title: "TelÃ©fono" },
     	            { data: "email", title: "Email" },
     	            { data: "cantidad", title: "Cantidad", className: 'text-nowrap text-center' },
     	            { data: "importe", title: "Importe", className: 'text-nowrap text-center' },
@@ -188,7 +188,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar el participante?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el participante?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id
@@ -203,7 +203,7 @@
 			$('#inscripcion').on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
-		    	$(this, "form .id").val("");
+		    	$(this, ".id").val("");
 		    	$(this, "form").limpiar();
 		    });
 			
@@ -267,7 +267,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar el documento?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el documento?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id,
@@ -366,11 +366,11 @@
 										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaInicio}" /></td>
 										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaFin}" /></td>
 										<td class="text-center text-nowrap">
-											<button type="button" class="btn btn-link enviar" title="Enviar notificación antes de la actividad"
+											<button type="button" class="btn btn-link enviar" title="Enviar notificaciÃ³n antes de la actividad"
 												data-accion="notificarSalida" data-id="${actividad.id}">
 												<i class="fas fa-envelope"></i>
 											</button>
-											<button type="button" class="btn btn-link enviar" title="Enviar notificiación después de la actividad"
+											<button type="button" class="btn btn-link enviar" title="Enviar notificiaciÃ³n despuÃ©s de la actividad"
 												data-accion="notificarLlegada" data-id="${actividad.id}">
 												<i class="far fa-envelope"></i>
 											</button>
@@ -405,7 +405,7 @@
 		</c:choose>
 	</div>
 	
-	<div class="modal" id="editar" tabindex="-1" role="dialog" aria-labelledby="Editar Gasto" aria-hidden="true">
+	<div class="modal" id="editar" tabindex="-1" role="dialog" aria-labelledby="Editar Actividad" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -416,7 +416,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="nuevo">
+					<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="nuevo" enctype="multipart/form-data" acceptcharset="UTF-8">
 						<input type="hidden" name="id" class="id no-limpiar"/>
 
 						<div class="form-group row">
@@ -626,7 +626,7 @@
 						</div>
 						
 						<div class="form-group row">
-							<label for="telefono" class="col-form-label col-md-3">Teléfono:</label>
+							<label for="telefono" class="col-form-label col-md-3">TelÃ©fono:</label>
 							<div class="col-md-9">
 								<input type="text" name="telefono" class="form-control telefono required" />
 							</div>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -96,7 +96,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar el documento?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el documento?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id,

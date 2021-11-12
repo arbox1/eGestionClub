@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,7 +16,7 @@
 			$("#tablaUsuarios").on("click", ".eliminar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
-		    	bootbox.confirm("¿Está seguro que desea eliminar el usuario seleccionado?", function(result){
+		    	bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el usuario seleccionado?", function(result){
 		    		if(result){
 		    			$.enviarForm(data.accion, data.modelo, {
 		    				"id": data.id
@@ -59,8 +59,8 @@
 								<tr>
 									<th class="text-center">Identificador</th>
 									<th class="text-center">Nombre</th>
-									<th class="text-center">1º Apellido</th>
-									<th class="text-center">2º Apellido</th>
+									<th class="text-center">1Âº Apellido</th>
+									<th class="text-center">2Âº Apellido</th>
 									<th class="text-center">Email</th>
 									<th></th>
 								</tr>
@@ -120,13 +120,13 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="apellido1" class="col-sm-2 col-form-label">1º Apellido</label>
+							<label for="apellido1" class="col-sm-2 col-form-label">1Âº Apellido</label>
 							<div class="col-sm-10">
 								<form:input path="apellido1" cssClass="form-control apellido1 required" />
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="apellido2" class="col-sm-2 col-form-label">2º Apellido</label>
+							<label for="apellido2" class="col-sm-2 col-form-label">2Âº Apellido</label>
 							<div class="col-sm-10">
 								<form:input path="apellido2" cssClass="form-control apellido2 required" />
 							</div>

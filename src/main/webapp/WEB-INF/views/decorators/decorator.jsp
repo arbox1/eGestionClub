@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <%
 	response.setHeader("Cache-Control", "no-cache");
@@ -11,7 +11,7 @@
 <head><%@ page isELIgnored="false"%>
 
 <title>eGestion: <sitemesh:write property='title' /></title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
 	var context = '${context}';
 </script>
@@ -125,7 +125,7 @@
 		<sitemesh:write property='body' />
 	</div>
 
-	<div class='disclaimer'>Emilio López Delgado</div>
+	<div class='disclaimer'>Emilio LÃ³pez Delgado</div>
 
 </body>
 </html>

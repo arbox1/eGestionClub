@@ -2,7 +2,6 @@ package es.arbox.eGestion.controller.actividades;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +37,7 @@ import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
 import es.arbox.eGestion.service.config.MailService;
+import es.arbox.eGestion.utils.Utilidades;
 
 @Controller
 @RequestMapping("/actividades/actividades")
@@ -134,11 +134,11 @@ public class ActividadesController extends BaseController {
 		String opcion = actividad.getId() != null ? "actualizada" : "realizada";
 		
 		if(!StringUtils.isEmpty(actividad.getHoraInicio())) {
-			actividad.setFechaInicio(asignarHora(actividad.getFechaInicio(), actividad.getHoraInicio()));
+			actividad.setFechaInicio(Utilidades.asignarHora(actividad.getFechaInicio(), actividad.getHoraInicio()));
 		}
 		
 		if(!StringUtils.isEmpty(actividad.getHoraFin())) {
-			actividad.setFechaFin(asignarHora(actividad.getFechaFin(), actividad.getHoraFin()));
+			actividad.setFechaFin(Utilidades.asignarHora(actividad.getFechaFin(), actividad.getHoraFin()));
 		}
 		
 		actividadService.guardar(actividad);
@@ -274,13 +274,4 @@ public class ActividadesController extends BaseController {
 		
         return result;
     }
-	
-	private Date asignarHora (Date fecha, String hora) {
-		String [] h = hora.split(":");
-	    Calendar c = Calendar.getInstance();
-	    c.setTime(fecha);
-	    c.set(Calendar.HOUR_OF_DAY, new Integer(h[0]));
-	    c.set(Calendar.MINUTE, new Integer(h[1]));
-	    return c.getTime();
-	}
 }

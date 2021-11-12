@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -11,7 +11,7 @@
 			$('#recordatorio').on('click', '.guardar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
-				bootbox.confirm("¿Está seguro que desea realizar la notificación?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea realizar la notificaciÃ³n?", function(result){
 		    		if(result){
 		    			$('#recordatorio').enviar(data.accion, function(res){
 							$('#recordatorio').modal("hide");
@@ -74,7 +74,7 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label for="importe" class="col-sm-4 col-form-label">Categoría:</label>
+									<label for="importe" class="col-sm-4 col-form-label">CategorÃ­a:</label>
 									<div class="col-sm-8">
 										<select name="categoria.id" class="form-control required">
 											<option value=""></option>

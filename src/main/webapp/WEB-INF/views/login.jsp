@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,7 +24,7 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="descripcion" class="col-sm-4 col-form-label">Contraseña</label>
+						<label for="descripcion" class="col-sm-4 col-form-label">ContraseÃ±a</label>
 						<div class="col-sm-8">
 							<form:password path="password" cssClass="form-control password required"/>
 						</div>

@@ -97,6 +97,18 @@ implements WebMvcConfigurer {
 		return resolver;
 	}
 	
+//	@Bean
+//	public ViewResolver getJasperReportsViewResolver() {
+//	  JasperReportsViewResolver resolver = new JasperReportsViewResolver();
+//	  resolver.setPrefix("classpath:/jasperreports/");
+//	  resolver.setSuffix(".jasper");
+//	  resolver.setReportDataKey("datasource");
+//	  resolver.setViewNames("rpt_*");
+//	  resolver.setViewClass(JasperReportsMultiFormatView.class);
+//	  resolver.setOrder(0);
+//	  return resolver;
+//	} 
+	
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();

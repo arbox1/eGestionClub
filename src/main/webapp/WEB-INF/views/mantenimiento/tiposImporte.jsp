@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,7 +10,7 @@
 		    $('#tablaTiposImporte .eliminar').click(function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
-		    	bootbox.confirm("¿Está seguro que desea eliminar el tipo de ingreso?", function(result){
+		    	bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el tipo de ingreso?", function(result){
 		    		if(result){
 		    			$.enviarForm(data.accion, data.modelo, {
 		    				"id": data.id
@@ -67,7 +67,7 @@
 		    
 		    $('#detalle table.detalle').DataTable({
     			columns: [
-    	            { data: "descripcion", title: "Descripción" },
+    	            { data: "descripcion", title: "DescripciÃ³n" },
     	            { data: "orden", title: "orden" }
     	        ]
     		});
@@ -81,7 +81,7 @@
 			<div class="col-md-offset-1 col-md-10">
 				<div class="row botonera">
 					<div class="col-md-12" >
-						<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#editar">Añadir Tipo Importe</button>
+						<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#editar">AÃ±adir Tipo Importe</button>
 					</div>
 				</div>
 				<div class="panel panel-info">
@@ -137,7 +137,7 @@
 					<form:form action="guardar" cssClass="form-horizontal validation" method="post" modelAttribute="tipo">
 						<form:hidden path="id" cssClass="id" />
 						<div class="form-group row">
-							<label for="descripcion" class="col-form-label col-md-2">Descripción:</label>
+							<label for="descripcion" class="col-form-label col-md-2">DescripciÃ³n:</label>
 							<div class="col-md-10">
 								<form:input path="descripcion" cssClass="form-control descripcion required" />
 							</div>
@@ -172,7 +172,7 @@
 				<div class="modal-body">
 					<div class="row botonera">
 						<div class="col-md-12">
-							<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#subtipo">Añadir Subtipo Importe</button>
+							<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#subtipo">AÃ±adir Subtipo Importe</button>
 						</div>
 					</div>
 					<table class="table table-striped table-bordered detalle">
@@ -200,7 +200,7 @@
 					<form action="guardarSubTipo" cssClass="form-horizontal validation" method="post" modelAttribute="subtipo">
 						<input type="hidden" name="id" class="id"/>
 						<div class="form-group row">
-							<label for="descripcion" class="col-form-label col-md-2">Descripción:</label>
+							<label for="descripcion" class="col-form-label col-md-2">DescripciÃ³n:</label>
 							<div class="col-md-10">
 								<input type="text" name="descripcion" class="form-control descripcion required"/>
 							</div>

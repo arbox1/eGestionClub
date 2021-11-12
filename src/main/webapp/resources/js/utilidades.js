@@ -512,6 +512,7 @@ var ventana=null;
 	    			if(!$form.hasClass('validation') || $form.valid()) {
 	    				
 	    				if($form.length == 0) {
+	    					alert("a");
 	    					$form = $('<form enctype="multipart/form-data">');
 	    					element.wrapInner($form);
 	    					$form = $('form', element);
@@ -520,31 +521,18 @@ var ventana=null;
 	    				if(button) 
 	    					$.loading('Enviando...');
 	    				
-//	    				var $disabledControls = $(':input:disabled', $form).prop('disabled', false);
-	    				
 	    				var data2 = new FormData($form[0]);
 	    				data2.append('iehack', "&#9760;");
 	    				console.log(data2);
 						if(1==1){
 						 $.ajax({
 								type : "POST",
-								contentType : false,
 								processData: false,
+								contentType : false,
 								url : url,
 								data : data2,
-//								dataType : 'json',
 								timeout : 100000,
 						        success: function(data) {
-//						        	$disabledControls.prop('disabled', true);
-						        	
-//						        	if(button)
-//						        		button.button('reset');
-						        	
-						        	//Si la petici�n es correcta, guarda en elemento una bandera que se comprobar� luego con la funci�n "checkUpdated"
-//						        	if((data.ok && data.ok==='S') || (data.correcto && data.correcto==='S')) {
-//						        		element.data('updated', 'S');
-//						        	}
-						        	
 									if(callback && typeof callback==='function') {
 										callback.call(element, data);
 									}

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,7 +30,7 @@
 			$("#tablaSocios").on("click", ".eliminar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
-		    	bootbox.confirm("¿Está seguro que desea eliminar el socio seleccionado?", function(result){
+		    	bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el socio seleccionado?", function(result){
 		    		if(result){
 		    			$.enviarForm(data.accion, data.modelo, {
 		    				"id": data.id
@@ -102,7 +102,7 @@
 			
 			$('#detalle table.detalle').DataTable({
 				language: {
-					"emptyTable": "El socio no tiene está en ninguna escuela deportiva"
+					"emptyTable": "El socio no tiene estÃ¡ en ninguna escuela deportiva"
 				},
     			columns: [
     	            { data: "curso.descripcion", title: "Curso" },
@@ -165,7 +165,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar la inscripción?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar la inscripciÃ³n?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id
@@ -195,7 +195,7 @@
 								tipo: 'link',
 								icono: 'envelope',
 								clases: 'enviar',
-								title: 'Enviar notificación',
+								title: 'Enviar notificaciÃ³n',
 								data: {
 									id: row.id,
 									accion: 'enviarMailCuota'
@@ -253,7 +253,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar la cuota?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar la cuota?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id
@@ -266,7 +266,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea el correo de pago de cuota?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea el correo de pago de cuota?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id
@@ -344,7 +344,7 @@
 				e.stopPropagation();
 				var $data = $(this).data();
 				
-				bootbox.confirm("¿Está seguro que desea eliminar el documento?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el documento?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id,
@@ -502,7 +502,7 @@
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group row">
-									<label for="telefono" class="col-sm-4 col-form-label">Teléfono:</label>
+									<label for="telefono" class="col-sm-4 col-form-label">TelÃ©fono:</label>
 									<div class="col-sm-8">
 										<form:input path="telefono" cssClass="form-control telefono required" />
 									</div>

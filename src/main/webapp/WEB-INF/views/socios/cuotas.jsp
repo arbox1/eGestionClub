@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -64,10 +64,10 @@
 								<form:options items="${escuelas}" itemValue="id" itemLabel="descripcion"/>
 							</form:select>
 						</div>
-						<label for="descripcion" class="col-sm-1 col-form-label">Categoría</label>
+						<label for="descripcion" class="col-sm-1 col-form-label">CategorÃ­a</label>
 						<div class="col-sm-3">
 							<form:select path="categoria.id" cssClass="form-control" >
-								<form:option value="" label="--Selecciona una categoría"/>
+								<form:option value="" label="--Selecciona una categorÃ­a"/>
 								<form:options items="${categorias}" itemValue="id" itemLabel="descripcion"/>
 							</form:select>
 						</div>

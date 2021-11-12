@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/inc/taglibs.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -11,7 +11,7 @@
 			$('#tablaPagos').on('click', '.eliminar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
-				bootbox.confirm("¿Está seguro que desea eliminar el gasto seleccionado?", function(result){
+				bootbox.confirm("Â¿EstÃ¡ seguro que desea eliminar el gasto seleccionado?", function(result){
 		    		if(result){
 		    			$.enviarFormAjax(data.accion, {
 		    				"id": data.id
@@ -227,7 +227,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group row">
-									<label for="observacion" class="col-sm-4 col-form-label">Observación:</label>
+									<label for="observacion" class="col-sm-4 col-form-label">ObservaciÃ³n:</label>
 									<div class="col-sm-8">
 										<input type="text" name="observacion" class="observacion form-control"/>
 									</div>
