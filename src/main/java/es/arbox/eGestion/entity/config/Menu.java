@@ -16,8 +16,12 @@ import es.arbox.eGestion.entity.BaseEntidad;
 @NamedQueries({
 	@NamedQuery(
 			name="menu.porMenuEstructura",
-				query="SELECT m FROM Menu m WHERE m.menuEstructura.id = :idMenuEstructura order by m.orden "
+				query="SELECT m FROM Menu m WHERE m.menuEstructura.id = :idMenuEstructura and exists (select mr from MenuRol mr, UsuarioRol ur where mr.menu.id = m.id and mr.rol.id = ur.rol.id and ur.usuario.id = :idUsuario) order by m.orden "
 			),
+	@NamedQuery(
+			name="menu.porMenuEstructuraSinUsuario",
+				query="SELECT m FROM Menu m WHERE m.menuEstructura.id = :idMenuEstructura order by m.orden "
+			)
 }) 
 
 @Entity
@@ -26,7 +30,7 @@ public class Menu extends BaseEntidad{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "m_id")
-	private int id;
+	private Integer id;
 	
 	@ManyToOne
 	@JoinColumn(name = "m_me_id")
@@ -41,11 +45,11 @@ public class Menu extends BaseEntidad{
 	@Column(name = "m_orden")
 	private int orden;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

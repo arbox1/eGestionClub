@@ -31,7 +31,7 @@ public class MenuEstructura extends BaseEntidad{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "me_id")
-	private int id;
+	private Integer id;
 	
 	@ManyToOne
 	@JoinColumn(name = "me_tm_id")
@@ -55,11 +55,11 @@ public class MenuEstructura extends BaseEntidad{
 		this.menus = menus;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

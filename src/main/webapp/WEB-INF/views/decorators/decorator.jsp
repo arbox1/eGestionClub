@@ -68,6 +68,13 @@
 
 <script type="text/javascript">
 	$( document ).ready(function() {
+		
+		$.obtener(context+'base/usuario', {}, function(res){
+			$('.logado').cargarDatos({
+    			datos: res.resultados.usuario
+    		});
+    	});
+		
     	$.obtener(context+'base/menu', {
     		"id": 1
     	}, function(res){
@@ -81,7 +88,7 @@
 			});
     	});
     	
-    	$('.row .logout').click(function(e){
+    	$('.logado .logout').click(function(e){
     		e.stopPropagation();
     		location.href=context+"login/logout";
     	});
@@ -107,10 +114,11 @@
 <body>
 	<header>
 		<div class="container">
-			<div class="row">
-				<div class="col-sm-10">
+			<div class="row logado">
+				<div class="col-sm-9">
 				</div>
-				<div class="col-sm-2 text-right" style="background-color: #dddddd; border-radius: 10px;">
+				<div class="col-sm-3 text-right" style="background-color: #dddddd; border-radius: 10px;">
+					<strong><span class="nombreCompleto"></span></strong>
 					<button type="button" class="btn btn-link logout"><i class="fas fa-2x fa-sign-out-alt"></i></button>
 				</div>
 			</div>

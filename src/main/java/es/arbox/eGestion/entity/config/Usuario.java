@@ -1,26 +1,48 @@
 
 package es.arbox.eGestion.entity.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import es.arbox.eGestion.entity.BaseEntidad;
 
+@NamedQueries({
+	@NamedQuery(
+			name="usuarioPorUsername",
+				query="SELECT u FROM Usuario u WHERE u.username = :username "
+			),
+}) 
+
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "Usuarios")
-public class Usuario extends BaseEntidad{
-
+public class Usuario extends BaseEntidad implements UserDetails{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "us_id")
 	private Integer id;
 	
 	@Column(name = "us_identificador")
-	private String identificador;
+	private String username;
 	
 	@Column(name = "us_password")
 	private String password;
@@ -42,7 +64,10 @@ public class Usuario extends BaseEntidad{
 	
 	@Column(name = "us_telefono")
 	private String telefono;
-
+	
+	@Transient
+	private Set<Rol> roles;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -51,12 +76,12 @@ public class Usuario extends BaseEntidad{
 		this.id = id;
 	}
 
-	public String getIdentificador() {
-		return identificador;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setIdentificador(String identificador) {
-		this.identificador = identificador;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -121,5 +146,44 @@ public class Usuario extends BaseEntidad{
 	
 	public String getNombreCompleto() {
 		return (nombre.isEmpty() ? "" : nombre) + " " + (apellido1.isEmpty() ? "" : apellido1) + " " + (apellido2.isEmpty() ? "" : apellido2);
+	}
+
+	@Override
+	@JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> r = new ArrayList<>();
+        for(Rol rol : roles) {
+        	r.add(new SimpleGrantedAuthority(rol.getCodigo()));
+        }
+//        r.add(new SimpleGrantedAuthority("USER"));
+        return r;
+    }
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	public Set<Rol> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Rol> roles) {
+		this.roles = roles;
 	}
 }

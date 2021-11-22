@@ -6,7 +6,10 @@ import es.arbox.eGestion.entity.config.Menu;
 import es.arbox.eGestion.entity.config.MenuEstructura;
 
 public interface MenuDAO {
-	public List<MenuEstructura> getMenuEstructura(Integer idTipoMenu);
 	
-	public List<Menu> getMenuByIdEstructura(Integer idMenuEstructura);
+	public List <MenuEstructura> getMenuEstructura(Integer idTipoMenu);
+	
+	public List<MenuEstructura> getMenuEstructura(Integer idTipoMenu, Integer idUsuario);
+	
+	public List<Menu> getMenuByIdEstructura(Integer idMenuEstructura, Integer idUsuario);
 }

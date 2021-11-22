@@ -4,13 +4,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BaseEntidad {
 	
-	public static <T> List<Map<String, Object>> getListaMapa(List<T> datos){
+	public static <T> Collection<Map<String, Object>> getListaMapa(Collection<T> datos){
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		for(T dato : datos) {

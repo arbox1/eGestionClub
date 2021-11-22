@@ -21,4 +21,10 @@ public class MenuServiceImpl extends GenericServiceImpl implements MenuService {
 	public List<MenuEstructura> getMenuEstructura(Integer idTipoMenu){
 		return menuDAO.getMenuEstructura(idTipoMenu);
 	}
+	
+	@Override
+	@Transactional
+	public List<MenuEstructura> getMenuEstructura(Integer idTipoMenu, Integer idUsuario){
+		return menuDAO.getMenuEstructura(idTipoMenu, idUsuario);
+	}
 }

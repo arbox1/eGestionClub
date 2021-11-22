@@ -18,6 +18,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -38,6 +39,7 @@ import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.Errores;
 import es.arbox.eGestion.entity.config.MenuEstructura;
+import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.entity.documento.Documento;
 import es.arbox.eGestion.service.config.MenuService;
 
@@ -103,9 +105,24 @@ public class BaseController {
 
 		RespuestaAjax result = new RespuestaAjax();
 		
-		List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId());
+		Usuario usuario = getUsuarioLogado();
+		
+		List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId(), usuario.getId());
 
 		result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
+		result.setResultado("ok", "S");
+		
+		ObjectMapper Obj = new ObjectMapper();
+		return Obj.writeValueAsString(result);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/usuario", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String usuario(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		result.setResultado("usuario", getUsuarioLogado());
 		result.setResultado("ok", "S");
 		
 		ObjectMapper Obj = new ObjectMapper();
@@ -116,16 +133,20 @@ public class BaseController {
 	public HttpEntity<byte[]> getDocumento(@ModelAttribute("valor") ValoresDTO valores) throws IOException {
       Documento documento = menuService.obtenerPorId(Documento.class, valores.getId());
       
-//      response.setContentType(documento.getMime());
-//      response.setHeader("Content-Disposition", String.format("attachment; filename=\"%1$s\"", documento.getNombre()));
-//      
-//      IOUtils.copy(new ByteArrayInputStream(documento.getFichero()), response.getOutputStream());
-//      response.flushBuffer();
-
       MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
       header.add("Content-disposition", "form-data; name=filex; filename=" + documento.getNombre());
       header.add("Content-type", documento.getMime());
       
       return new HttpEntity<byte[]>(documento.getFichero(), header);
+	}
+	
+	protected Usuario getUsuarioLogado() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Usuario usuario = null;
+		if (principal instanceof Usuario) {
+			usuario = (Usuario) principal;
+		}
+		
+		return usuario;
 	}
 }

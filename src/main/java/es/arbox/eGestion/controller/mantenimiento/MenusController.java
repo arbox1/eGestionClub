@@ -21,51 +21,51 @@ import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
+import es.arbox.eGestion.entity.config.Menu;
+import es.arbox.eGestion.entity.config.MenuEstructura;
+import es.arbox.eGestion.entity.config.MenuRol;
 import es.arbox.eGestion.entity.config.Rol;
-import es.arbox.eGestion.entity.config.Usuario;
-import es.arbox.eGestion.entity.config.UsuarioRol;
 import es.arbox.eGestion.enums.TiposMensaje;
-import es.arbox.eGestion.service.config.UsuarioRolService;
-import es.arbox.eGestion.utils.Utilidades;
+import es.arbox.eGestion.service.config.MenuRolService;
 
 @Controller
-@RequestMapping("/mantenimiento/usuarios")
-public class UsuariosController extends BaseController {
+@RequestMapping("/mantenimiento/menus")
+public class MenusController extends BaseController {
 	
 	@Autowired
-	UsuarioRolService usuarioRolService;
+	MenuRolService menuRolService;
 	
 	@GetMapping("/")
 	public String listaSocios(Model model) {
-		model.addAttribute("usuarios", menuService.obtenerTodos(Usuario.class));
+		model.addAttribute("menus", menuService.obtenerTodosOrden(Menu.class, " menuEstructura.orden, orden "));
+		model.addAttribute("menusEstructura", menuService.obtenerTodos(MenuEstructura.class));
 		model.addAttribute("roles", menuService.obtenerTodosOrden(Rol.class, " descripcion "));
-		model.addAttribute("usuario", new Usuario());
+		model.addAttribute("menu", new Menu());
 		model.addAttribute("valor", new ValoresDTO());
-		return "/mantenimiento/usuarios";
+		return "/mantenimiento/menus";
 	}
 	
 	@PostMapping("/guardar")
-    public String guardar(@ModelAttribute("nuevo") Usuario usuario, RedirectAttributes redirectAttrs) {
-		String msg = usuario.getId() != null ? "actualizado" : "creado";
-		usuario.setPassword(Utilidades.getMd5(usuario.getPassword()));
-		menuService.guardar(usuario);
+    public String guardar(@ModelAttribute("nuevo") Menu menu, RedirectAttributes redirectAttrs) {
+		String msg = menu.getId() != null ? "actualizado" : "creado";
+		menuService.guardar(menu);
 		
 		Mensajes mensajes = new Mensajes();
-		mensajes.mensaje(TiposMensaje.success, String.format("Usuario %1$s correctamente.", msg));
+		mensajes.mensaje(TiposMensaje.success, String.format("Menu %1$s correctamente.", msg));
 		redirectAttrs.addFlashAttribute("mensajes", mensajes.getMensajes());
 		
-        return "redirect:/mantenimiento/usuarios/";
+        return "redirect:/mantenimiento/menus/";
     }
 	
 	@PostMapping("/eliminar")
-    public String eliminar(@ModelAttribute("nuevo") Usuario usuario, RedirectAttributes redirectAttrs) {
-		menuService.eliminar(usuario.getClass(), usuario.getId());
+    public String eliminar(@ModelAttribute("nuevo") Menu menu, RedirectAttributes redirectAttrs) {
+		menuService.eliminar(menu.getClass(), menu.getId());
 		
 		Mensajes mensajes = new Mensajes();
-		mensajes.mensaje(TiposMensaje.success, "Usuario eliminado correctamente.");
+		mensajes.mensaje(TiposMensaje.success, "Menu eliminado correctamente.");
 		redirectAttrs.addFlashAttribute("mensajes", mensajes.getMensajes());
 		
-		return "redirect:/mantenimiento/usuarios/";
+		return "redirect:/mantenimiento/menus/";
     }
 	
 	@ResponseBody
@@ -74,9 +74,8 @@ public class UsuariosController extends BaseController {
 
 		RespuestaAjax result = new RespuestaAjax();
 		
-		Usuario usuario = menuService.obtenerPorId(Usuario.class, valores.getId());
-		usuario.setPassword("");
-		result.setResultado("usuario", usuario.getMapa());
+		Menu menu = menuService.obtenerPorId(Menu.class, valores.getId());
+		result.setResultado("menu", menu.getMapa());
 		
 		return menuService.serializa(result);
 	}
@@ -86,24 +85,24 @@ public class UsuariosController extends BaseController {
 
 		RespuestaAjax result = new RespuestaAjax();
 		
-		Usuario usuario = new Usuario();
-		usuario.setId(valores.getId());
+		Menu menu = new Menu();
+		menu.setId(valores.getId());
 		
-		result.setResultado("roles", usuarioRolService.getUsuarioRol(usuario));
+		result.setResultado("roles", menuRolService.getMenuRol(menu));
 		
 		ObjectMapper Obj = new ObjectMapper();
 		return Obj.writeValueAsString(result);
 	}
 	
 	@PostMapping(value = "/guardarRol")
-    public @ResponseBody RespuestaAjax guardarRol(@ModelAttribute UsuarioRol usuarioRol, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarRol(@ModelAttribute MenuRol menuRol, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
-		String opcion = usuarioRol.getId() != null ? "actualizado" : "añadido";
+		String opcion = menuRol.getId() != null ? "actualizado" : "añadido";
 
-		menuService.guardar(usuarioRol);
+		menuService.guardar(menuRol);
 		
-		result.setResultado("id", usuarioRol.getUsuario().getId());
+		result.setResultado("id", menuRol.getMenu().getId());
 		result.setResultado("ok", "S");
 		
 		Mensajes mensajes = new Mensajes();
@@ -114,10 +113,10 @@ public class UsuariosController extends BaseController {
     }
 	
 	@PostMapping(value = "/eliminarRol")
-    public @ResponseBody RespuestaAjax eliminarRol(@ModelAttribute UsuarioRol usuarioRol, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax eliminarRol(@ModelAttribute MenuRol menuRol, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
 		
-		menuService.eliminar(UsuarioRol.class, usuarioRol.getId());;
+		menuService.eliminar(MenuRol.class, menuRol.getId());;
 		
 		result.setResultado("ok", "S");
 		

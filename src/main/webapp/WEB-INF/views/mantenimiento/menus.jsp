@@ -3,17 +3,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
-<title>Usuarios</title>
+<title>Menus</title>
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
-			$("#tablaUsuarios").on("click", ".cargar", function(e){
+			$("#tablaMenus").on("click", ".cargar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
 		    	$('#editar').trigger("reload", data).mostrar();
 		    });
 			
-			$("#tablaUsuarios").on("click", ".detalle", function(e){
+			$("#tablaMenus").on("click", ".detalle", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
 		    	
@@ -22,7 +22,7 @@
 		    }).on("click", ".eliminar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
-		    	bootbox.confirm("¿Está seguro que desea eliminar el usuario seleccionado?", function(result){
+		    	bootbox.confirm("¿Está seguro que desea eliminar el menu seleccionado?", function(result){
 		    		if(result){
 		    			$.enviarForm(data.accion, data.modelo, {
 		    				"id": data.id
@@ -37,7 +37,7 @@
 		    		"id": data.id
 		    	}, function(res){
 		    		$('#editar').cargarDatos({
-		    			datos: res.resultados.usuario
+		    			datos: res.resultados.menu
 		    		});
 		    	});
 		    }).on('shown.bs.modal', function(e) {
@@ -48,7 +48,7 @@
 			
 			$('#detalle').on("reload", function(e, data){
 				e.stopPropagation();
-				$('#nuevoRol .usuario_id').val(data.id);
+				$('#nuevoRol .menu_id').val(data.id);
 		    	$.obtener(data.accion, {
 		    		"id": data.id
 		    	}, function(res){
@@ -61,7 +61,7 @@
 			
 			$('#detalle table.detalle').DataTable({
 				language: {
-					"emptyTable": "El usuario no tiene ningún rol"
+					"emptyTable": "El menu no tiene ningún rol"
 				},
     			columns: [
     	            { data: "rol.descripcion", title: "Rol" },
@@ -93,7 +93,7 @@
 		    			$.enviarFormAjax($data.accion, {
 		    				"id": $data.id
 		    			}, function(res){
-		    				$('#detalle').trigger("reload", {id: $('#nuevoRol form .usuario_id').val(), accion: "roles"});
+		    				$('#detalle').trigger("reload", {id: $('#nuevoRol form .menu_id').val(), accion: "roles"});
 		    			});
 		    		}
 		    	});
@@ -124,37 +124,35 @@
 			<div class="col-md-12">
 				<div class="row botonera">
 					<div class="col-md-12" >
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Usuario</button>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Menu</button>
 					</div>
 				</div>
 				<div class="panel panel-info">
 					<div class="panel-body">
-						<table class="table table-striped table-bordered extendida usuarios" id="tablaUsuarios">
+						<table class="table table-striped table-bordered extendida menus" id="tablaMenus">
 							<thead>
 								<tr>
-									<th class="text-center">Identificador</th>
-									<th class="text-center">Nombre</th>
-									<th class="text-center">1º Apellido</th>
-									<th class="text-center">2º Apellido</th>
-									<th class="text-center">Email</th>
+									<th class="text-center">Menu Padre</th>
+									<th class="text-center">Descripcion</th>
+									<th class="text-center">Pagina</th>
+									<th class="text-center">Orden</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="usuario" items="${usuarios}">
+								<c:forEach var="menu" items="${menus}">
 									<tr>
-										<td>${usuario.username}</td>
-										<td>${usuario.nombre}</td>
-										<td>${usuario.apellido1}</td>
-										<td>${usuario.apellido2}</td>
-										<td>${usuario.correo}</td>
+										<td>${menu.menuEstructura.descripcion}</td>
+										<td>${menu.descripcion}</td>
+										<td>${menu.pagina}</td>
+										<td>${menu.orden}</td>
 										<td class="text-center text-nowrap">
-											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${usuario.id}"><i class="fas fa-pencil-alt"></i></button>
+											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${menu.id}"><i class="fas fa-pencil-alt"></i></button>
 											<button type="button" class="btn btn-link detalle"
-												data-accion="roles" data-id="${usuario.id}">
+												data-accion="roles" data-id="${menu.id}">
 												<i class="fas fa-bars"></i>
 											</button>
-											<button type="button" class="btn btn-link eliminar" data-accion="eliminar" data-modelo="nuevo" data-id="${usuario.id}"><i class="fas fa-trash"></i></button>
+											<button type="button" class="btn btn-link eliminar" data-accion="eliminar" data-modelo="nuevo" data-id="${menu.id}"><i class="fas fa-trash"></i></button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -166,54 +164,45 @@
 		</div>
 	</div>
 	
-	<div class="modal" id="editar" tabindex="-1" role="dialog" aria-labelledby="Editar Socio" aria-hidden="true">
+	<div class="modal" id="editar" tabindex="-1" role="dialog" aria-labelledby="Editar Menu" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Editar Usuario</h5>
+					<h5 class="modal-title">Editar Menu</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<form:form action="guardar" cssClass="form-horizontal validation" method="post" modelAttribute="usuario">
+					<form:form action="guardar" cssClass="form-horizontal validation" method="post" modelAttribute="menu">
 						<form:hidden path="id" cssClass="id" />
 						
 						<div class="form-group row">
-							<label for="nombre" class="col-sm-2 col-form-label">Identificador</label>
+							<label for="menuEstructura.id" class="col-sm-2 col-form-label">Menu Padre</label>
 							<div class="col-sm-10">
-								<form:input path="username" cssClass="form-control username required" />
+								<form:select path="menuEstructura.id" cssClass="form-control menuEstructura_id required">
+									<form:option value="" label="--Selecciona un menu"/>
+									<form:options items="${menusEstructura}" itemValue="id" itemLabel="descripcion"/>
+								</form:select>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="nombre" class="col-sm-2 col-form-label">Password</label>
+							<label for="descripcion" class="col-sm-2 col-form-label">Menu</label>
 							<div class="col-sm-10">
-								<form:password path="password" cssClass="form-control required" />
+								<form:input path="descripcion" cssClass="form-control descripcion required" />
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+							<label for="pagina" class="col-sm-2 col-form-label">Pagina</label>
 							<div class="col-sm-10">
-								<form:input path="nombre" cssClass="form-control nombre required" />
+								<form:input path="pagina" cssClass="form-control pagina required" />
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="apellido1" class="col-sm-2 col-form-label">1º Apellido</label>
+							<label for="orden" class="col-sm-2 col-form-label">Orden</label>
 							<div class="col-sm-10">
-								<form:input path="apellido1" cssClass="form-control apellido1 required" />
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="apellido2" class="col-sm-2 col-form-label">2º Apellido</label>
-							<div class="col-sm-10">
-								<form:input path="apellido2" cssClass="form-control apellido2 required" />
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="correo" class="col-sm-2 col-form-label">Email:</label>
-							<div class="col-sm-10">
-								<form:input path="correo" cssClass="form-control correo required email" placeholder="ejemplo@host.com" />
+								<form:input path="orden" cssClass="form-control orden required" />
 							</div>
 						</div>
 					</form:form>
@@ -268,9 +257,9 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="guardarRol" class="form-horizontal validation" method="post" modelAttribute="usuarioRol">
+					<form action="guardarRol" class="form-horizontal validation" method="post" modelAttribute="menuRol">
 						<input type="hidden" name="id" class="id no-limpiar"/>
-						<input type="hidden" name="usuario.id" class="usuario_id no-limpiar"/>
+						<input type="hidden" name="menu.id" class="menu_id no-limpiar"/>
 						<div class="form-group row">
 							<label for="rol" class="col-form-label col-md-3">Rol:</label>
 							<div class="col-md-9">

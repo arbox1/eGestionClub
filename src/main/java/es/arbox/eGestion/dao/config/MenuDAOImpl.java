@@ -25,16 +25,50 @@ public class MenuDAOImpl implements MenuDAO{
         
         List <MenuEstructura> result = query.getResultList();
         for (MenuEstructura menuEstructura : result) {
-        	menuEstructura.setMenus(getMenuByIdEstructura(menuEstructura.getId()));
+        	menuEstructura.setMenus(getMenuByIdEstructura(menuEstructura.getId(), null));
         }
         return result;
     }
 	
-	public List<Menu> getMenuByIdEstructura(Integer idMenuEstructura){
-		Session session = sessionFactory.getCurrentSession();
-        TypedQuery<Menu> query = session.createNamedQuery("menu.porMenuEstructura", Menu.class)
-        											.setParameter("idMenuEstructura", idMenuEstructura);
+	@Override
+    public List <MenuEstructura> getMenuEstructura(Integer idTipoMenu, Integer idUsuario) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<MenuEstructura> query = session.createNamedQuery("menuEstructura.porTipo", MenuEstructura.class)
+        											.setParameter("idTipoMenu", idTipoMenu);
         
+        List <MenuEstructura> result = query.getResultList();
+        for (MenuEstructura menuEstructura : result) {
+        	menuEstructura.setMenus(getMenuByIdEstructura(menuEstructura.getId(), idUsuario));
+        }
+        return result;
+    }
+	
+	public List<Menu> getMenuByIdEstructura(Integer idMenuEstructura, Integer idUsuario){
+		Session session = sessionFactory.getCurrentSession();
+        TypedQuery<Menu> query = session.createNamedQuery(idUsuario != null ? "menu.porMenuEstructura" : "menu.porMenuEstructuraSinUsuario", Menu.class)
+        											.setParameter("idMenuEstructura", idMenuEstructura)
+        											.setParameter("idUsuario", idUsuario);
         return query.getResultList();
+        
+//        Session session = sessionFactory.getCurrentSession();
+//		CriteriaBuilder cb =  sessionFactory.getCurrentSession().getCriteriaBuilder();
+//		
+//		CriteriaQuery<MenuRol> q = cb.createQuery(MenuRol.class);
+//		Root<MenuRol> menusRoles = q.from(MenuRol.class);
+//		List<Predicate> predicados = new ArrayList<Predicate>();
+//		
+//		predicados.add(cb.equal(menusRoles.get("rol").get("id"), idRol));
+//		predicados.add(cb.equal(menusRoles.get("menu").get("menuEstructura").get("id"), idMenuEstructura));
+//		
+//		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(menusRoles.get("menu").get("orden")));
+//		
+//		TypedQuery<MenuRol> query = session.createQuery(q);
+//		
+//		List<Menu> lMenu = new ArrayList<>();
+//		for(MenuRol mrol : query.getResultList()) {
+//			lMenu.add(mrol.getMenu());
+//		}
+//        
+//        return lMenu;
 	}
 }

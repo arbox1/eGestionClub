@@ -15,7 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import es.arbox.eGestion.entity.config.Usuario;
+import es.arbox.eGestion.entity.config.MenuRol;
 import es.arbox.eGestion.service.config.MenuService;
 import es.arbox.eGestion.utils.Utilidades;
 
@@ -42,6 +44,9 @@ implements WebMvcConfigurer {
 	
 	@Autowired
     PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	UserDetailsService userDetailsService;
 	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -131,33 +136,36 @@ implements WebMvcConfigurer {
 	
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    	auth.userDetailsService(usuariosAccesoService);
-//    	/*
         auth.inMemoryAuthentication()
         .passwordEncoder(passwordEncoder)
         .withUser("Albaida").password(passwordEncoder.encode("club")).roles("USER");
         
-        List<Usuario> usuarios = menuService.obtenerTodos(Usuario.class);
-        for(Usuario usuario : usuarios) {
-        	auth.inMemoryAuthentication()
-            .passwordEncoder(passwordEncoder)
-            .withUser(usuario.getIdentificador()).password(usuario.getPassword()).roles("USER");
-        }
-        /**/
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
     
-    @Override
+//    @Override
 	public void configure(WebSecurity web) throws Exception {
     	web.ignoring().antMatchers("/resources/**");
     }
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	List<MenuRol> lMenuRol = menuService.obtenerTodos(MenuRol.class);
+    	
+    	for(MenuRol menuRol : lMenuRol) {
+    		http.authorizeRequests()
+    			.antMatchers("/" + menuRol.getMenu().getPagina() + "**").hasAuthority(menuRol.getRol().getCodigo());
+    	}
+    	
         http.authorizeRequests()
-            .antMatchers("/**").hasRole("USER")
+        	.antMatchers("/principal/**").authenticated()
             .antMatchers("/resources/**", "/decorators/**").permitAll()
-            .and().formLogin().loginPage("/login/").loginProcessingUrl("/login/logar2").defaultSuccessUrl("/principal/")
-            .and().logout().logoutSuccessUrl("/login/").permitAll()
+            .and().formLogin()
+            		.loginPage("/login/")
+            		.loginProcessingUrl("/login/logar2")
+            		.defaultSuccessUrl("/principal/", true)
+            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("login/logout", "GET"))
+            .deleteCookies("remove").logoutSuccessUrl("/login/").permitAll()
             .and().csrf().disable();
     }
 }
