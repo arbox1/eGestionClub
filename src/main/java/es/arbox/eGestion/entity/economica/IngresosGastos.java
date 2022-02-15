@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
@@ -38,6 +39,22 @@ public class IngresosGastos extends BaseEntidad {
 	
 	@Column(name = "ig_fecha")
 	protected Date fecha;
+	
+	@Column(name = "ig_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "ig_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "ig_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "ig_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	protected Date fechaDesde;
@@ -107,5 +124,37 @@ public class IngresosGastos extends BaseEntidad {
 
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

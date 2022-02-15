@@ -3,6 +3,7 @@ package es.arbox.eGestion.entity.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @NamedQueries({
@@ -64,6 +66,22 @@ public class Usuario extends BaseEntidad implements UserDetails{
 	
 	@Column(name = "us_telefono")
 	private String telefono;
+
+	@Column(name = "us_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "us_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "us_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "us_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	private Set<Rol> roles;
@@ -185,5 +203,37 @@ public class Usuario extends BaseEntidad implements UserDetails{
 
 	public void setRoles(Set<Rol> roles) {
 		this.roles = roles;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

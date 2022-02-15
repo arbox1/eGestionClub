@@ -1,5 +1,11 @@
 package es.arbox.eGestion.controller.comunicacion;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -9,12 +15,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
+import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.socios.Categoria;
 import es.arbox.eGestion.entity.socios.Curso;
 import es.arbox.eGestion.entity.socios.Escuela;
@@ -25,7 +34,7 @@ import es.arbox.eGestion.service.socios.SociosCursoService;
 
 @Controller
 @RequestMapping("/comunicacion/notificaciones")
-public class NotificacionesController {
+public class NotificacionesController extends BaseController {
 	
 	@Autowired
 	SociosCursoService sociosCursoService;
@@ -53,4 +62,16 @@ public class NotificacionesController {
 		
         return result;
     }
+	
+	@PostMapping("/informe")
+	public ModelAndView informe(@ModelAttribute ValoresDTO valores) throws IOException{
+		List<ValoresDTO> datos = new ArrayList<>();
+		datos.add(valores);
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
+		mapa.put("param", "prueba");
+		
+		return getInforme(valores.getDescripcion(), "prueba", datos, mapa);
+	}
+
 }

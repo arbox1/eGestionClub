@@ -1,5 +1,6 @@
 package es.arbox.eGestion.entity.socios;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @NamedQueries({
@@ -64,6 +66,22 @@ public class SociosCurso extends BaseEntidad{
 	@ManyToOne
 	@JoinColumn(name = "sc_m_salida")
 	protected Meses salida;
+	
+	@Column(name = "sc_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "sc_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "sc_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "sc_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	protected Map<Integer, Cuota> cuotas;
@@ -122,6 +140,38 @@ public class SociosCurso extends BaseEntidad{
 
 	public void setSalida(Meses salida) {
 		this.salida = salida;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 
 	public Map<Integer, Cuota> getCuotas() {

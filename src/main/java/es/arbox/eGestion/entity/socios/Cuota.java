@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.converter.StringDoubleConverter;
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -50,6 +51,22 @@ public class Cuota extends BaseEntidad {
 
 	@Column(name = "cu_notificado")
 	protected String notificado;
+	
+	@Column(name = "cu_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "cu_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "cu_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "cu_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 
 	public Integer getId() {
 		return id;
@@ -105,5 +122,37 @@ public class Cuota extends BaseEntidad {
 
 	public void setNotificado(String notificado) {
 		this.notificado = notificado;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

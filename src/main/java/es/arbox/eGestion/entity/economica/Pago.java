@@ -16,6 +16,7 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.converter.StringDateConverter;
 import es.arbox.eGestion.entity.config.Usuario;
 
@@ -48,6 +49,22 @@ public class Pago {
 	
 	@Column(name = "p_observacion")
 	private String observacion;
+	
+	@Column(name = "p_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "p_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "p_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "p_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	protected Integer mes;
@@ -128,5 +145,37 @@ public class Pago {
 	public void setStringFecha(String f) throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		fecha = formatter.parse(f);
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

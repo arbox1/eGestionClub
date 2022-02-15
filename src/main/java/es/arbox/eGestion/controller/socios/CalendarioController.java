@@ -1,8 +1,11 @@
 package es.arbox.eGestion.controller.socios;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -89,7 +93,7 @@ public class CalendarioController extends BaseController{
 	
 	
 	@PostMapping(value = "/guardar")
-    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Calendario calendario, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Calendario calendario, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = calendario.getId() != null ? "actualizado" : "realizado";
@@ -102,7 +106,7 @@ public class CalendarioController extends BaseController{
 			calendario.setFechaSalida(Utilidades.asignarHora(calendario.getFecha(), calendario.getHoraSalida()));
 		}
 		
-		calendarioService.guardar(calendario);
+		calendarioService.guardar(calendario, getUsuarioLogado());
 		
 		result.setResultado("ok", "S");
 		
@@ -170,4 +174,22 @@ public class CalendarioController extends BaseController{
 		
         return result;
     }
+	
+	@PostMapping("/informe")
+	public ModelAndView informe(@ModelAttribute ValoresDTO valores) throws IOException{
+		List<ValoresDTO> datos = new ArrayList<>();
+		datos.add(valores);
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
+		Calendario calendario = calendarioService.obtenerPorId(Calendario.class, valores.getId());
+		mapa.put("escuela", calendario.getEscuela().getDescripcion());
+		mapa.put("categoria", calendario.getCategoria().getDescripcion());
+		mapa.put("rival", calendario.getRival());
+		mapa.put("fecha", String.format("%1$s a las %1$s", 
+				Utilidades.formatDateToString(calendario.getFecha()), 
+				Utilidades.formatDateToStringHora(calendario.getFecha())));
+		mapa.put("lugar", calendario.getLugar());
+		
+		return getInforme(valores.getDescripcion(), valores.getNombre(), datos, mapa);
+	}
 }

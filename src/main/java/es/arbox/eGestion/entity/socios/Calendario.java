@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.converter.StringDateConverter;
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -57,6 +58,22 @@ public class Calendario extends BaseEntidad {
 	
 	@Column(name = "ca_color_rival")
 	protected String colorRival;
+	
+	@Column(name = "ca_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "ca_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "ca_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "ca_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	private String horaInicio;
@@ -158,5 +175,37 @@ public class Calendario extends BaseEntidad {
 
 	public void setHoraSalida(String horaSalida) {
 		this.horaSalida = horaSalida;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

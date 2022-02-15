@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.entity.config.Usuario;
@@ -25,7 +26,7 @@ import es.arbox.eGestion.service.economica.PagosService;
 
 @Controller
 @RequestMapping("/economica/pagos")
-public class PagosController {
+public class PagosController extends BaseController {
 	
 	@Autowired
 	private PagosService pagosService;
@@ -55,14 +56,14 @@ public class PagosController {
     }
 	
 	@PostMapping(value = "/guardar", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Pago pago, RedirectAttributes redirectAttrs) {
+    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Pago pago, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = pago.getId() != null ? "actualizado" : "realizado";
 		
 		if(pago.getFecha() == null)
 			pago.setFecha(new Date());
-		pagosService.guardar(pago);
+		pagosService.guardar(pago, getUsuarioLogado());
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Pago %1$s correctamente.", opcion));

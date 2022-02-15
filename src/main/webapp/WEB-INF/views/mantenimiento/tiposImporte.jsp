@@ -57,20 +57,78 @@
 		    	$.obtener(data.accion, {
 		    		"id": data.id
 		    	}, function(res){
+		    		$('#subtipo form .tipoImporte_id').val(data.id);
 		    		$('#detalle table.detalle').reloadTable(res.resultados.subtipos);
 		    	});
 		    }).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
-		    });
+		    }).on('click', '.subtipo', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				$.obtener($data.accion, {
+		    		"id": $data.id
+		    	}, function(res){
+		    		$('#subtipo').cargarDatos({
+		    			datos: res.resultados.subTipo
+		    		}).mostrar();
+		    	});
+			}).on('click', '.eliminar', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea eliminar el subtipo?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax($data.accion, {
+		    				"id": $data.id
+		    			}, function(res){
+		    				$('#detalle').trigger("reload", {id: $('#subtipo form .tipoImporte_id').val(), accion: "subTipos"});
+		    			});
+		    		}
+		    	});
+			});
 		    
 		    $('#detalle table.detalle').DataTable({
     			columns: [
     	            { data: "descripcion", title: "Descripción" },
-    	            { data: "orden", title: "orden" }
+    	            { data: "orden", title: "orden" },
+    	            { data: function ( row, type, val, meta ) {
+						var $buttons = $('<p>').addBoton({
+							tipo: 'link',
+							icono: 'pencil-alt',
+							clases: 'subtipo',
+							title: 'Detalle',
+							data: {
+								id: row.id,
+								accion: 'subTipo'
+							}
+						}).addBoton({
+							tipo: 'link',
+							icono: 'trash',
+							clases: 'eliminar',
+							title: 'Eliminar',
+							data: {
+								id: row.id,
+								accion: 'eliminarSubTipo'
+							}
+						});
+						return $.toHtml($buttons);
+					}, 
+					title: "",
+					className: 'text-nowrap text-center'
+				}
     	        ]
     		});
+		    
+		    $('#subtipo').on('click', '.guardar', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				$('#subtipo').enviar(data.accion, function(res){
+					$('#detalle').trigger("reload", {id: res.resultados.id, accion: "subTipos"});
+					$('#subtipo').modal("hide");
+				});
+			});
 		});
 	</script>
 </head>
@@ -199,6 +257,7 @@
 				<div class="modal-body">
 					<form action="guardarSubTipo" cssClass="form-horizontal validation" method="post" modelAttribute="subtipo">
 						<input type="hidden" name="id" class="id"/>
+						<input type="hidden" name="tipoImporte.id" class="tipoImporte_id no-limpiar"/>
 						<div class="form-group row">
 							<label for="descripcion" class="col-form-label col-md-2">Descripción:</label>
 							<div class="col-md-10">

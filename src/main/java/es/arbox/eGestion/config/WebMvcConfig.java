@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -102,22 +103,11 @@ implements WebMvcConfigurer {
 		return resolver;
 	}
 	
-//	@Bean
-//	public ViewResolver getJasperReportsViewResolver() {
-//	  JasperReportsViewResolver resolver = new JasperReportsViewResolver();
-//	  resolver.setPrefix("classpath:/jasperreports/");
-//	  resolver.setSuffix(".jasper");
-//	  resolver.setReportDataKey("datasource");
-//	  resolver.setViewNames("rpt_*");
-//	  resolver.setViewClass(JasperReportsMultiFormatView.class);
-//	  resolver.setOrder(0);
-//	  return resolver;
-//	} 
-	
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+	@Bean
+	public ViewResolver beanNameViewResolver() {
+		BeanNameViewResolver resolver = new BeanNameViewResolver();
+		return resolver;
+    }
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {

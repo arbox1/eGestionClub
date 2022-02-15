@@ -65,6 +65,15 @@
 		    			});
 		    		}
 		    	});
+		    }).on("click", ".informe", function(e){//Eliminar
+		    	e.stopPropagation();
+		    	var data = $(this).data();
+
+		    	bootbox.confirm("¿Está seguro que desea generar el cartel?", function(result){
+		    		if(result){
+		    			$.enviarForm(data.accion, "valores", data);
+		    		}
+		    	});
 		    });
 			
 			$('#editar').on("reload", function(e, data){
@@ -366,6 +375,13 @@
 										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaInicio}" /></td>
 										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaFin}" /></td>
 										<td class="text-center text-nowrap">
+											<button type="button" class="btn btn-link informe" 
+												data-accion="informe" 
+												data-id="${actividad.id}"
+												data-nombre="cartel"
+												data-descripcion="reports/actividades/cartel">
+												<i class="far fa-file-pdf"></i>
+											</button>
 											<button type="button" class="btn btn-link enviar" title="Enviar notificación antes de la actividad"
 												data-accion="notificarSalida" data-id="${actividad.id}">
 												<i class="fas fa-envelope"></i>
@@ -591,7 +607,7 @@
 				</div>
 				<div class="modal-body">
 					<form action="guardarParticipante" class="form-horizontal validation" method="post" modelAttribute="participante">
-						<input type="hidden" name="id" class="id no-limpiar"/>
+						<input type="hidden" name="id" class="id"/>
 						<input type="hidden" name="actividad.id" class="actividad_id no-limpiar"/>
 						<div class="form-group row">
 							<label for="nombre" class="col-form-label col-md-3">Nombre:</label>
@@ -649,7 +665,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-					<button type="button" class="btn btn-primary" data-limpiar="#inscripcion form">Limpiar</button>
+<!-- 					<button type="button" class="btn btn-primary" data-limpiar="#inscripcion form">Limpiar</button> -->
 					<button type="button" class="btn btn-primary guardar" data-accion="guardarParticipante" >Guardar</button>
 				</div>
 			</div>

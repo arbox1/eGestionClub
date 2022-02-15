@@ -14,12 +14,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import es.arbox.eGestion.dao.config.GenericDAO;
+import es.arbox.eGestion.entity.config.Usuario;
 
 @Service
 public class GenericServiceImpl implements GenericService{
 	
 	@Autowired
 	private GenericDAO genericDAO;
+	
+	@Override
+	@Transactional
+	public <T> void guardar(T objeto, Usuario usuario) throws IllegalArgumentException, IllegalAccessException {
+		genericDAO.guardar(objeto, usuario);
+	}
 	
 	@Override
 	@Transactional

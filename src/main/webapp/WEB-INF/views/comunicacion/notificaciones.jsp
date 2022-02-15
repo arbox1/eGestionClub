@@ -8,6 +8,18 @@
 	<script type="text/javascript">
 		$( document ).ready(function() {
 			
+			$('.botonera').on('click', '.report', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				bootbox.confirm("¿Está seguro que desea realizar el report?", function(result){
+		    		if(result){
+		    			$.enviarForm("informe", "valores", {
+		    				"descripcion": "reports/prueba"
+						});
+		    		}
+		    	});
+			})
+			
 			$('#recordatorio').on('click', '.guardar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
@@ -30,9 +42,10 @@
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
-		<div class="row">
+		<div class="row botonera">
 			<div class="col-sm-12">
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#recordatorio">Enviar recordatorio cuotas</button>
+				<button type="button" class="btn btn-primary report">Report Prueba</button>
 			</div>
 		</div>
 	</div>

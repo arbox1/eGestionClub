@@ -1,5 +1,7 @@
 package es.arbox.eGestion.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
@@ -10,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -31,10 +35,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.arbox.eGestion.config.PdfReportView;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.Errores;
@@ -42,6 +48,8 @@ import es.arbox.eGestion.entity.config.MenuEstructura;
 import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.entity.documento.Documento;
 import es.arbox.eGestion.service.config.MenuService;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @RequestMapping("/base")
@@ -52,7 +60,7 @@ public class BaseController {
 	
 	@ExceptionHandler(Exception.class)
     public String genericErrorPage(Model model, HttpServletRequest req, Exception e) {
-		Errores error = new Errores(e.getMessage());
+		Errores error = new Errores(e.getMessage()); e.printStackTrace();
 		
 		menuService.guardar(error);
 		
@@ -106,12 +114,12 @@ public class BaseController {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		Usuario usuario = getUsuarioLogado();
-		
-		List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId(), usuario.getId());
-
-		result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
-		result.setResultado("ok", "S");
-		
+		if(usuario != null && valores != null) {
+			List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId(), usuario.getId());
+	
+			result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
+			result.setResultado("ok", "S");
+		}
 		ObjectMapper Obj = new ObjectMapper();
 		return Obj.writeValueAsString(result);
 	}
@@ -138,6 +146,20 @@ public class BaseController {
       header.add("Content-type", documento.getMime());
       
       return new HttpEntity<byte[]>(documento.getFichero(), header);
+	}
+	
+	public ModelAndView getInforme(String informe, String nombre, List<?> datos, Map<String, Object> mapa) throws IOException {
+      
+		JRDataSource dataSource = new JRBeanCollectionDataSource(datos);
+		mapa.put("datasource", dataSource);
+		File file = null;
+		try {
+			 file  = ResourceUtils.getFile("classpath:"+informe+".jrxml");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		ModelAndView mv = new ModelAndView(new PdfReportView(file.getPath(), nombre), mapa);
+		return mv ;
 	}
 	
 	protected Usuario getUsuarioLogado() {

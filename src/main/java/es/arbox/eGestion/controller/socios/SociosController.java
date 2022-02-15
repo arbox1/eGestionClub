@@ -73,9 +73,9 @@ public class SociosController extends BaseController {
 	}
 	
 	@PostMapping("/guardar")
-    public String guardar(@ModelAttribute("nuevo") Socios socio, RedirectAttributes redirectAttrs) {
+    public String guardar(@ModelAttribute("nuevo") Socios socio, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {
 		String msg = socio.getId() != null ? "actualizado" : "creado";
-		sociosService.guardar(socio);
+		sociosService.guardar(socio, getUsuarioLogado());
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Socio %1$s correctamente.", msg));
@@ -129,7 +129,7 @@ public class SociosController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarInscripcion")
-    public @ResponseBody RespuestaAjax guardarInscripcion(@ModelAttribute SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarInscripcion(@ModelAttribute SociosCurso inscripcion, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = inscripcion.getId() != null ? "actualizada" : "realizada";
@@ -142,7 +142,7 @@ public class SociosController extends BaseController {
 			inscripcion.setSalida(null);
 		}
 		
-		sociosCursoService.guardar(inscripcion);
+		sociosCursoService.guardar(inscripcion, getUsuarioLogado());
 		
 		result.setResultado("id", inscripcion.getSocio().getId());
 		result.setResultado("ok", "S");
@@ -196,12 +196,12 @@ public class SociosController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = cuota.getId() != null ? "actualizada" : "realizada";
 		
-		cuotaService.guardar(cuota);
+		cuotaService.guardar(cuota, getUsuarioLogado());
 		
 		result.setResultado("id", cuota.getSocioCurso().getId());
 		result.setResultado("ok", "S");
@@ -214,7 +214,7 @@ public class SociosController extends BaseController {
     }
 	
 	@PostMapping(value = "/enviarMailCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax enviarMailCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax enviarMailCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		Mensajes mensajes = new Mensajes();
 		
@@ -224,7 +224,7 @@ public class SociosController extends BaseController {
 			mailService.correoPagoSocio(cuota);
 			
 	        cuota.setNotificado("S");
-	        cuotaService.guardar(cuota);
+	        cuotaService.guardar(cuota, getUsuarioLogado());
 	        mensajes.mensaje(TiposMensaje.success, String.format("Correo enviado corréctamente"));
 		} else {
 			mensajes.mensaje(TiposMensaje.danger, "El socio no tiene dirección de correos");
@@ -277,12 +277,12 @@ public class SociosController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarDocumento", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoSocio documentoSocio, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoSocio documentoSocio, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = documentoSocio.getId() != null ? "actualizado" : "realizado";
 		
-		documentoSocioService.guardar(documentoSocio.getDocumento());
+		documentoSocioService.guardar(documentoSocio.getDocumento(), getUsuarioLogado());
 		documentoSocioService.guardar(documentoSocio);
 		
 		result.setResultado("id", documentoSocio.getSocio().getId());

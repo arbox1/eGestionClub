@@ -5,7 +5,12 @@ import java.util.List;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 
+import es.arbox.eGestion.entity.config.Usuario;
+
 public interface GenericDAO {
+
+	public <T> void guardar(T objeto, Usuario usuario) throws IllegalArgumentException, IllegalAccessException;
+	
 	public <T> void guardar(T tipo);
 
 	public <T> void eliminar(Class<T> clase, int id);

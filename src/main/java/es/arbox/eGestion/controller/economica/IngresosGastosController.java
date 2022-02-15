@@ -64,11 +64,11 @@ public class IngresosGastosController extends BaseController {
     }
 	
 	@PostMapping("/guardar")
-    public String guardar(@ModelAttribute("nuevo") IngresosGastos ingresoGasto, RedirectAttributes redirectAttrs) {
+    public String guardar(@ModelAttribute("nuevo") IngresosGastos ingresoGasto, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {
 		String msg = ingresoGasto.getId() != null ? "actualizado" : "creado";
 		if (ingresoGasto.getFecha() == null)	
 			ingresoGasto.setFecha(new Date());
-		ingresosGastosService.guardar(ingresoGasto);
+		ingresosGastosService.guardar(ingresoGasto, getUsuarioLogado());
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Ingreso / Gasto %1$s correctamente.", msg));
@@ -115,12 +115,12 @@ public class IngresosGastosController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarDocumento", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoIngresoGasto documentoIngresoGasto, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoIngresoGasto documentoIngresoGasto, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = documentoIngresoGasto.getId() != null ? "actualizado" : "realizado";
 		
-		documentoIngresoGastoService.guardar(documentoIngresoGasto.getDocumento());
+		documentoIngresoGastoService.guardar(documentoIngresoGasto.getDocumento(), getUsuarioLogado());
 		documentoIngresoGastoService.guardar(documentoIngresoGasto);
 		
 		result.setResultado("id", documentoIngresoGasto.getIngresoGasto().getId());

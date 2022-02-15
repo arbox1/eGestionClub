@@ -13,8 +13,8 @@ public class Utilidades {
 		String [] h = hora.split(":");
 	    Calendar c = Calendar.getInstance();
 	    c.setTime(fecha);
-	    c.set(Calendar.HOUR_OF_DAY, new Integer(h[0]));
-	    c.set(Calendar.MINUTE, new Integer(h[1]));
+	    c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(h[0]));
+	    c.set(Calendar.MINUTE, Integer.parseInt(h[1]));
 	    return c.getTime();
 	}
 

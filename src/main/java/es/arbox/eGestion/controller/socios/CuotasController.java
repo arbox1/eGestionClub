@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.ExcelData;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
@@ -39,7 +40,7 @@ import es.arbox.eGestion.view.ExcelReportView;
 
 @Controller
 @RequestMapping("/socios/cuotas")
-public class CuotasController {
+public class CuotasController extends BaseController{
 	
 	@Autowired
 	private SociosCursoService sociosCursoService;
@@ -92,13 +93,13 @@ public class CuotasController {
     }
 	
 	@PostMapping(value = "/guardarCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = cuota.getId() != null ? "actualizada" : "realizada";
 		
 		cuota.setFecha(new Date());
-		cuotaService.guardar(cuota);
+		cuotaService.guardar(cuota, getUsuarioLogado());
 		
 		result.setResultado("ok", "S");
 		
@@ -110,14 +111,14 @@ public class CuotasController {
     }
 	
 	@PostMapping(value = "/enviarMailCuota", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax enviarMailCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax enviarMailCuota(@ModelAttribute Cuota cuota, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		Mensajes mensajes = new Mensajes();
 		
 		String opcion = cuota.getId() != null ? "actualizada" : "realizada";
 		
 		cuota.setFecha(new Date());
-		cuotaService.guardar(cuota);
+		cuotaService.guardar(cuota, getUsuarioLogado());
 		
 		result.setResultado("ok", "S");
 		
@@ -128,7 +129,7 @@ public class CuotasController {
 			mailService.correoPagoSocio(cuota);
 			
 	        cuota.setNotificado("S");
-	        cuotaService.guardar(cuota);
+	        cuotaService.guardar(cuota, getUsuarioLogado());
 	        mensajes.mensaje(TiposMensaje.success, String.format("Cuota %1$s y enviada correctamente.", opcion));
 		} else {
 			mensajes.mensaje(TiposMensaje.danger, "El socio no tiene dirección de correos");

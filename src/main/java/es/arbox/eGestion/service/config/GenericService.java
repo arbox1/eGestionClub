@@ -7,7 +7,11 @@ import javax.persistence.criteria.Predicate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.entity.config.Usuario;
+
 public interface GenericService {
+	
+	public <T> void guardar(T objeto, Usuario usuario) throws IllegalArgumentException, IllegalAccessException;
 	
 	public <T> void guardar(T objeto);
 

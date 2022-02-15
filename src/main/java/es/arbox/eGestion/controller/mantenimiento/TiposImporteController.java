@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
@@ -30,7 +30,7 @@ import es.arbox.eGestion.service.economica.TiposImporteService;
 
 @Controller
 @RequestMapping("/mantenimiento/tiposImporte")
-public class TiposImporteController {
+public class TiposImporteController extends BaseController{
 	
 	@Autowired
 	private TiposImporteService tiposImporteService;
@@ -46,9 +46,9 @@ public class TiposImporteController {
 	}
 	
 	@PostMapping("/guardar")
-    public String guardar(@ModelAttribute("tipo") TiposImporte tipo, RedirectAttributes redirectAttrs) {
+    public String guardar(@ModelAttribute("tipo") TiposImporte tipo, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {
 		String msg = tipo.getId() != null ? "actualizado" : "creado";
-		tiposImporteService.guardar(tipo);
+		tiposImporteService.guardar(tipo, getUsuarioLogado());
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Tipo Importe %1$s correctamente.", msg));
@@ -96,19 +96,50 @@ public class TiposImporteController {
 		return Obj.writeValueAsString(result);
 	}
 	
-	@ResponseBody
-	@PostMapping(value = "/guardarSubtipo")//, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public String saveCustomer(@RequestParam(value="id") Integer id) throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, JsonProcessingException {
+	@PostMapping(value = "/guardarSubtipo")
+    public @ResponseBody RespuestaAjax guardarSubtipo(@ModelAttribute SubtiposImporte subTipos, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
-		String msg = "";//subtipo.getId() != null ? "actualizado" : "creado";
-//		subtiposImporteService.guardar(subtipo);
+		
+		String opcion = subTipos.getId() != null ? "actualizado" : "realizado";
+		
+		subtiposImporteService.guardar(subTipos, getUsuarioLogado());
+		
+		result.setResultado("id", subTipos.getTipoImporte().getId());
+		result.setResultado("ok", "S");
 		
 		Mensajes mensajes = new Mensajes();
-		mensajes.mensaje(TiposMensaje.success, String.format("Subtipo Importe %1$s correctamente.", msg));
+		mensajes.mensaje(TiposMensaje.success, String.format("Subtipo %1$s correctamente.", opcion));
+		result.setMensajes(mensajes.getMensajes());
 		
-//		result.setResultado("subtipos", subtipo.getMapa());
-		
-		ObjectMapper Obj = new ObjectMapper();
-		return Obj.writeValueAsString(result);
+		return result;
     }
+	
+	@PostMapping(value = "/eliminarSubTipo")
+    public @ResponseBody RespuestaAjax eliminarSubTipo(@ModelAttribute SubtiposImporte subTipos, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		subtiposImporteService.eliminar(SubtiposImporte.class, subTipos.getId());;
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Subtipo eliminado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@ResponseBody
+	@PostMapping(value = "/subTipo", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String subTipo(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		SubtiposImporte subtipo = subtiposImporteService.obtenerPorId(SubtiposImporte.class, valores.getId());
+		
+		result.setResultado("subTipo", subtipo.getMapa());
+		
+		return subtiposImporteService.serializa(result);
+	}
+	
 }

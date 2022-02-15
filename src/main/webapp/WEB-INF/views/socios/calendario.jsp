@@ -54,6 +54,15 @@
 		    			});
 		    		}
 		    	});
+		    }).on("click", ".informe", function(e){//Eliminar
+		    	e.stopPropagation();
+		    	var data = $(this).data();
+
+		    	bootbox.confirm("¿Está seguro que desea generar el cartel?", function(result){
+		    		if(result){
+		    			$.enviarForm(data.accion, "valores", data);
+		    		}
+		    	});
 		    });
 			
 			$('#editar').on("reload", function(e, data){
@@ -153,6 +162,13 @@
 										<td>${calendario.rival}</td>
 										<td>${calendario.colorRival}</td>
 										<td class="text-center text-nowrap">
+											<button type="button" class="btn btn-link informe" 
+												data-accion="informe" 
+												data-id="${calendario.id}"
+												data-nombre="cartel"
+												data-descripcion="reports/calendario/cartel">
+												<i class="far fa-file-pdf"></i>
+											</button>
 											<button type="button" class="btn btn-link enviar" title="Enviar notificación"
 												data-accion="notificar" data-id="${calendario.id}">
 												<i class="fas fa-envelope"></i>

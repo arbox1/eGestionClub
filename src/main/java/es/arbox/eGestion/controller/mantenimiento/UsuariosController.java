@@ -45,10 +45,10 @@ public class UsuariosController extends BaseController {
 	}
 	
 	@PostMapping("/guardar")
-    public String guardar(@ModelAttribute("nuevo") Usuario usuario, RedirectAttributes redirectAttrs) {
+    public String guardar(@ModelAttribute("nuevo") Usuario usuario, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {
 		String msg = usuario.getId() != null ? "actualizado" : "creado";
 		usuario.setPassword(Utilidades.getMd5(usuario.getPassword()));
-		menuService.guardar(usuario);
+		menuService.guardar(usuario, getUsuarioLogado());
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Usuario %1$s correctamente.", msg));
@@ -96,12 +96,12 @@ public class UsuariosController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarRol")
-    public @ResponseBody RespuestaAjax guardarRol(@ModelAttribute UsuarioRol usuarioRol, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarRol(@ModelAttribute UsuarioRol usuarioRol, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = usuarioRol.getId() != null ? "actualizado" : "añadido";
 
-		menuService.guardar(usuarioRol);
+		menuService.guardar(usuarioRol, getUsuarioLogado());
 		
 		result.setResultado("id", usuarioRol.getUsuario().getId());
 		result.setResultado("ok", "S");

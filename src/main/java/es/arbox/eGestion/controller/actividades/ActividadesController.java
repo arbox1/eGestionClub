@@ -1,9 +1,12 @@
 package es.arbox.eGestion.controller.actividades;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -128,7 +132,7 @@ public class ActividadesController extends BaseController {
 	
 	
 	@PostMapping(value = "/guardar")
-    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Actividad actividad, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardar(@ModelAttribute Actividad actividad, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = actividad.getId() != null ? "actualizada" : "realizada";
@@ -141,7 +145,7 @@ public class ActividadesController extends BaseController {
 			actividad.setFechaFin(Utilidades.asignarHora(actividad.getFechaFin(), actividad.getHoraFin()));
 		}
 		
-		actividadService.guardar(actividad);
+		actividadService.guardar(actividad, getUsuarioLogado());
 		
 		result.setResultado("ok", "S");
 		
@@ -176,7 +180,7 @@ public class ActividadesController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarParticipante")
-    public @ResponseBody RespuestaAjax guardarParticipante(@ModelAttribute Participante participante, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarParticipante(@ModelAttribute Participante participante, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = participante.getId() != null ? "actualizado" : "inscrito";
@@ -185,7 +189,7 @@ public class ActividadesController extends BaseController {
 			participante.setFecha(new Date());
 		}
 		
-		actividadService.guardar(participante);
+		actividadService.guardar(participante, getUsuarioLogado());
 		
 		result.setResultado("id", participante.getActividad().getId());
 		result.setResultado("ok", "S");
@@ -239,12 +243,12 @@ public class ActividadesController extends BaseController {
 	}
 	
 	@PostMapping(value = "/guardarDocumento", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoActividad documentoActividad, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+    public @ResponseBody RespuestaAjax guardarDocumento(@ModelAttribute DocumentoActividad documentoActividad, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		String opcion = documentoActividad.getId() != null ? "actualizado" : "realizado";
 		
-		documentoActividadService.guardar(documentoActividad.getDocumento());
+		documentoActividadService.guardar(documentoActividad.getDocumento(), getUsuarioLogado());
 		documentoActividadService.guardar(documentoActividad);
 		
 		result.setResultado("id", documentoActividad.getActividad().getId());
@@ -274,4 +278,15 @@ public class ActividadesController extends BaseController {
 		
         return result;
     }
+	
+	@PostMapping("/informe")
+	public ModelAndView informe(@ModelAttribute ValoresDTO valores) throws IOException{
+		List<ValoresDTO> datos = new ArrayList<>();
+		datos.add(valores);
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		
+		mapa.put("param", "prueba");
+		
+		return getInforme(valores.getDescripcion(), "prueba", datos, mapa);
+	}
 }

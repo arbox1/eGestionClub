@@ -1,6 +1,7 @@
 package es.arbox.eGestion.entity.documento;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Transient;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
@@ -42,6 +44,22 @@ public class Documento extends BaseEntidad{
 	@Lob
 	@Column(name="doc_fichero", columnDefinition = "BLOB")
 	protected byte[] fichero;
+	
+	@Column(name = "doc_u_creacion")
+	@Auditoria("INSERT")
+	protected Integer idUsuarioCreacion;
+	
+	@Column(name = "doc_f_creacion")
+	@Auditoria("INSERT")
+	protected Date fechaCreacion;
+	
+	@Column(name = "doc_u_actu")
+	@Auditoria("UPDATE")
+	protected Integer idUsuarioActualizacion;
+	
+	@Column(name = "doc_f_actu")
+	@Auditoria("UPDATE")
+	protected Date fechaActualizacion;
 	
 	@Transient
 	CommonsMultipartFile archivo;
@@ -96,6 +114,38 @@ public class Documento extends BaseEntidad{
 
 	public CommonsMultipartFile getArchivo() {
 		return archivo;
+	}
+
+	public Integer getIdUsuarioCreacion() {
+		return idUsuarioCreacion;
+	}
+
+	public void setIdUsuarioCreacion(Integer idUsuarioCreacion) {
+		this.idUsuarioCreacion = idUsuarioCreacion;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Integer getIdUsuarioActualizacion() {
+		return idUsuarioActualizacion;
+	}
+
+	public void setIdUsuarioActualizacion(Integer idUsuarioActualizacion) {
+		this.idUsuarioActualizacion = idUsuarioActualizacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 
 	public void setArchivo(CommonsMultipartFile archivo) throws IOException {
