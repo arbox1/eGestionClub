@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cartel" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f7661640-f33a-4135-8641-1ff56a8e2122">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="escuela" class="java.lang.String"/>
+	<parameter name="categoria" class="java.lang.String"/>
+	<parameter name="rival" class="java.lang.String"/>
+	<parameter name="lugar" class="java.lang.String"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="555" height="802" uuid="9387844e-d6d6-4455-b79e-3d5684b02dc6"/>
+				<imageExpression><![CDATA["\\imagenes\\fondo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<detail>
+		<band height="802" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="368" width="555" height="30" forecolor="#FF0033" uuid="2ee13753-ac60-4658-9c3c-3e3211323983"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB" size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{rival}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="2" width="412" height="35" forecolor="#FFFF66" uuid="252898ae-b98a-427d-b633-e7a0ee739160"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB Demi" size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{escuela}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="408" width="555" height="30" forecolor="#FF0033" uuid="fbdbf39d-52c9-4248-8894-d20bd42f0c60"/>
+				<textElement textAlignment="Center">
+					<font fontName="Berlin Sans FB" size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="5" y="89" width="367" height="274" uuid="0ada7e8d-759c-4836-bd1c-7a977d52d4ff"/>
+				<imageExpression><![CDATA["\\imagenes\\Superior.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="449" width="555" height="30" forecolor="#FF0033" uuid="7eb95a6c-856e-45f8-bea2-b75b78b96ca6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Berlin Sans FB" size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{lugar}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="67" y="490" width="414" height="287" uuid="12391f5e-02ef-473d-b826-137fad0537ec"/>
+				<imageExpression><![CDATA["\\imagenes\\Inferior.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="69" y="38" width="412" height="35" forecolor="#FFFF66" uuid="01665348-cdc9-4e47-94dc-20c4c0a0dc60"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Berlin Sans FB Demi" size="24"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{categoria}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
