@@ -352,7 +352,7 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="documento.fichero" class="col-form-label col-md-3 text-nowrap">Descripcion:</label>
+							<label for="documento.fichero" class="col-form-label col-md-3 text-nowrap">Documento:</label>
 							<div class="col-md-9">
 								<input type="file" name="documento.archivo" class="documento_fichero form-control"/>
 							</div>

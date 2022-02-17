@@ -136,7 +136,7 @@
 		</c:choose>
 	</div>
 	
-	<div class="modal" id="pago" tabindex="-1" role="dialog" aria-labelledby="Editar Gasto" aria-hidden="true">
+	<div class="modal" id="pago" tabindex="-1" role="dialog" aria-labelledby="Editar Pago" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
