@@ -33,7 +33,6 @@ public class TiposDocumentosController extends BaseController{
 		model.addAttribute("tipo", new TipoDocumento());
 		model.addAttribute("tipos", menuService.obtenerTodos(TipoDocumento.class));
 		model.addAttribute("familias", menuService.obtenerTodosOrden(FamiliaDocumento.class, " descripcion "));
-		model.addAttribute("buscador", tipoDocumento == null ? new TipoDocumento() : tipoDocumento);
 		return "/mantenimiento/tiposDocumentos";
 	}
 	

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BaseEntidad {
+public abstract class BaseEntidad {
 	
 	public static <T> Collection<Map<String, Object>> getListaMapa(Collection<T> datos){
 		List<Map<String, Object>> result = new ArrayList<>();
@@ -61,4 +61,6 @@ public class BaseEntidad {
 		
 		return result;
 	}
+	
+	public abstract Integer getId();
 }

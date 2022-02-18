@@ -9,6 +9,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @NamedQueries({
@@ -54,5 +56,9 @@ public class Curso extends BaseEntidad{
 
 	public void setActivo(String activo) {
 		this.activo = activo;
+	}
+	
+	public String getActivoTexto() {
+		return StringUtils.isNotBlank(activo) && activo.equals("S") ? "Si" : "No";
 	}
 }
