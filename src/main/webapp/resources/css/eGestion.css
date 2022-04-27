@@ -70,8 +70,8 @@ label.error {
 appearance: none;
 background-color: rgb(69, 130, 236);
 border-bottom-color: rgb(69, 130, 236);
-border-bottom-left-radius: 15.092px;
-border-bottom-right-radius: 15.092px;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 2px;
 border-bottom-style: solid;
 border-bottom-width: 1px;
 border-image-outset: 0;
@@ -86,8 +86,8 @@ border-right-color: rgb(69, 130, 236);
 border-right-style: solid;
 border-right-width: 1px;
 border-top-color: rgb(69, 130, 236);
-border-top-left-radius: 15.092px;
-border-top-right-radius: 15.092px;
+border-top-left-radius: 0px;
+border-top-right-radius: 0px;
 border-top-style: solid;
 border-top-width: 1px;
 box-sizing: border-box;
@@ -112,10 +112,10 @@ margin-right: 0px;
 margin-top: 0px;
 overflow-x: visible;
 overflow-y: visible;
-padding-bottom: 6px;
-padding-left: 12px;
-padding-right: 12px;
-padding-top: 6px;
+padding-bottom: 0px;
+padding-left: 4px;
+padding-right: 4px;
+padding-top: 0px;
 text-align: center;
 text-indent: 0px;
 text-rendering: auto;
@@ -131,4 +131,28 @@ div.buscador {
 	border-radius: 15px;
     margin-bottom: 10px;
     padding-top: 12px;
+}
+
+.extendida .btn{
+	border: 0px solid transparent;
+    padding: 0.0rem 0.2rem;
+}
+
+div.cajaBoton {
+	border-right: 2px solid #ffffff;
+	border-bottom: 2px solid #ffffff;
+	background-color: #4582EC;
+	color: #ffffff;
+	text-align: center;
+	cursor: pointer;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+div.cajaDato {
+	border: 2px solid #4582EC;
+	text-align: center;
+	cursor: pointer;
+	margin-bottom: 10px;
+	border-radius: 5px;
 }

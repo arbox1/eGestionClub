@@ -44,7 +44,7 @@ public class Menu extends BaseEntidad{
 	
 	@Column(name = "m_orden")
 	private int orden;
-
+	
 	public Integer getId() {
 		return id;
 	}

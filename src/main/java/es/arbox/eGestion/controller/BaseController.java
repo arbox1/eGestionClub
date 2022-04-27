@@ -114,9 +114,14 @@ public class BaseController {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		Usuario usuario = getUsuarioLogado();
-		if(usuario != null && valores != null) {
+		if(usuario != null && valores != null && valores.getId().equals(1)) {
 			List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId(), usuario.getId());
 	
+			result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
+			result.setResultado("ok", "S");
+		} else if (valores != null && valores.getId().equals(2)) {
+			List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId());
+			
 			result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
 			result.setResultado("ok", "S");
 		}

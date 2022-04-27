@@ -125,7 +125,8 @@
 					"emptyTable": "la actividad no tiene ningún participante"
 				},
     			columns: [
-    	            { data: "nombre", title: "Nombre" },
+    				{ data: "estado.descripcion", title: "Estado", className: 'text-nowrap text-center' },
+    				{ data: "nombre", title: "Nombre" },
     	            { data: "telefono", title: "Teléfono" },
     	            { data: "email", title: "Email" },
     	            { data: "cantidad", title: "Cantidad", className: 'text-nowrap text-center' },
@@ -354,6 +355,7 @@
 								<tr>
 									<th class="text-center">Tipo</th>
 									<th class="text-center">Descripcion</th>
+									<th class="text-center">Estado</th>
 									<th class="text-center">Lugar Salida</th>
 									<th class="text-center">Precio</th>
 									<th class="text-center">Participantes</th>
@@ -368,12 +370,13 @@
 									<tr>
 										<td class="text-center">${actividad.tipo.descripcion}</td>
 										<td>${actividad.descripcion}</td>
+										<td class="text-center">${actividad.estado.descripcion}</td>
 										<td>${actividad.lugarSalida}</td>
 										<td class="text-center">${actividad.precio} &euro;</td>
 										<td class="text-center">${actividad.participantes}</td>
 										<td class="text-center">${actividad.inscritos}</td>
-										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaInicio}" /></td>
-										<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaFin}" /></td>
+										<td class="text-center text-nowrap"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaInicio}" /></td>
+										<td class="text-center text-nowrap"><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "${actividad.fechaFin}" /></td>
 										<td class="text-center text-nowrap">
 											<button type="button" class="btn btn-link informe" 
 												data-accion="informe" 
@@ -435,6 +438,17 @@
 					<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="nuevo" enctype="multipart/form-data" acceptcharset="UTF-8">
 						<input type="hidden" name="id" class="id no-limpiar"/>
 
+						<div class="form-group row">
+							<label for="tipo" class="col-sm-2 col-form-label">Estado</label>
+							<div class="col-sm-10">
+								<select name="estado.id" class="form-control estado_id required">
+									<option value=""></option>
+									<c:forEach var="estado" items="${estadosActividad}">
+										<option value="${estado.id}">${estado.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 						<div class="form-group row">
 							<label for="tipo" class="col-sm-2 col-form-label">Tipo</label>
 							<div class="col-sm-10">
@@ -539,6 +553,33 @@
 							</div>
 						</div>
 						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="fechaFin" class="col-sm-4 col-form-label">Fecha Plazo</label>
+									<div class="col-sm-8">
+										<input type="text" name="fechaFinPlazo" 
+											data-date-format="mm/dd/yyyy"
+											data-date-container='#editar'
+											class="form-control datepicker fecha_corta fechaFinPlazo fechaValida" 
+											placeholder="dd/mm/aaaa"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="horaFin" class="col-sm-4 col-form-label">Hora Fin</label>
+									<div class="col-sm-8">
+										<input type="text" name="horaFinPlazo" 
+											data-date-format="hh:mm"
+											data-date-container='#editar'
+											class="form-control hora_corta fechaFinPlazo" 
+											placeholder="HH:mm"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						
 						<div class="form-group row">
 							<label for="contenido" class="col-sm-2 col-form-label">Observaciones</label>
 							<div class="col-sm-10">
@@ -577,6 +618,7 @@
 										<th></th>
 										<th></th>
 										<th></th>
+										<th></th>
 									</tr>
 								</tfoot>
 							</table>
@@ -609,6 +651,17 @@
 					<form action="guardarParticipante" class="form-horizontal validation" method="post" modelAttribute="participante">
 						<input type="hidden" name="id" class="id"/>
 						<input type="hidden" name="actividad.id" class="actividad_id no-limpiar"/>
+						<div class="form-group row">
+							<label for="tipo" class="col-sm-3 col-form-label">Estado</label>
+							<div class="col-sm-9">
+								<select name="estado.id" class="form-control estado_id required">
+									<option value=""></option>
+									<c:forEach var="estado" items="${estadosParticipante}">
+										<option value="${estado.id}">${estado.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 						<div class="form-group row">
 							<label for="nombre" class="col-form-label col-md-3">Nombre:</label>
 							<div class="col-md-9">

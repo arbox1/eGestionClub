@@ -1,0 +1,14 @@
+<div class="container">
+	<div class="row">
+	</div>
+	<div class="col-md-offset-1 col-md-10">
+		{{#each menu}}
+			{{#if menus}}
+					{{#each menus}}
+						<c:url var="pagina" value="{{pagina}}" />
+						<a class="btn btn-primary" href="{{context}}{{pagina}}">{{descripcion}} </a>
+					{{/each}}
+			{{/if}}
+		{{/each}}
+	</div>
+</div>

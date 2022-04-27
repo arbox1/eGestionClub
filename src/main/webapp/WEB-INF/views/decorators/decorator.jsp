@@ -19,8 +19,6 @@
 <link rel="shortcut icon" href="${context}resources/favicon.ico">
 
 <!-- CSS -->
-<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/> -->
-
 <link rel="stylesheet" href="${context}resources/css/bootstrap-datepicker.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/bootstrap-datepicker.min.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/bootstrap.min.css" type="text/css"/>
@@ -42,10 +40,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js "></script>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script> -->
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/async/3.2.0/async.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>

@@ -46,8 +46,12 @@ public class MenuDAOImpl implements MenuDAO{
 	public List<Menu> getMenuByIdEstructura(Integer idMenuEstructura, Integer idUsuario){
 		Session session = sessionFactory.getCurrentSession();
         TypedQuery<Menu> query = session.createNamedQuery(idUsuario != null ? "menu.porMenuEstructura" : "menu.porMenuEstructuraSinUsuario", Menu.class)
-        											.setParameter("idMenuEstructura", idMenuEstructura)
-        											.setParameter("idUsuario", idUsuario);
+        											.setParameter("idMenuEstructura", idMenuEstructura);
+        
+        if(idUsuario != null) {
+        	query.setParameter("idUsuario", idUsuario);
+        }
+        
         return query.getResultList();
         
 //        Session session = sessionFactory.getCurrentSession();

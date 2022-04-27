@@ -54,6 +54,14 @@ public class Actividad extends BaseEntidad {
 	@JsonDeserialize(using = StringDateConverter.class, as = Date.class)
 	private Date fechaFin;
 	
+	@Column(name = "a_fecha_fin_plazo")
+	@JsonDeserialize(using = StringDateConverter.class, as = Date.class)
+	private Date fechaFinPlazo;
+	
+	@ManyToOne
+	@JoinColumn(name = "a_ea_id")
+	private EstadosActividad estado;
+	
 	@Column(name = "a_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
@@ -78,6 +86,9 @@ public class Actividad extends BaseEntidad {
 
 	@Transient
 	private String horaFin;
+	
+	@Transient
+	private String horaFinPlazo;
 	
 	public Integer getId() {
 		return id;
@@ -167,6 +178,14 @@ public class Actividad extends BaseEntidad {
 		this.horaFin = horaFin;
 	}
 
+	public String getHoraFinPlazo() {
+		return horaFinPlazo;
+	}
+
+	public void setHoraFinPlazo(String horaFinPlazo) {
+		this.horaFinPlazo = horaFinPlazo;
+	}
+
 	public Integer getInscritos() {
 		return inscritos;
 	}
@@ -205,6 +224,22 @@ public class Actividad extends BaseEntidad {
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public Date getFechaFinPlazo() {
+		return fechaFinPlazo;
+	}
+
+	public void setFechaFinPlazo(Date fechaFinPlazo) {
+		this.fechaFinPlazo = fechaFinPlazo;
+	}
+
+	public EstadosActividad getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadosActividad estado) {
+		this.estado = estado;
 	}
 
 }

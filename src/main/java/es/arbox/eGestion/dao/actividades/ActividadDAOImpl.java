@@ -1,6 +1,7 @@
 package es.arbox.eGestion.dao.actividades;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -33,6 +34,10 @@ public class ActividadDAOImpl implements ActividadDAO {
 		
 		if(!StringUtils.isEmpty(actividad.getDescripcion()))
 			predicados.add(cb.equal(actividades.get("descripcion"), actividad.getDescripcion()));
+		
+		if(!StringUtils.isEmpty(actividad.getFechaFinPlazo())) {
+			predicados.add(cb.greaterThanOrEqualTo(actividades.get("fechaFinPlazo").as(Date.class), actividad.getFechaFinPlazo()));
+		}
 		
 		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(actividades.get("fechaInicio")));
     	

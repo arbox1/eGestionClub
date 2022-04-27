@@ -55,6 +55,10 @@ public class Participante extends BaseEntidad {
 	@Column(name = "p_email")
 	private String email;
 	
+	@ManyToOne
+	@JoinColumn(name = "p_ep_id")
+	private EstadosParticipante estado;
+	
 	@Column(name = "p_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
@@ -181,5 +185,13 @@ public class Participante extends BaseEntidad {
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public EstadosParticipante getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadosParticipante estado) {
+		this.estado = estado;
 	}
 }

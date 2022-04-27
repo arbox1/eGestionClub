@@ -29,9 +29,8 @@
 			<div class="col-sm-4">
 			</div>
 			<div class="col-sm-4 logo">
-<!-- 				<img alt="Logo Club" src="../resources/img/logo.png" class="text-center" -->
-<!-- 					height="200" width="200"> -->
 			</div>
 		</div>
 	</div>
 </body>
+</html>

@@ -149,6 +149,7 @@ implements WebMvcConfigurer {
     	
         http.authorizeRequests()
         	.antMatchers("/principal/**").authenticated()
+        	.antMatchers("/servicios/**").permitAll()
             .antMatchers("/resources/**", "/decorators/**").permitAll()
             .and().formLogin()
             		.loginPage("/login/")

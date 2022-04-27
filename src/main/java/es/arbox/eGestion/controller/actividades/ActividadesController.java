@@ -32,6 +32,8 @@ import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.actividades.Actividad;
 import es.arbox.eGestion.entity.actividades.DocumentoActividad;
+import es.arbox.eGestion.entity.actividades.EstadosActividad;
+import es.arbox.eGestion.entity.actividades.EstadosParticipante;
 import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.actividades.TiposActividad;
 import es.arbox.eGestion.entity.documento.Documento;
@@ -62,6 +64,8 @@ public class ActividadesController extends BaseController {
 		model.addAttribute("tipos", actividadService.obtenerTodosOrden(TiposActividad.class, " descripcion "));
 		model.addAttribute("buscador", actividad == null ? new Actividad() : actividad);
 		model.addAttribute("tiposDocumentos", documentoActividadService.getTipoDocumento(FamiliasDocumento.ACTIVIDAD));
+		model.addAttribute("estadosActividad", actividadService.obtenerTodosOrden(EstadosActividad.class, " descripcion "));
+		model.addAttribute("estadosParticipante", actividadService.obtenerTodosOrden(EstadosParticipante.class, " descripcion "));
 		return "/actividades/actividades";
 	}
 	
@@ -69,6 +73,8 @@ public class ActividadesController extends BaseController {
     public String buscar(Model model, @ModelAttribute("buscador") Actividad actividad, RedirectAttributes redirectAttrs) {
 		model.addAttribute("tipos", actividadService.obtenerTodosOrden(TiposActividad.class, " descripcion "));
 		model.addAttribute("tiposDocumentos", documentoActividadService.getTipoDocumento(FamiliasDocumento.ACTIVIDAD));
+		model.addAttribute("estadosActividad", actividadService.obtenerTodosOrden(EstadosActividad.class, " descripcion "));
+		model.addAttribute("estadosParticipante", actividadService.obtenerTodosOrden(EstadosParticipante.class, " descripcion "));
 		
 		List<Actividad> actividades = actividadService.getActividadesFiltro(actividad);
 		for(Actividad act : actividades) {
@@ -143,6 +149,10 @@ public class ActividadesController extends BaseController {
 		
 		if(!StringUtils.isEmpty(actividad.getHoraFin())) {
 			actividad.setFechaFin(Utilidades.asignarHora(actividad.getFechaFin(), actividad.getHoraFin()));
+		}
+		
+		if(!StringUtils.isEmpty(actividad.getHoraFinPlazo())) {
+			actividad.setFechaFinPlazo(Utilidades.asignarHora(actividad.getFechaFinPlazo(), actividad.getHoraFinPlazo()));
 		}
 		
 		actividadService.guardar(actividad, getUsuarioLogado());
