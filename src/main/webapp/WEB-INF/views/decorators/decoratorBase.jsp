@@ -7,7 +7,7 @@
 	response.setHeader("Cache-Control", "no-store"); //HTTP 1.1
 %>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es_ES">
 <head><%@ page isELIgnored="false"%>
 
 <title>eGestion: <sitemesh:write property='title' /></title>
@@ -61,6 +61,8 @@
 <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js "></script>
 
 <script type="text/javascript">
+	var abc='<spring:message code="message.badCredentials"/>';
+	
 	$( document ).ready(function() {
     	$.obtener(context+'base/menu', {
     		"id": 2
@@ -74,6 +76,14 @@
 					}));
 			});
     	});
+
+    	if('${param}' != '' && '${param}'=='{error=}'){
+    		$.notify({
+    			message: abc
+    		}, {
+    			type: "danger"
+    		});
+    	}
 	});
 	
 	$("#login").on("click", ".aceptar", function(e){
@@ -127,7 +137,14 @@
 		<sitemesh:write property='body' />
 	</div>
 
-	<div class='disclaimer'>Emilio López Delgado</div>
+	<div class='disclaimer'>Emilio López Delgado
+		<c:if test="${param.error != null}">
+		    <div id="error">
+		        <spring:message code="message.badCredentials">   
+		        </spring:message>
+		    </div>
+		</c:if>
+	</div>
 
 	<div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="Editar Actividad" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">

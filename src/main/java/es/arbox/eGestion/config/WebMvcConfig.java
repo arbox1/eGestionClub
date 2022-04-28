@@ -1,12 +1,15 @@
 package es.arbox.eGestion.config;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -19,10 +22,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -110,6 +117,27 @@ implements WebMvcConfigurer {
     }
 	
 	@Bean
+	public MessageSource messageSource() {
+	     ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+	     messageSource.setBasename("/WEB-INF/classes/messages");
+	     return messageSource;
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+	    LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+	    localeChangeInterceptor.setParamName("lang");
+	    registry.addInterceptor(localeChangeInterceptor);
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+	    CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+	    cookieLocaleResolver.setDefaultLocale(new Locale("es_ES"));
+	    return cookieLocaleResolver;
+	}
+	
+	@Bean
 	public PasswordEncoder passwordEncoder() {
 	    return new PasswordEncoder() {
 	        @Override
@@ -153,10 +181,11 @@ implements WebMvcConfigurer {
             .antMatchers("/resources/**", "/decorators/**").permitAll()
             .and().formLogin()
             		.loginPage("/login/")
-            		.loginProcessingUrl("/login/logar2")
+            		.loginProcessingUrl("/login/logar2/")
             		.defaultSuccessUrl("/principal/", true)
-            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("login/logout", "GET"))
-            .deleteCookies("remove").logoutSuccessUrl("/login/").permitAll()
+            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("login/logout/", "GET"))
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID").logoutSuccessUrl("/login/").permitAll()
             .and().csrf().disable();
     }
 }

@@ -41,7 +41,7 @@ public abstract class BaseEntidad {
 					Map<String, Object> temp = new HashMap<>();
 					for(Field fielInterna : obj.getClass().getDeclaredFields()) {
 						fielInterna.setAccessible(true);
-						if(fielInterna.get(obj).getClass() != this.getClass()) {
+						if(fielInterna.get(obj) != null && fielInterna.get(obj).getClass() != this.getClass()) {
 							if(fielInterna.get(obj) instanceof BaseEntidad) {
 								Method m = fielInterna.getType().getMethod("getMapa");
 								temp.put(fielInterna.getName(), m.invoke(fielInterna.get(obj), new Object[]{}));

@@ -123,7 +123,7 @@ public class BaseController {
 			List<MenuEstructura> lMenuEstructura = menuService.getMenuEstructura(valores.getId());
 			
 			result.setResultado("menuEstructura", MenuEstructura.getListaMapa(lMenuEstructura));
-			result.setResultado("ok", "S");
+			result.setResultado("ok", "S2");
 		}
 		ObjectMapper Obj = new ObjectMapper();
 		return Obj.writeValueAsString(result);

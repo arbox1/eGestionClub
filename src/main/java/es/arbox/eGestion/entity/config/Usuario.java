@@ -66,6 +66,12 @@ public class Usuario extends BaseEntidad implements UserDetails{
 	
 	@Column(name = "us_telefono")
 	private String telefono;
+	
+	@Column(name = "us_intento")
+	private Integer intento;
+	
+	@Column(name = "us_f_baja")
+	private Date fechaBaja;
 
 	@Column(name = "us_u_creacion")
 	@Auditoria("INSERT")
@@ -203,6 +209,22 @@ public class Usuario extends BaseEntidad implements UserDetails{
 
 	public void setRoles(Set<Rol> roles) {
 		this.roles = roles;
+	}
+
+	public Integer getIntento() {
+		return intento;
+	}
+
+	public void setIntento(Integer intento) {
+		this.intento = intento;
+	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
 	}
 
 	public Integer getIdUsuarioCreacion() {

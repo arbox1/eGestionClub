@@ -7,7 +7,7 @@
 	response.setHeader("Cache-Control", "no-store"); //HTTP 1.1
 %>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es_ES">
 <head><%@ page isELIgnored="false"%>
 
 <title>eGestion: <sitemesh:write property='title' /></title>
