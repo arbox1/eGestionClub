@@ -39,6 +39,10 @@ public class ActividadDAOImpl implements ActividadDAO {
 			predicados.add(cb.greaterThanOrEqualTo(actividades.get("fechaFinPlazo").as(Date.class), actividad.getFechaFinPlazo()));
 		}
 		
+		if(actividad.getTipo() != null && actividad.getTipo().getId() != null) {
+			predicados.add(cb.equal(actividades.get("tipo").get("id"), actividad.getTipo().getId()));
+		}
+		
 		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(actividades.get("fechaInicio")));
     	
 		TypedQuery<Actividad> query = session.createQuery(q);

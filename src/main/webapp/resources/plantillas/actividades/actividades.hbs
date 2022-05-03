@@ -1,0 +1,23 @@
+{{#each actividades}}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="cajaDato" data-id="{{id}}">
+				<div class="row">
+					<div class="col-md-12">
+						<span class="text-center">{{tipo.descripcion}}</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span class="text-center">{{descripcion}}</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span class="text-center"><b>Plazo: </b><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "{{fechaFinPlazo}}" /></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{{/each}}
