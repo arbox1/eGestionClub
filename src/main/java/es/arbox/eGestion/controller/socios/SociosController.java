@@ -60,8 +60,9 @@ public class SociosController extends BaseController {
     private MailService mailService;
 	
 	@GetMapping("/")
-	public String listaSocios(Model model) {
-		model.addAttribute("socios", sociosService.getSocios());
+	public String listaSocios(Model model, @ModelAttribute("buscador") Socios socio) {
+		socio = socio == null ? new Socios() : socio;
+		model.addAttribute("socios", sociosService.getBusqueda(socio));
 		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
 		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
 		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
@@ -69,8 +70,24 @@ public class SociosController extends BaseController {
 		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
 		model.addAttribute("nuevo", new Socios());
 		model.addAttribute("valor", new ValoresDTO());
+		model.addAttribute("buscador", socio);
 		return "/socios/socios";
 	}
+	
+	@PostMapping("/buscar")
+    public String buscar(Model model, @ModelAttribute("buscador") Socios socio) {
+		model.addAttribute("socios", sociosService.getBusqueda(socio));
+		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
+		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
+		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
+		model.addAttribute("tiposDocumentos", documentoSocioService.getTipoDocumento(FamiliasDocumento.SOCIO));
+		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
+		model.addAttribute("nuevo", new Socios());
+		model.addAttribute("valor", new ValoresDTO());
+		model.addAttribute("buscador", socio);
+		
+		return "/socios/socios";
+    }
 	
 	@PostMapping("/guardar")
     public String guardar(@ModelAttribute("nuevo") Socios socio, RedirectAttributes redirectAttrs) throws IllegalArgumentException, IllegalAccessException {

@@ -22,5 +22,10 @@ public class SociosServiceImpl extends GenericServiceImpl implements SociosServi
 	public List<Socios> getSocios() {
 		return sociosDAO.getSocios();
 	}
-
+	
+	@Override
+	@Transactional
+	public List<Socios> getBusqueda(Socios socio) {
+		return sociosDAO.getBusqueda(socio);
+	}
 }

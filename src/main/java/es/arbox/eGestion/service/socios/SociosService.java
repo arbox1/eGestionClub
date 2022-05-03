@@ -7,4 +7,5 @@ import es.arbox.eGestion.service.config.GenericService;
 
 public interface SociosService extends GenericService {
 	public List<Socios> getSocios();
+	public List<Socios> getBusqueda(Socios socio);
 }

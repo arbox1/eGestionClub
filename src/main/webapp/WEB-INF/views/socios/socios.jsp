@@ -377,13 +377,63 @@
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
+		<div class="row buscador">
+			<div class="col-md-12">
+				<form:form action="buscar" cssClass="form-horizontal" method="post" modelAttribute="buscador">
+					<div class="row form-group">
+						<label for="nombre" class="col-sm-1 col-form-label">Nombre</label>
+						<div class="col-md-3">
+							<form:input path="nombre" cssClass="form-control" />
+						</div>
+						<label for="apellidos" class="col-sm-1 col-form-label">Apellidos</label>
+						<div class="col-sm-7">
+							<form:input path="apellidos" cssClass="form-control" />
+						</div>
+					</div>
+					
+					<div class="row form-group">
+						<label for="curso" class="col-sm-1 col-form-label">Curso</label>
+						<div class="col-md-3">
+							<form:select path="idCurso" cssClass="form-control" >
+								<form:option value="" label="--Selecciona un curso"/>
+								<form:options items="${cursos}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
+						</div>
+						<label for="escuela" class="col-sm-1 col-form-label">Escuela</label>
+						<div class="col-sm-3">
+							<form:select path="idEscuela" cssClass="form-control" >
+								<form:option value="" label="--Selecciona una escuela"/>
+								<form:options items="${escuelas}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
+						</div>
+						<label for="categoria" class="col-sm-1 col-form-label">Categoría</label>
+						<div class="col-sm-3">
+							<form:select path="idCategoria" cssClass="form-control" >
+								<form:option value="" label="--Selecciona una categoría"/>
+								<form:options items="${categorias}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
+						</div>
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-md-6" >
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Socio</button>
+						</div>
+						<div class="col-md-6 text-right">
+							<button type="button" class="btn btn-primary" data-limpiar=".buscador form">Limpiar</button>
+							<button type="button" class="btn btn-primary" data-submit=".buscador form">Buscar</button>
+						</div>
+					</div>
+				</form:form>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="row botonera">
-					<div class="col-md-12" >
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Socio</button>
-					</div>
-				</div>
+<!-- 				<div class="row botonera"> -->
+<!-- 					<div class="col-md-12" > -->
+<!-- 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar">Nuevo Socio</button> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				<div class="panel panel-info">
 					<div class="panel-body">
 						<table class="table table-striped table-bordered extendida socios" id="tablaSocios">

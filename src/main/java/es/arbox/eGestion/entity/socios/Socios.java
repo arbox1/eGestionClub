@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.entity.BaseEntidad;
@@ -90,6 +91,15 @@ public class Socios extends BaseEntidad{
 	@Column(name = "so_f_actu")
 	@Auditoria("UPDATE")
 	protected Date fechaActualizacion;
+	
+	@Transient
+	protected Integer idCurso;
+	
+	@Transient
+	protected Integer idEscuela;
+	
+	@Transient
+	protected Integer idCategoria;
 
 	public Integer getId() {
 		return id;
@@ -245,5 +255,29 @@ public class Socios extends BaseEntidad{
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public Integer getIdCurso() {
+		return idCurso;
+	}
+
+	public void setIdCurso(Integer idCurso) {
+		this.idCurso = idCurso;
+	}
+
+	public Integer getIdEscuela() {
+		return idEscuela;
+	}
+
+	public void setIdEscuela(Integer idEscuela) {
+		this.idEscuela = idEscuela;
+	}
+
+	public Integer getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(Integer idCategoria) {
+		this.idCategoria = idCategoria;
 	}
 }
