@@ -216,6 +216,18 @@
 								<form:input path="correo" cssClass="form-control correo required email" placeholder="ejemplo@host.com" />
 							</div>
 						</div>
+						<div class="form-group row">
+							<label for="correo" class="col-sm-2 col-form-label">Intento:</label>
+							<div class="col-sm-10">
+								<form:input path="intento" cssClass="form-control intento" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="fechaBaja" class="col-sm-2 col-form-label">F. baja:</label>
+							<div class="col-sm-10">
+								<form:input path="fechaBaja" data-date-format="mm/dd/yyyy" cssClass="form-control fechaBaja datepicker fecha_corta fechaValida" placeholder="dd/mm/aaaa" />
+							</div>
+						</div>
 					</form:form>
 				</div>
 				<div class="modal-footer">

@@ -61,17 +61,7 @@ public class SociosController extends BaseController {
 	
 	@GetMapping("/")
 	public String listaSocios(Model model, @ModelAttribute("buscador") Socios socio) {
-		socio = socio == null ? new Socios() : socio;
-		model.addAttribute("socios", sociosService.getBusqueda(socio));
-		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
-		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
-		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
-		model.addAttribute("tiposDocumentos", documentoSocioService.getTipoDocumento(FamiliasDocumento.SOCIO));
-		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
-		model.addAttribute("nuevo", new Socios());
-		model.addAttribute("valor", new ValoresDTO());
-		model.addAttribute("buscador", socio);
-		return "/socios/socios";
+		return buscar(model, socio);
 	}
 	
 	@PostMapping("/buscar")
