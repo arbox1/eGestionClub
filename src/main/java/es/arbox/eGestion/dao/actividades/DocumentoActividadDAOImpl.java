@@ -46,4 +46,19 @@ public class DocumentoActividadDAOImpl implements DocumentoActividadDAO {
 		TypedQuery<DocumentoActividad> query = session.createQuery(q);
     	return query.getResultList();
 	}
+	
+	public DocumentoActividad getDocumentoActividad(Integer idDocumento) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb =  sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<DocumentoActividad> q = cb.createQuery(DocumentoActividad.class);
+		Root<DocumentoActividad> documentoActividad = q.from(DocumentoActividad.class);
+		List<Predicate> predicados = new ArrayList<Predicate>();
+		
+		predicados.add(cb.equal(documentoActividad.get("documento").get("id"), idDocumento));
+		
+		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(documentoActividad.get("id")));
+    	
+		TypedQuery<DocumentoActividad> query = session.createQuery(q);
+    	return query.getSingleResult();
+	}
 }

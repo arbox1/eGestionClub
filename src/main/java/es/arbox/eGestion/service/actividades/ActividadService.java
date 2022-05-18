@@ -13,4 +13,6 @@ public interface ActividadService extends GenericService {
 	public List<Participante> getParticipantes(Integer idActividad);
 	
 	public Integer getInscritos(Integer idActividad);
+	
+	public Participante getParticipantePassword(Participante participante);
 }

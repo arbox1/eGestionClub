@@ -46,7 +46,7 @@ public class LoginController extends BaseController {
 		
 		if(userDetails == null) {
 			Mensajes mensajes = new Mensajes();
-			mensajes.mensaje(TiposMensaje.danger, String.format("Usuario y contraseña incorrecta"));
+			mensajes.mensaje(TiposMensaje.danger, String.format("Usuario y contraseña incorrecta " + usuario.getUsername()));
 			redirectAttrs.addFlashAttribute("mensajes", mensajes.getMensajes());
 		} else {
 			Integer intento = ((Usuario)userDetails).getIntento() == null ? 0 : ((Usuario)userDetails).getIntento();

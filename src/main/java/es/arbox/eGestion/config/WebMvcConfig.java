@@ -151,15 +151,15 @@ implements WebMvcConfigurer {
 	        }
 	    };
 	}
-	
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-        .passwordEncoder(passwordEncoder)
-        .withUser("Albaida").password(passwordEncoder.encode("club")).roles("USER");
-        
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
+//	
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//        .passwordEncoder(passwordEncoder)
+//        .withUser("Albaida").password(passwordEncoder.encode("club")).roles("USER");
+//        
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+//    }
     
 //    @Override
 	public void configure(WebSecurity web) throws Exception {

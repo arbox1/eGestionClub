@@ -3,6 +3,7 @@ package es.arbox.eGestion.utils;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +17,11 @@ public class Utilidades {
 	    c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(h[0]));
 	    c.set(Calendar.MINUTE, Integer.parseInt(h[1]));
 	    return c.getTime();
+	}
+	
+	public static Date formatStringToDate (String date) throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return format.parse(date);
 	}
 
 	public static String formatDateToString (Date date) {

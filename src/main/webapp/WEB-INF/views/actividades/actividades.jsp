@@ -670,6 +670,24 @@
 						</div>
 						
 						<div class="form-group row">
+							<label for="dni" class="col-form-label col-md-3">DNI:</label>
+							<div class="col-md-9">
+								<input type="text" name="dni" class="form-control dni dniValido" />
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="fechaNacimiento" class="col-form-label col-md-3">F. Nacimiento:</label>
+							<div class="col-md-9">
+								<input type="text" name="fechaNacimiento" 
+											data-date-format="mm/dd/yyyy"
+											data-date-container='#inscripcion'
+											class="form-control datepicker fecha_corta fechaNacimiento fechaValida" 
+											placeholder="dd/mm/aaaa"/>
+							</div>
+						</div>
+						
+						<div class="form-group row">
 							<label for="cantidad" class="col-form-label col-md-3">Cantidad:</label>
 							<div class="col-md-9">
 								<input type="text" name="cantidad" class="form-control cantidad required" />
@@ -718,7 +736,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-<!-- 					<button type="button" class="btn btn-primary" data-limpiar="#inscripcion form">Limpiar</button> -->
+					<button type="button" class="btn btn-primary guardar" data-accion="guardarNotificarParticipante" >Guardar y Notificar</button>
 					<button type="button" class="btn btn-primary guardar" data-accion="guardarParticipante" >Guardar</button>
 				</div>
 			</div>

@@ -39,6 +39,74 @@ public class MailService {
 	@Autowired
 	CuotaService cuotaService;
 	
+	public void correoNotificacionParticipante(Participante participante) {
+		SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(participante.getEmail()); 
+        
+    	message.setCc("atleticoalbaida@gmail.com");
+        
+        message.setSubject(String.format("[INSCRIPCION ACTIVIDAD] %1$s de la modalidad %2$s", 
+        		participante.getActividad().getDescripcion(), 
+        		participante.getActividad().getTipo().getDescripcion())); 
+        message.setText(String.format("Cambio en su solicitud:\n\n"
+        		+ "- Nombre: %1$s \n"
+        		+ "- DNI: %2$s \n"
+        		+ "- Nº Participantes: %3$s \n"
+        		+ "- Teléfono: %4$s \n"
+        		+ "- Email: %5$s \n"
+        		+ "- Observaciones: %6$s \n"
+        		+ "- Estado: %7$s \n"
+        		+ "- Fecha: %8$s",
+        		participante.getNombre(),
+        		participante.getDni(),
+        		participante.getCantidad(),
+        		participante.getTelefono(),
+        		participante.getEmail(),
+        		participante.getObservacion(),
+        		participante.getEstado().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date())
+        		));
+        
+        mailSender.send(message);
+	}
+	
+	public void correoInscripcionParticipante(Participante participante, String password) {
+		SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(participante.getEmail()); 
+        
+    	message.setCc("atleticoalbaida@gmail.com");
+        
+        message.setSubject(String.format("[INSCRIPCION ACTIVIDAD] %1$s de la modalidad %2$s", 
+        		participante.getActividad().getDescripcion(), 
+        		participante.getActividad().getTipo().getDescripcion())); 
+        message.setText(String.format("Confirmación de inscripcion:\n\n"
+        		+ "- Nombre: %1$s \n"
+        		+ "- DNI: %2$s \n"
+        		+ "- Nº Participantes: %3$s \n"
+        		+ "- Teléfono: %4$s \n"
+        		+ "- Email: %5$s \n"
+        		+ "- Observaciones: %6$s \n"
+        		+ "- Estado: %7$s \n"
+        		+ "- Fecha: %8$s \n\n"
+        		+ "Datos de acceso para consultar Inscripción \n\n"
+        		+ "- Usuario: %5$s \n"
+        		+ "- Contraseña: %9$s",
+        		participante.getNombre(),
+        		participante.getDni(),
+        		participante.getCantidad(),
+        		participante.getTelefono(),
+        		participante.getEmail(),
+        		participante.getObservacion(),
+        		participante.getEstado().getDescripcion(),
+        		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date()),
+        		password
+        		));
+        
+        mailSender.send(message);
+	}
+	
 	public void correoPagoSocio(Cuota cuota) {
 		SimpleMailMessage message = new SimpleMailMessage(); 
         message.setFrom("atleticoalbaida@gmail.com");

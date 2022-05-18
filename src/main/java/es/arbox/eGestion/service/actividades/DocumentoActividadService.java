@@ -15,4 +15,6 @@ public interface DocumentoActividadService extends GenericService {
 	public List<TipoDocumento> getTipoDocumento(FamiliasDocumento familia);
 	
 	public List<DocumentoActividad> getDocumentosPorTipo(Integer idActividad, TiposDocumento tipoDocumento);
+	
+	public DocumentoActividad getDocumentoActividad(Integer idDocumento);
 }

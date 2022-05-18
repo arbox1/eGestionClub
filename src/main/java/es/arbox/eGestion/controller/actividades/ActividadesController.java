@@ -197,6 +197,12 @@ public class ActividadesController extends BaseController {
 		
 		if(participante.getId() == null) {
 			participante.setFecha(new Date());
+		} else {
+			Participante p = actividadService.obtenerPorId(participante.getClass(), participante.getId());
+			participante.setPassword(p.getPassword());
+			participante.setFecha(p.getFecha());
+			participante.setIdUsuarioCreacion(p.getIdUsuarioCreacion());
+			participante.setFechaCreacion(p.getFechaCreacion());
 		}
 		
 		actividadService.guardar(participante, getUsuarioLogado());
@@ -207,6 +213,15 @@ public class ActividadesController extends BaseController {
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Participante %1$s correctamente.", opcion));
 		result.setMensajes(mensajes.getMensajes());
+		
+		return result;
+    }
+	
+	@PostMapping(value = "/guardarNotificarParticipante")
+    public @ResponseBody RespuestaAjax guardarNotificarParticipante(@ModelAttribute Participante participante, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = guardarParticipante(participante, redirectAttrs);
+		
+		mailService.correoNotificacionParticipante(actividadService.obtenerPorId(participante.getClass(), participante.getId()));
 		
 		return result;
     }

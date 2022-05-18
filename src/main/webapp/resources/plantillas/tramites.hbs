@@ -5,8 +5,11 @@
 		{{#each menu}}
 			{{#if menus}}
 					{{#each menus}}
-						<c:url var="pagina" value="{{pagina}}" />
-						<a class="btn btn-primary" href="{{context}}{{pagina}}">{{descripcion}} </a>
+						{{#isEmpty pagina}}
+						{{else}}
+							<c:url var="pagina" value="{{pagina}}" />
+							<a class="btn btn-primary" href="{{context}}{{pagina}}">{{descripcion}} </a>
+						{{/isEmpty}}
 					{{/each}}
 			{{/if}}
 		{{/each}}

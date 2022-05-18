@@ -305,6 +305,8 @@ var ventana=null;
     	    	{
     	    		if($(this).hasClass('fecha_corta')) {
     		            valor = moment(valor).format('DD/MM/YYYY');
+    		        } else if($(this).hasClass('fecha_corta_span')) {
+    		            valor = moment(+valor).format('DD/MM/YYYY');
     		        } else if($(this).hasClass('fecha_larga')) {
     		            valor = valor.substring(0,19);
     		        } else if($(this).hasClass('hora_larga')) {
@@ -314,7 +316,7 @@ var ventana=null;
     		        } else if($(this).hasClass('porcentaje')) {
     		            valor = valor + '%';
     		        }else if($(this).hasClass('sino')) {
-    		        	valor = valor == 'S' ? 'S�' : 'No';
+    		        	valor = valor == 'S' ? 'Sí' : 'No';
 	    	    	}else if($(this).hasClass('truefalse')) {
 			        	valor = valor == 'true' ? 'S�' : 'No';
 			        }else if($(this).hasClass('importe') && !$(this).hasClass('noformat')) {
@@ -507,7 +509,6 @@ var ventana=null;
 	    				
 	    				var data2 = new FormData($form[0]);
 	    				data2.append('iehack', "&#9760;");
-	    				console.log(data2);
 						if(1==1){
 						 $.ajax({
 								type : "POST",
@@ -739,6 +740,11 @@ var ventana=null;
 		$.validator.addMethod("fechaValida", function(value, element) {
         	return this.optional(element) || moment(value,"DD/MM/YYYY").isValid();
     	}, "Por favor introduce una fecha v&aacute;lida con el formato DD/MM/YYYY");
+    	
+    	$.validator.addMethod("dniValido", function (value, element) {
+     		var pattern = /^[XYZ]?\d{5,8}[A-Z]$/;
+     		return this.optional(element) || pattern.test(value);
+  		}, "Formato del dni incorrecto.");
 		
 		$.extend($.validator.messages, {
 		  required: "Este campo es obligatorio.",

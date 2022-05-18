@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import es.arbox.eGestion.entity.actividades.Actividad;
 import es.arbox.eGestion.entity.actividades.Participante;
+import es.arbox.eGestion.utils.Utilidades;
 
 @Repository
 public class ActividadDAOImpl implements ActividadDAO {
@@ -31,6 +32,10 @@ public class ActividadDAOImpl implements ActividadDAO {
 		CriteriaQuery<Actividad> q = cb.createQuery(Actividad.class);
 		Root<Actividad> actividades = q.from(Actividad.class);
 		List<Predicate> predicados = new ArrayList<Predicate>();
+		
+		if(actividad.getId() != null) {
+			predicados.add(cb.equal(actividades.get("id"), actividad.getId()));
+		}
 		
 		if(!StringUtils.isEmpty(actividad.getDescripcion()))
 			predicados.add(cb.equal(actividades.get("descripcion"), actividad.getDescripcion()));
@@ -79,5 +84,30 @@ public class ActividadDAOImpl implements ActividadDAO {
 		query.where(predicados.toArray(new Predicate[0]));
 		
 		return (Integer) session.createQuery(query).getSingleResult();
+	}
+	
+	public Participante getParticipantePassword(Participante participante) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb =  sessionFactory.getCurrentSession().getCriteriaBuilder();
+		
+		CriteriaQuery<Participante> q = cb.createQuery(Participante.class);
+		Root<Participante> participantes = q.from(Participante.class);
+		List<Predicate> predicados = new ArrayList<Predicate>();
+		
+		predicados.add(cb.equal(participantes.get("actividad").get("id"), participante.getActividad().getId()));
+		predicados.add(cb.equal(participantes.get("email"), participante.getEmail()));
+		predicados.add(cb.equal(participantes.get("password"), Utilidades.getMd5(participante.getPassword())));
+		
+		q.where(predicados.toArray(new Predicate[0]));
+		
+		TypedQuery<Participante> query = session.createQuery(q);
+		
+		List<Participante> lista = query.getResultList();
+		
+		if(lista == null || lista.size() == 0) {
+			return null;
+		} else {
+			return lista.get(0);
+		}
 	}
 }

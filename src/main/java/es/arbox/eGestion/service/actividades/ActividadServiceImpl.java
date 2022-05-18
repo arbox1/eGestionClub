@@ -35,4 +35,10 @@ public class ActividadServiceImpl extends GenericServiceImpl implements Activida
 	public Integer getInscritos(Integer idActividad) {
 		return actividadDAO.getInscritos(idActividad);
 	}
+	
+	@Override
+	@Transactional
+	public Participante getParticipantePassword(Participante participante) {
+		return actividadDAO.getParticipantePassword(participante);
+	}
 }

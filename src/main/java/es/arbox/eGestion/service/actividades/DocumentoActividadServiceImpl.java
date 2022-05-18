@@ -42,4 +42,10 @@ public class DocumentoActividadServiceImpl extends GenericServiceImpl implements
 	public List<DocumentoActividad> getDocumentosPorTipo(Integer idActividad, TiposDocumento tipoDocumento) {
 		return documentoActividadDAO.getDocumentosPorTipo(idActividad, tipoDocumento);
 	}
+	
+	@Override
+	@Transactional
+	public DocumentoActividad getDocumentoActividad(Integer idDocumento) {
+		return documentoActividadDAO.getDocumentoActividad(idDocumento);
+	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import es.arbox.eGestion.entity.BaseEntidad;
+import es.arbox.eGestion.enums.EstadosParticipantes;
 
 @Entity
 @Table(name = "estados_participante")
@@ -20,6 +21,14 @@ public class EstadosParticipante extends BaseEntidad {
 	
 	@Column(name = "ep_descripcion")
 	private String descripcion;
+
+	public EstadosParticipante() {
+		super();
+	}
+	
+	public EstadosParticipante(EstadosParticipantes estado) {
+		this.id = estado.getId();
+	}
 
 	public Integer getId() {
 		return id;

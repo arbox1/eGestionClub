@@ -66,6 +66,14 @@
 		return new Handlebars.SafeString(context);
 	});
 	
+	Handlebars.registerHelper('isEmpty', function (value, options) {
+		if(value == null || (_.isArray(value) && value.length > 0) || (!_.isArray(value) && value != "")) {
+			return options.inverse(this);			
+		} else {
+			return options.fn(this);
+		}
+	});
+	
 	Handlebars.registerHelper('check', function (value, options) {
 		if(value=='S') {
 			return options.fn(this);

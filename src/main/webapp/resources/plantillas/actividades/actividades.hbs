@@ -1,3 +1,12 @@
+{{#isEmpty actividades}}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div class="cajaDato">
+				No hay actividades en plazo de inscripción en este momento.
+			</div>
+		</div>
+	</div>
+{{/isEmpty}}
 {{#each actividades}}
 	<div class="row">
 		<div class="col-md-12">
@@ -14,9 +23,17 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<span class="text-center"><b>Plazo: </b><fmt:formatDate pattern = "dd/MM/yyyy HH:mm" value = "{{fechaFinPlazo}}" /></span>
+						<span class="text-center spanPrueba"><b>Plazo: </b>{{fechaFinPlazo}}</span>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<button type="button" class="btn btn-primary inscribir" data-id="{{id}}" >Inscribir Participante</button>
+						<button type="button" class="btn btn-primary consulta" data-id="{{id}}" >Consulta Participante</button>
+						<button type="button" class="btn btn-primary documentos" data-id="{{id}}" data-accion="documentos" >Documentación</button>
+					</div>
+				</div>
+				<br/>
 			</div>
 		</div>
 	</div>

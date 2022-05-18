@@ -59,6 +59,16 @@ public class Participante extends BaseEntidad {
 	@JoinColumn(name = "p_ep_id")
 	private EstadosParticipante estado;
 	
+	@Column(name = "p_dni")
+	private String dni;
+	
+	@Column(name = "p_f_nacimiento")
+	@JsonDeserialize(using = StringDateConverter.class, as = Date.class)
+	private Date fechaNacimiento;
+	
+	@Column(name = "p_password")
+	private String password;
+	
 	@Column(name = "p_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
@@ -193,5 +203,29 @@ public class Participante extends BaseEntidad {
 
 	public void setEstado(EstadosParticipante estado) {
 		this.estado = estado;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 }

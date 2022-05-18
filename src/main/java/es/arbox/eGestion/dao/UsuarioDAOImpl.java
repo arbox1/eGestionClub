@@ -35,10 +35,6 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public Usuario usuarioByUsername(String username) {
 		
 		Session session = sessionFactory.getCurrentSession();
-//      TypedQuery<Usuario> query = session.createNamedQuery("usuarioPorUsername", Usuario.class)
-//      											.setParameter("username", username);
-//      
-//      Usuario result = query.getSingleResult();
       
 		CriteriaBuilder cb =  sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<Usuario> q = cb.createQuery(Usuario.class);
@@ -46,15 +42,10 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		List<Predicate> predicados = new ArrayList<Predicate>();
 		
 		predicados.add(cb.equal(usuarios.get("username"), username));
-		predicados.add(
-				cb.or(cb.isNull(usuarios.get("fechaBaja").as(Date.class)),
-						cb.greaterThanOrEqualTo(usuarios.get("fechaBaja").as(Date.class), new Date()))
-				
-				);
-		
 //		predicados.add(
-//				cb.or(cb.isNull(usuarios.get("intento").as(Integer.class)),
-//						cb.lessThan(usuarios.get("intento").as(Integer.class), Integer.valueOf(3)))
+//				cb.or(cb.isNull(usuarios.get("fechaBaja").as(Date.class)),
+//						cb.greaterThanOrEqualTo(usuarios.get("fechaBaja").as(Date.class), new Date()))
+//				
 //				);
 		
 		q.where(predicados.toArray(new Predicate[0]));
