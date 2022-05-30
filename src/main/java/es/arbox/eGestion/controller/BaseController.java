@@ -147,7 +147,7 @@ public class BaseController {
       Documento documento = menuService.obtenerPorId(Documento.class, valores.getId());
       
       MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-      header.add("Content-disposition", "form-data; name=filex; filename=" + documento.getNombre());
+      header.add("Content-disposition", "attachment; name=filex; filename=" + documento.getNombre());
       header.add("Content-type", documento.getMime());
       
       return new HttpEntity<byte[]>(documento.getFichero(), header);

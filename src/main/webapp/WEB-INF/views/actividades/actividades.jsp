@@ -146,6 +146,15 @@
 								}
 							}).addBoton({
 								tipo: 'link',
+								icono: 'file-alt',
+								clases: 'documentos',
+								title: 'Documentos',
+								data: {
+									id: row.id,
+									accion: 'documentosParticipante'
+								}
+							}).addBoton({
+								tipo: 'link',
 								icono: 'trash',
 								clases: 'eliminar',
 								title: 'Eliminar',
@@ -194,6 +203,11 @@
 		    			datos: res.resultados.participante
 		    		}).mostrar();
 		    	});
+			}).on('click', '.documentos', function(e){
+				e.stopPropagation();
+		    	var data = $(this).data();
+		    	
+		    	$('#documentosParticipante').trigger("reload", data).mostrar();
 			}).on('click', '.eliminar', function(e){
 				e.stopPropagation();
 				var $data = $(this).data();
@@ -306,6 +320,92 @@
 				$('#nuevoDocumento').enviar(data.accion, function(res){
 					$('#documentos').trigger("reload", {id: res.resultados.id, accion: "documentos"});
 					$('#nuevoDocumento').modal("hide");
+				});
+			}).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#documentosParticipante table.detalle').DataTable({
+				language: {
+					"emptyTable": "No hay documentos de este participante"
+				},
+    			columns: [
+    				{ data: "documento.tipo.descripcion", title: "Tipo" },
+    	            { data: "documento.descripcion", title: "Descripcion" },
+    	            { data: "documento.mime", title: "Mime" },
+    	            { data: function ( row, type, val, meta ) {
+						var $buttons = $('<p>').addBoton({
+								tipo: 'link',
+								icono: 'search',
+								clases: 'descargar',
+								title: 'Descargar',
+								data: {
+									id: row.documento.id,
+									accion: 'documento'
+								}
+							}).addBoton({
+								tipo: 'link',
+								icono: 'trash',
+								clases: 'eliminar',
+								title: 'Eliminar',
+								data: {
+									"id": row.id,
+									"id-documento": row.documento.id,
+									"id-participante": row.participante.id,
+									accion: 'eliminarDocumentoParticipante'
+								}
+							});
+							return $.toHtml($buttons);
+						}, 
+						title: "",
+						className: 'text-nowrap text-center'
+	    	    	}
+    	        ]
+    		});
+			
+			$('#documentosParticipante').on("reload", function(e, data){
+				e.stopPropagation();
+				$('#nuevoDocumentoParticipante .idParticipante').val(data.id);
+		    	$.obtener(data.accion, {
+		    		"id": data.id
+		    	}, function(res){
+		    		$('#documentosParticipante table.detalle').reloadTable(res.resultados.documento);
+		    	});
+		    }).on('click', '.eliminar', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea eliminar el documento?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax($data.accion, {
+		    				"id": $data.id,
+		    				"documento.id": $data.idDocumento,
+		    				"actividad.id": $data.idParticipante
+		    			}, function(res){
+		    				$('#documentosParticipante').trigger("reload", {id: $data.idParticipante, accion: "documentosParticipante"});
+		    			});
+		    		}
+		    	});
+			}).on('click', '.descargar', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				$.enviarForm($data.accion, "valor", {
+    				"id": $data.id
+    			});
+			}).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#nuevoDocumentoParticipante').on('click', '.guardar', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				$('#nuevoDocumentoParticipante').enviar(data.accion, function(res){
+					$('#documentosParticipante').trigger("reload", {id: res.resultados.id, accion: "documentosParticipante"});
+					$('#nuevoDocumentoParticipante').modal("hide");
 				});
 			}).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
@@ -815,6 +915,73 @@
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 					<button type="button" class="btn btn-primary" data-limpiar="#nuevoDocumento">Limpiar</button>
 					<button type="button" class="btn btn-primary guardar" data-accion="guardarDocumento" >Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="documentosParticipante" tabindex="-1" role="dialog" aria-labelledby="Documentos" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Documentos Participante</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row botonera">
+					</div>
+					<table class="table table-striped table-bordered dataTable no-footer detalle">
+					</table>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoDocumentoParticipante">Nuevo documento</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="nuevoDocumentoParticipante" tabindex="-1" role="dialog" aria-labelledby="Nuevo documento" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Nuevo Documento</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="guardarDocumentoParticipante" cssClass="form-horizontal validation" method="post" modelAttribute="documentoParticipante">
+						<input type="hidden" name="id" class="id"/>
+						<input type="hidden" name="participante.id" class="idParticipante no-limpiar"/>
+						<input type="hidden" name="documento.tipo.id" class="documento_tipo_id no-limpiar" value="7"/>
+						
+						<div class="form-group row">
+							<label for="documento.descripcion" class="col-form-label col-md-3 text-nowrap">Descripcion:</label>
+							<div class="col-md-9">
+								<input type="text" name="documento.descripcion" class="documento_descripcion required form-control"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="documento.fichero" class="col-form-label col-md-3 text-nowrap">Archivo:</label>
+							<div class="col-md-9">
+								<input type="file" name="documento.archivo" class="documento_fichero form-control"/>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" data-limpiar="#nuevoDocumentoParticipante">Limpiar</button>
+					<button type="button" class="btn btn-primary guardar" data-accion="guardarDocumentoParticipante" >Guardar</button>
 				</div>
 			</div>
 		</div>

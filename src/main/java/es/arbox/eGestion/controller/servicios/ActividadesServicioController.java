@@ -10,8 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +28,7 @@ import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.actividades.Actividad;
 import es.arbox.eGestion.entity.actividades.DocumentoActividad;
+import es.arbox.eGestion.entity.actividades.DocumentoParticipante;
 import es.arbox.eGestion.entity.actividades.EstadosParticipante;
 import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.actividades.TiposActividad;
@@ -40,6 +39,7 @@ import es.arbox.eGestion.enums.TiposDocumento;
 import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
+import es.arbox.eGestion.service.actividades.DocumentoParticipanteService;
 import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.utils.CaptchaUtil;
 import es.arbox.eGestion.utils.PasswordGenerator;
@@ -54,6 +54,9 @@ public class ActividadesServicioController extends BaseController {
 	
 	@Autowired
 	DocumentoActividadService documentoActividadService;
+	
+	@Autowired
+	DocumentoParticipanteService documentoParticipanteService;
 	
 	@Autowired
 	MailService mailService;
@@ -101,8 +104,9 @@ public class ActividadesServicioController extends BaseController {
 		RespuestaAjax result = new RespuestaAjax();
 		Mensajes mensajes = new Mensajes();
 		
-		getCaptcha(valores);
-		result.setResultado("valor", valores.getMapa());
+		ValoresDTO v = new ValoresDTO();
+		getCaptcha(v);
+		result.setResultado("valor", v.getMapa());
 		
 		
 		Actividad actividad = participante.getActividad();
@@ -182,12 +186,17 @@ public class ActividadesServicioController extends BaseController {
 		
 		Participante resultado = actividadService.getParticipantePassword(p);
 		
+		
 		if(!valores.getHiddenCaptcha().equals(valores.getCaptcha())) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("El captcha introducido no es correcto."));
 			result.setMensajes(mensajes.getMensajes());
 		} else if(resultado != null) {
+			List<DocumentoParticipante> documentoParticipante = documentoParticipanteService.getDocumentos(resultado.getId());
+			
+			result.setResultado("permiso", resultado.getEstado().getId() != null && resultado.getEstado().getId() == 2 ? "S" : "N");
 			result.setResultado("participante", resultado.getMapa());
+			result.setResultado("documento", DocumentoParticipante.getListaMapa(documentoParticipante));
 			result.setResultado("ok", "S");
 		} else {
 			result.setResultado("ok", "N");
@@ -241,6 +250,106 @@ public class ActividadesServicioController extends BaseController {
 		
 		return actividades != null && actividades.size()>0 ? true : false;
 	}
+	
+	@PostMapping("/documentoParticipante")
+	public HttpEntity<byte[]> getDocumentoParticipante(@ModelAttribute("valor") ValoresDTO valores) throws IOException {
+		
+		Actividad actividad = documentoParticipanteService.getDocumentoParticipante(valores.getId()).getParticipante().getActividad();
+		
+		if(actividad.getFechaFinPlazo() == null || actividad.getFechaFinPlazo().before(new Date())) {
+			return null;
+		}
+		
+		return super.getDocumento(valores);
+	}
+	
+	@PostMapping(value = "/guardarDocumentoParticipante", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax guardarDocumentoParticipante(@ModelAttribute DocumentoParticipante documentoParticipante, @ModelAttribute ValoresDTO valores, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		Mensajes mensajes = new Mensajes();
+		
+		Participante p = documentoParticipanteService.obtenerPorId(Participante.class, documentoParticipante.getParticipante().getId());
+		
+		Actividad actividad = p.getActividad();
+		actividad.setFechaFinPlazo(new Date());
+		if(!permiso(actividad)) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
+			result.setMensajes(mensajes.getMensajes());
+			
+			return result;
+		}
+		
+		p.setEmail(valores.getNombre());
+		p.setPassword(valores.getPassword());
+		Participante resultado = actividadService.getParticipantePassword(p);
+		
+		if (resultado != null && resultado.getEstado().getId() == 2) {
+			documentoParticipante.setId(null);
+			documentoParticipanteService.guardar(documentoParticipante.getDocumento());
+			documentoParticipanteService.guardar(documentoParticipante);
+			
+			result.setResultado("ok", "S");
+			mensajes.mensaje(TiposMensaje.success, "Documento almacenado correctamente.");
+		} else if (resultado == null) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("Usuario o contraseña incorrectos."));
+			result.setMensajes(mensajes.getMensajes());
+		} else {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar aceptada para poder subir documentos."));
+			result.setMensajes(mensajes.getMensajes());
+		}
+		
+		result.setMensajes(mensajes.getMensajes());
+        return result;
+    }
+	
+	@PostMapping(value = "/eliminarDocumentoParticipante", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax eliminarDocumentoParticipante(@ModelAttribute ValoresDTO valores, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		Mensajes mensajes = new Mensajes();
+		
+		DocumentoParticipante documentoParticipante = documentoParticipanteService.obtenerPorId(DocumentoParticipante.class, valores.getId());
+		
+		Actividad actividad = documentoParticipante.getParticipante().getActividad();
+		actividad.setFechaFinPlazo(new Date());
+		if(!permiso(actividad)) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
+			result.setMensajes(mensajes.getMensajes());
+			
+			return result;
+		}
+		
+		Participante p = new Participante();
+		p.setActividad(documentoParticipante.getParticipante().getActividad());
+		p.setEmail(valores.getNombre());
+		p.setPassword(valores.getPassword());
+		Participante resultado = actividadService.getParticipantePassword(p);
+		
+		if (resultado != null && resultado.getEstado().getId() == 2) {
+			Integer idDocumento = documentoParticipante.getDocumento().getId();
+			documentoParticipanteService.eliminar(DocumentoParticipante.class, documentoParticipante.getId());
+			documentoParticipanteService.eliminar(Documento.class, idDocumento);
+			
+			result.setResultado("ok", "S");
+			mensajes.mensaje(TiposMensaje.success, "Documento eliminado correctamente.");
+		} else if (resultado == null) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("Usuario o contraseña incorrectos."));
+			result.setMensajes(mensajes.getMensajes());
+		} else {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar aceptada para poder eliminar el documento."));
+			result.setMensajes(mensajes.getMensajes());
+		}
+		
+		
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
 	
 	private void getCaptcha(ValoresDTO valores) {
 		Captcha captcha = CaptchaUtil.createCaptcha(240, 70);

@@ -32,6 +32,7 @@ import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.actividades.Actividad;
 import es.arbox.eGestion.entity.actividades.DocumentoActividad;
+import es.arbox.eGestion.entity.actividades.DocumentoParticipante;
 import es.arbox.eGestion.entity.actividades.EstadosActividad;
 import es.arbox.eGestion.entity.actividades.EstadosParticipante;
 import es.arbox.eGestion.entity.actividades.Participante;
@@ -42,6 +43,7 @@ import es.arbox.eGestion.enums.TiposDocumento;
 import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
+import es.arbox.eGestion.service.actividades.DocumentoParticipanteService;
 import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.utils.Utilidades;
 
@@ -54,6 +56,9 @@ public class ActividadesController extends BaseController {
 	
 	@Autowired
 	DocumentoActividadService documentoActividadService;
+	
+	@Autowired
+	DocumentoParticipanteService documentoParticipanteService;
 	
 	@Autowired
 	MailService mailService;
@@ -294,6 +299,55 @@ public class ActividadesController extends BaseController {
 
 		documentoActividadService.eliminar(DocumentoActividad.class, documentoActividad.getId());
 		documentoActividadService.eliminar(Documento.class, idDocumento);
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Documento eliminado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@ResponseBody
+	@PostMapping(value = "/documentosParticipante", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String documentosParticipante(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		List<DocumentoParticipante> documentoParticipante = documentoParticipanteService.getDocumentos(valores.getId());
+		
+		result.setResultado("documento", DocumentoParticipante.getListaMapa(documentoParticipante));
+		
+		return documentoParticipanteService.serializa(result);
+	}
+	
+	@PostMapping(value = "/guardarDocumentoParticipante", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax guardarDocumentoParticipante(@ModelAttribute DocumentoParticipante documentoParticipante, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		String opcion = documentoParticipante.getId() != null ? "actualizado" : "realizado";
+		
+		documentoParticipanteService.guardar(documentoParticipante.getDocumento(), getUsuarioLogado());
+		documentoParticipanteService.guardar(documentoParticipante);
+		
+		result.setResultado("id", documentoParticipante.getParticipante().getId());
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, String.format("Documento %1$s correctamente.", opcion));
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@PostMapping(value = "/eliminarDocumentoParticipante", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax eliminarDocumentoParticipante(@ModelAttribute DocumentoParticipante documentoParticipante, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		Integer idDocumento = documentoParticipante.getDocumento().getId();
+
+		documentoParticipanteService.eliminar(DocumentoParticipante.class, documentoParticipante.getId());
+		documentoParticipanteService.eliminar(Documento.class, idDocumento);
 		
 		result.setResultado("ok", "S");
 		
