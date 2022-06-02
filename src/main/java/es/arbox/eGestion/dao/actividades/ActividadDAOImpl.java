@@ -48,6 +48,10 @@ public class ActividadDAOImpl implements ActividadDAO {
 			predicados.add(cb.equal(actividades.get("tipo").get("id"), actividad.getTipo().getId()));
 		}
 		
+		if(actividad.getEstado() != null && actividad.getEstado().getId() != null) {
+			predicados.add(cb.equal(actividades.get("estado").get("id"), actividad.getEstado().getId()));
+		}
+		
 		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(actividades.get("fechaInicio")));
     	
 		TypedQuery<Actividad> query = session.createQuery(q);

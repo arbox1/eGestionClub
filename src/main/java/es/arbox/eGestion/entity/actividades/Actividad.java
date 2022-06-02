@@ -90,6 +90,9 @@ public class Actividad extends BaseEntidad {
 	@Transient
 	private String horaFinPlazo;
 	
+	@Transient
+	private String permiso;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -241,5 +244,12 @@ public class Actividad extends BaseEntidad {
 	public void setEstado(EstadosActividad estado) {
 		this.estado = estado;
 	}
+	
+	public String getPermiso() {
+		return this.permiso;
+	}
 
+	public void setPermiso(String permiso) {
+		this.permiso = permiso;
+	}
 }

@@ -69,6 +69,9 @@ public class Participante extends BaseEntidad {
 	@Column(name = "p_password")
 	private String password;
 	
+	@Column(name = "p_lopd")
+	private String lopd;
+	
 	@Column(name = "p_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
@@ -227,5 +230,13 @@ public class Participante extends BaseEntidad {
 
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getLopd() {
+		return lopd;
+	}
+
+	public void setLopd(String lopd) {
+		this.lopd = lopd;
 	}
 }

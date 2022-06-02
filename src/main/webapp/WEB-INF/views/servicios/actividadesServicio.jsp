@@ -18,8 +18,9 @@
 		    		"id": $data.id
 		    	}, function(res){
 		    		var result = res.resultados.actividades;
+		    		console.log(res.resultados);
 		    		result = result.map((act) => {
-		    			  act.fechaFinPlazo = moment(act.fechaFinPlazo).format('DD/MM/YYYY');
+		    			  act.fechaFinPlazo = moment(act.fechaFinPlazo).format('DD/MM/YYYY HH:mm:ss');
 		    			  return act;
 		    			});
 		 		    Handlebars.cargarPlantillas([
@@ -127,6 +128,18 @@
 				$('#nuevoDocumentoParticipante .nombre').val($('#consulta .nomb').val());
 				$('#nuevoDocumentoParticipante .password').val($('#consulta .pass').val());
 				$('#nuevoDocumentoParticipante').modal("show");
+			}).on('click', '.pasar', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea solicitar la aceptación de la solicitud? una vez solicitada no podrá adjuntar más documentación a la inscripción.", function(result){
+		    		if(result){
+		    			$('#consulta .captcha').val($('#consulta .hiddenCaptcha').val());
+		    			$('#consulta form').enviar($data.accion, function(res){
+		    				$('#consulta .consultar').click();
+		    			});
+		    		}
+		    	});
 			}).on('click', '.eliminar', function(e){
 				e.stopPropagation();
 				var $data = $(this).data();
@@ -346,6 +359,17 @@
 						</div>
 						
 						<div class="form-group row">
+							<label for="lopd" class="col-sm-9 col-form-label">Acepto publicaciones en redes sociales:</label>
+							<div class="col-sm-3">
+								<select name="lopd" class="form-control lopd required">
+									<option value=""></option>
+									<option value="S">Si</option>
+									<option value="N">No</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group row">
 							<label for="observacion" class="col-form-label col-md-3">Observaciones:</label>
 							<div class="col-md-9">
 								<textarea rows="4" name="observacion" maxlength="4000" class="form-control observacion"></textarea>
@@ -442,12 +466,17 @@
 							<span class="email col-md-5"></span>
 						</div>
 						<div class="row">
+							<label for="lopd" class="font-weight-bold col-md-5">Acepto publicaciones en redes sociales:</label>
+							<span class="lopd col-md-5 sino"></span>
+						</div>
+						<div class="row">
 							<label for="observacion" class="font-weight-bold col-md-2">Observaciones:</label>
 							<span class="observacion col-md-10"></span>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
 								<button type="button" class="btn btn-primary nuevo" data-mostrar="permiso">Nuevo documento</button>
+								<button type="button" class="btn btn-primary pasar" data-accion="pasar" data-mostrar="permiso">Solicitar aceptación</button>
 							</div>
 						</div>
 						<br/>

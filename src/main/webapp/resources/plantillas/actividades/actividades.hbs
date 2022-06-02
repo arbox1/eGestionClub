@@ -28,7 +28,9 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<button type="button" class="btn btn-primary inscribir" data-id="{{id}}" >Inscribir Participante</button>
+						{{#check permiso}}
+							<button type="button" class="btn btn-primary inscribir" data-id="{{id}}" >Inscribir Participante</button>
+						{{/check}}
 						<button type="button" class="btn btn-primary consulta" data-id="{{id}}" >Consulta Participante</button>
 						<button type="button" class="btn btn-primary documentos" data-id="{{id}}" data-accion="documentos" >Documentación</button>
 					</div>

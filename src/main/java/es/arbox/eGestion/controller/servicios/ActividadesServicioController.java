@@ -29,6 +29,7 @@ import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.actividades.Actividad;
 import es.arbox.eGestion.entity.actividades.DocumentoActividad;
 import es.arbox.eGestion.entity.actividades.DocumentoParticipante;
+import es.arbox.eGestion.entity.actividades.EstadosActividad;
 import es.arbox.eGestion.entity.actividades.EstadosParticipante;
 import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.actividades.TiposActividad;
@@ -73,7 +74,8 @@ public class ActividadesServicioController extends BaseController {
     public String buscar(Model model, @ModelAttribute("buscador") Actividad actividad, RedirectAttributes redirectAttrs) {
 		model.addAttribute("tipos", actividadService.obtenerTodosOrden(TiposActividad.class, " descripcion "));
 		
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		model.addAttribute("actividades", actividadService.getActividadesFiltro(actividad));
 		return "/servicios/actividadesServicio";
     }
@@ -88,9 +90,14 @@ public class ActividadesServicioController extends BaseController {
 		TiposActividad tipo = new TiposActividad();
 		tipo.setId(valores.getId());
 		actividad.setTipo(tipo);
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		
 		List<Actividad> lActividades = actividadService.getActividadesFiltro(actividad);
+		
+		for(Actividad a : lActividades) {
+			a.setPermiso(a.getFechaFinPlazo() != null && a.getFechaFinPlazo().after(new Date()) ? "S" : "N");
+		}
 		
 		result.setResultado("actividades", MenuEstructura.getListaMapa(lActividades));
 		result.setResultado("ok", "S");
@@ -111,6 +118,8 @@ public class ActividadesServicioController extends BaseController {
 		
 		Actividad actividad = participante.getActividad();
 		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		if(!permiso(actividad)) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
@@ -168,7 +177,8 @@ public class ActividadesServicioController extends BaseController {
 		
 		Actividad actividad = new Actividad();
 		actividad.setId(valores.getId());
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		if(!permiso(actividad)) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
@@ -194,7 +204,7 @@ public class ActividadesServicioController extends BaseController {
 		} else if(resultado != null) {
 			List<DocumentoParticipante> documentoParticipante = documentoParticipanteService.getDocumentos(resultado.getId());
 			
-			result.setResultado("permiso", resultado.getEstado().getId() != null && resultado.getEstado().getId() == 2 ? "S" : "N");
+			result.setResultado("permiso", resultado.getEstado() != null && resultado.getEstado().getId() == 6 ? "S" : "N");
 			result.setResultado("participante", resultado.getMapa());
 			result.setResultado("documento", DocumentoParticipante.getListaMapa(documentoParticipante));
 			result.setResultado("ok", "S");
@@ -218,7 +228,8 @@ public class ActividadesServicioController extends BaseController {
 		
 		Actividad actividad = new Actividad();
 		actividad.setId(valores.getId());
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		if(!permiso(actividad)) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
@@ -238,7 +249,7 @@ public class ActividadesServicioController extends BaseController {
 	public HttpEntity<byte[]> getDocumento(@ModelAttribute("valor") ValoresDTO valores) throws IOException {
 		Actividad actividad = documentoActividadService.getDocumentoActividad(valores.getId()).getActividad();
 		
-		if(actividad.getFechaFinPlazo() == null || actividad.getFechaFinPlazo().before(new Date())) {
+		if(actividad.getEstado() == null || actividad.getEstado().getId() != 1) {
 			return null;
 		}
 		
@@ -256,7 +267,7 @@ public class ActividadesServicioController extends BaseController {
 		
 		Actividad actividad = documentoParticipanteService.getDocumentoParticipante(valores.getId()).getParticipante().getActividad();
 		
-		if(actividad.getFechaFinPlazo() == null || actividad.getFechaFinPlazo().before(new Date())) {
+		if(actividad.getEstado() == null || actividad.getEstado().getId() != 1) {
 			return null;
 		}
 		
@@ -271,7 +282,8 @@ public class ActividadesServicioController extends BaseController {
 		Participante p = documentoParticipanteService.obtenerPorId(Participante.class, documentoParticipante.getParticipante().getId());
 		
 		Actividad actividad = p.getActividad();
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		if(!permiso(actividad)) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
@@ -284,7 +296,7 @@ public class ActividadesServicioController extends BaseController {
 		p.setPassword(valores.getPassword());
 		Participante resultado = actividadService.getParticipantePassword(p);
 		
-		if (resultado != null && resultado.getEstado().getId() == 2) {
+		if (resultado != null && resultado.getEstado().getId() == 6) {
 			documentoParticipante.setId(null);
 			documentoParticipanteService.guardar(documentoParticipante.getDocumento());
 			documentoParticipanteService.guardar(documentoParticipante);
@@ -297,7 +309,7 @@ public class ActividadesServicioController extends BaseController {
 			result.setMensajes(mensajes.getMensajes());
 		} else {
 			result.setResultado("ok", "N");
-			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar aceptada para poder subir documentos."));
+			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar pendiente incorporación documentación para poder eliminar el documento."));
 			result.setMensajes(mensajes.getMensajes());
 		}
 		
@@ -313,7 +325,8 @@ public class ActividadesServicioController extends BaseController {
 		DocumentoParticipante documentoParticipante = documentoParticipanteService.obtenerPorId(DocumentoParticipante.class, valores.getId());
 		
 		Actividad actividad = documentoParticipante.getParticipante().getActividad();
-		actividad.setFechaFinPlazo(new Date());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
 		if(!permiso(actividad)) {
 			result.setResultado("ok", "N");
 			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
@@ -328,7 +341,7 @@ public class ActividadesServicioController extends BaseController {
 		p.setPassword(valores.getPassword());
 		Participante resultado = actividadService.getParticipantePassword(p);
 		
-		if (resultado != null && resultado.getEstado().getId() == 2) {
+		if (resultado != null && resultado.getEstado().getId() == 6) {
 			Integer idDocumento = documentoParticipante.getDocumento().getId();
 			documentoParticipanteService.eliminar(DocumentoParticipante.class, documentoParticipante.getId());
 			documentoParticipanteService.eliminar(Documento.class, idDocumento);
@@ -341,10 +354,54 @@ public class ActividadesServicioController extends BaseController {
 			result.setMensajes(mensajes.getMensajes());
 		} else {
 			result.setResultado("ok", "N");
-			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar aceptada para poder eliminar el documento."));
+			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar pendiente incorporación documentación para poder eliminar el documento."));
 			result.setMensajes(mensajes.getMensajes());
 		}
 		
+		
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@PostMapping(value = "/pasar", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody RespuestaAjax pasar(@ModelAttribute ValoresDTO valores, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		Mensajes mensajes = new Mensajes();
+		
+		Actividad actividad = new Actividad();
+		actividad.setId(valores.getId());
+		actividad.setEstado(new EstadosActividad());
+		actividad.getEstado().setId(1);
+		if(!permiso(actividad)) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La actividad no existe o está fuera de plazo"));
+			result.setMensajes(mensajes.getMensajes());
+			
+			return result;
+		}
+		
+		Participante p = new Participante();
+		p.setActividad(actividad);
+		p.setEmail(valores.getNombre());
+		p.setPassword(valores.getPassword());
+		Participante resultado = actividadService.getParticipantePassword(p);
+		
+		if (resultado != null && resultado.getEstado().getId() == 6) {
+			resultado.getEstado().setId(7);
+			actividadService.guardar(resultado);
+			
+			result.setResultado("ok", "S");
+			mensajes.mensaje(TiposMensaje.success, "Se ha solicitado la aceptación de la inscripción correctamente.");
+		} else if (resultado == null) {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("Usuario o contraseña incorrectos."));
+			result.setMensajes(mensajes.getMensajes());
+		} else {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La solicitud debe estar pendiente incorporación documentación para poder eliminar el documento."));
+			result.setMensajes(mensajes.getMensajes());
+		}
 		
 		result.setMensajes(mensajes.getMensajes());
 		

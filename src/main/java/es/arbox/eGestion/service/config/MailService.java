@@ -53,11 +53,14 @@ public class MailService {
         		+ "- Nombre: %1$s \n"
         		+ "- DNI: %2$s \n"
         		+ "- Nº Participantes: %3$s \n"
+        		+ "- Pagado: %9$s \n"
+        		+ "- Importe: %10$s € \n"
         		+ "- Teléfono: %4$s \n"
         		+ "- Email: %5$s \n"
         		+ "- Observaciones: %6$s \n"
         		+ "- Estado: %7$s \n"
-        		+ "- Fecha: %8$s",
+        		+ "- Fecha: %8$s \n"
+        		+ "- Permitir publicaciones en redes sociales: %11$s \n",
         		participante.getNombre(),
         		participante.getDni(),
         		participante.getCantidad(),
@@ -65,7 +68,10 @@ public class MailService {
         		participante.getEmail(),
         		participante.getObservacion(),
         		participante.getEstado().getDescripcion(),
-        		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date())
+        		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date()),
+        		participante.getPagado().isEmpty() || participante.getPagado() == "N" ? "No" : "Si",
+        		participante.getImporte(),
+        		participante.getLopd().isEmpty() || participante.getLopd() == "N" ? "No" : "Si"
         		));
         
         mailSender.send(message);
@@ -89,7 +95,8 @@ public class MailService {
         		+ "- Email: %5$s \n"
         		+ "- Observaciones: %6$s \n"
         		+ "- Estado: %7$s \n"
-        		+ "- Fecha: %8$s \n\n"
+        		+ "- Fecha: %8$s \n"
+        		+ "- Permitir publicaciones en redes sociales: %10$s\n\n"
         		+ "Datos de acceso para consultar Inscripción \n\n"
         		+ "- Usuario: %5$s \n"
         		+ "- Contraseña: %9$s",
@@ -101,7 +108,8 @@ public class MailService {
         		participante.getObservacion(),
         		participante.getEstado().getDescripcion(),
         		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date()),
-        		password
+        		password,
+        		participante.getLopd().isEmpty() || participante.getLopd() == "N" ? "No" : "Si"
         		));
         
         mailSender.send(message);

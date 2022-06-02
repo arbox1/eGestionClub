@@ -827,6 +827,17 @@
 						</div>
 						
 						<div class="form-group row">
+							<label for="lopd" class="col-sm-3 col-form-label">Lopd</label>
+							<div class="col-sm-9">
+								<select name="lopd" class="form-control lopd required">
+									<option value=""></option>
+									<option value="S">Si</option>
+									<option value="N">No</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group row">
 							<label for="observacion" class="col-form-label col-md-3">Observaciones:</label>
 							<div class="col-md-9">
 								<textarea rows="4" name="observacion" class="form-control observacion"></textarea>
