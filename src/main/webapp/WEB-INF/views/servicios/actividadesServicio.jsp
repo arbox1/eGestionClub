@@ -313,7 +313,7 @@
 					<form action="guardarParticipante" class="form-horizontal validation" method="post" modelAttribute="participante">
 						<input type="hidden" name="actividad.id" class="actividad_id no-limpiar"/>
 						<div class="form-group row">
-							<label for="nombre" class="col-form-label col-md-3">Nombre:</label>
+							<label for="nombre" class="col-form-label col-md-3">Nombre y Apellidos:</label>
 							<div class="col-md-9">
 								<input type="text" name="nombre" class="form-control nombre required" />
 							</div>

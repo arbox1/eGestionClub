@@ -70,7 +70,8 @@ implements WebMvcConfigurer {
 	    mailSender.setPort(587);
 	    
 	    mailSender.setUsername("atleticoalbaida.padel@gmail.com");
-	    mailSender.setPassword("principefelipe");
+//	    mailSender.setPassword("principefelipe");
+	    mailSender.setPassword("ttrcdhrctubvgwjt");
 	    
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", "smtp");

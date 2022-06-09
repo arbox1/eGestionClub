@@ -45,6 +45,7 @@ import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoParticipanteService;
 import es.arbox.eGestion.service.config.MailService;
+import es.arbox.eGestion.utils.PasswordGenerator;
 import es.arbox.eGestion.utils.Utilidades;
 
 @Controller
@@ -229,6 +230,29 @@ public class ActividadesController extends BaseController {
 		mailService.correoNotificacionParticipante(actividadService.obtenerPorId(participante.getClass(), participante.getId()));
 		
 		return result;
+    }
+	
+	@PostMapping(value = "/password")
+    public @ResponseBody RespuestaAjax password(@ModelAttribute Participante participante, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		participante = actividadService.obtenerPorId(Participante.class, participante.getId());
+		
+		String password = PasswordGenerator.getPassword(10);
+		
+		participante.setPassword(Utilidades.getMd5(password));
+		
+		actividadService.guardar(participante, getUsuarioLogado());
+		
+		mailService.correoInscripcionParticipante(participante, password);
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Contraseña modificada y enviada correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
     }
 	
 	@PostMapping(value = "/eliminarParticipante")

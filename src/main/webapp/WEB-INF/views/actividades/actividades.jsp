@@ -125,15 +125,22 @@
 					"emptyTable": "la actividad no tiene ningún participante"
 				},
     			columns: [
-    				{ data: "estado.descripcion", title: "Estado", className: 'text-nowrap text-center' },
+    				{ data: "id", title: "Nº" },
+    				{ data: "estado.descripcion", title: "Estado", className: 'text-center' },
     				{ data: "nombre", title: "Nombre" },
     	            { data: "telefono", title: "Teléfono" },
     	            { data: "email", title: "Email" },
     	            { data: "cantidad", title: "Cantidad", className: 'text-nowrap text-center' },
     	            { data: "importe", title: "Importe", className: 'text-nowrap text-center' },
     	            { data: function(row, type, val, meta){
+            			return row.lopd != null && row.lopd == 'S' ? 'Si' : 'No';
+            		}, title: "Lopd", className: 'text-nowrap text-center' },
+    	            { data: function(row, type, val, meta){
     	            			return row.pagado != null && row.pagado == 'S' ? 'Si' : 'No';
     	            		}, title: "Pagado", className: 'text-nowrap text-center' },
+    	            { data: function(row, type, val, meta){
+    	            			return row.observacion != null && row.observacion.trim() != '' ? 'Si' : 'No';
+    	            		}, title: "Obs.", className: 'text-nowrap text-center' },
 	   	            { data: function ( row, type, val, meta ) {
 							var $buttons = $('<p>').addBoton({
 								tipo: 'link',
@@ -143,6 +150,15 @@
 								data: {
 									id: row.id,
 									accion: 'participante'
+								}
+							}).addBoton({
+								tipo: 'link',
+								icono: 'key',
+								clases: 'password',
+								title: 'Enviar nueva contraseña',
+								data: {
+									id: row.id,
+									accion: 'password'
 								}
 							}).addBoton({
 								tipo: 'link',
@@ -172,24 +188,25 @@
     	        "footerCallback": function ( row, data, start, end, display ) {
     	            
     	            total = this.api()
-    	                .column(3)//numero de columna a sumar
+    	                .column(5)//numero de columna a sumar
     	                //.column(1, {page: 'current'})//para sumar solo la pagina actual
     	                .data()
     	                .reduce(function (a, b) {
     	                    return parseInt(a) + parseInt(b);
     	                }, 0 );
     	            
-    	            $(this.api().column(3).footer()).html(total);
+    	            $(this.api().column(5).footer()).html(total);
     	            
     	            total = this.api()
-		                .column(4)//numero de columna a sumar
+		                .column(6)//numero de columna a sumar
 		                //.column(1, {page: 'current'})//para sumar solo la pagina actual
 		                .data()
 		                .reduce(function (a, b) {
 		                    return parseInt(a) + parseInt(b);
 		                }, 0 );
     	            
-    	            $(this.api().column(4).footer()).html(total);
+    	            
+    	            $(this.api().column(6).footer()).html(total);
     	        }
     		});
 			
@@ -202,6 +219,20 @@
 		    		$('#inscripcion').cargarDatos({
 		    			datos: res.resultados.participante
 		    		}).mostrar();
+		    	});
+			}).on('click', '.password', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea cambiar y notificar la nueva contraseña?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax($data.accion, {
+		    				"id": $data.id
+		    			}, function(res){
+		    				$('#detalle').trigger("reload", {id: $('#inscripcion form .actividad_id').val(), accion: "participantes"});
+		    				recargar = true;
+		    			});
+		    		}
 		    	});
 			}).on('click', '.documentos', function(e){
 				e.stopPropagation();
@@ -714,6 +745,9 @@
 								<tfoot>
 									<tr>
 										<th colspan="3" class="text-right">Total:</th>
+										<th></th>
+										<th></th>
+										<th></th>
 										<th></th>
 										<th></th>
 										<th></th>

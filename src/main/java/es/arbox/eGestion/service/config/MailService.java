@@ -69,9 +69,9 @@ public class MailService {
         		participante.getObservacion(),
         		participante.getEstado().getDescripcion(),
         		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date()),
-        		participante.getPagado().isEmpty() || participante.getPagado() == "N" ? "No" : "Si",
+        		participante.getPagado().isEmpty() || participante.getPagado().equals("N") ? "No" : "Si",
         		participante.getImporte(),
-        		participante.getLopd().isEmpty() || participante.getLopd() == "N" ? "No" : "Si"
+        		participante.getLopd().isEmpty() || participante.getLopd().equals("N") ? "No" : "Si"
         		));
         
         mailSender.send(message);
@@ -109,7 +109,7 @@ public class MailService {
         		participante.getEstado().getDescripcion(),
         		Utilidades.formatDateToString(participante.getFecha() != null ? participante.getFecha() : new Date()),
         		password,
-        		participante.getLopd().isEmpty() || participante.getLopd() == "N" ? "No" : "Si"
+        		participante.getLopd().isEmpty() || participante.getLopd().equals("N") ? "No" : "Si"
         		));
         
         mailSender.send(message);
