@@ -137,7 +137,11 @@
 		<sitemesh:write property='body' />
 	</div>
 
-	<div class='disclaimer'>Emilio López Delgado
+	<div class='disclaimer'>
+		<a href="mailto:atleticoalbaida@gmail.com"><i class="fas fa-solid fa-envelope"></i></a>
+		<a href="https://www.facebook.com/atletico.albaida.7" target="_blank" ><i class="fa fa-brands fa-facebook"></i></a>
+		<a href="https://instagram.com/atleticoalbaida" target="_blank" ><i class="fa fa-brands fa-instagram"></i></a>
+		@ClubAtleticoAlbaida
 		<c:if test="${param.error != null}">
 		    <div id="error">
 		        <spring:message code="message.badCredentials">   

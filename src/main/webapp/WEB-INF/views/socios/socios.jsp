@@ -177,6 +177,7 @@
 					"emptyTable": "No hay cuotas de este socio para esta escuela deportiva"
 				},
     			columns: [
+    				{ data: "mes.orden", title: "Orden" },
     	            { data: "mes.descripcion", title: "Mes" },
     	            { data: "importe", title: "Importe", render: $.fn.dataTable.render.importe()},
     	            { data: "notificado", title: "Notificado", render: $.fn.dataTable.render.sino() },
