@@ -129,6 +129,9 @@
     				{ data: "estado.descripcion", title: "Estado", className: 'text-center' },
     				{ data: "nombre", title: "Nombre" },
     	            { data: "telefono", title: "Teléfono" },
+    	            { data: function(row, type, val, meta){
+            			return moment(row.fechaNacimiento).format('DD/MM/YYYY');
+            		}, title: "F. Nacimiento", className: 'text-nowrap text-center' },
     	            { data: "email", title: "Email" },
     	            { data: "cantidad", title: "Cantidad", className: 'text-nowrap text-center' },
     	            { data: "importe", title: "Importe", className: 'text-nowrap text-center' },
@@ -186,17 +189,6 @@
 					}
     	        ],
     	        "footerCallback": function ( row, data, start, end, display ) {
-    	            
-    	            total = this.api()
-    	                .column(5)//numero de columna a sumar
-    	                //.column(1, {page: 'current'})//para sumar solo la pagina actual
-    	                .data()
-    	                .reduce(function (a, b) {
-    	                    return parseInt(a) + parseInt(b);
-    	                }, 0 );
-    	            
-    	            $(this.api().column(5).footer()).html(total);
-    	            
     	            total = this.api()
 		                .column(6)//numero de columna a sumar
 		                //.column(1, {page: 'current'})//para sumar solo la pagina actual
@@ -745,6 +737,7 @@
 								<tfoot>
 									<tr>
 										<th colspan="3" class="text-right">Total:</th>
+										<th></th>
 										<th></th>
 										<th></th>
 										<th></th>
