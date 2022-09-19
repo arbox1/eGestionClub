@@ -425,17 +425,18 @@ public class ActividadesController extends BaseController {
 		RespuestaAjax result = new RespuestaAjax();
 		
 		Socios socio = new Socios();
-		socio.setDni(actividadService.obtenerPorId(Participante.class, valores.getId()).getDni());
+		Participante p = actividadService.obtenerPorId(Participante.class, valores.getId());
+		socio.setDni(p != null && !StringUtils.isEmpty(p.getDni()) ? p.getDni() : null);
 		
-		List<Socios> lista = sociosService.getBusqueda(socio);
-		
-		Socios resultado = null;
-		if(lista != null && lista.size() > 0) {
-			resultado = sociosService.getBusqueda(socio).get(0);
+		if(!StringUtils.isEmpty(socio.getDni())) {
+			List<Socios> lista = sociosService.getBusqueda(socio);
+			
+			Socios resultado = null;
+			if(lista != null && lista.size() > 0) {
+				resultado = sociosService.getBusqueda(socio).get(0);
+				result.setResultado("socio", resultado.getMapa());
+			}
 		}
-		
-		
-		result.setResultado("socio", resultado.getMapa());
 		
 		return sociosService.serializa(result);
 	}

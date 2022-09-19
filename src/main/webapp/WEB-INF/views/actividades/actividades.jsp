@@ -229,7 +229,8 @@
 		    		"id": $data.id
 		    	}, function(res){
 		    		$('#escuelas .idParticipante').val($data.id);
-		    		$('#escuelas .nombreCompleto').val(res.resultados.socio.apellidos + ", " + res.resultados.socio.nombre)
+		    		if(res.resultados.socio)
+		    			$('#escuelas .nombreCompleto').val(res.resultados.socio.apellidos + ", " + res.resultados.socio.nombre)
 		    		$('#escuelas').cargarDatos({
 		    			datos: res.resultados.socio
 		    		}).mostrar();
