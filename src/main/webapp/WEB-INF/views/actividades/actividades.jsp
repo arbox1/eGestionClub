@@ -156,6 +156,15 @@
 								}
 							}).addBoton({
 								tipo: 'link',
+								icono: 'arrow-up',
+								clases: 'escuela',
+								title: 'Inscribir en escuelas',
+								data: {
+									id: row.id,
+									accion: 'socio'
+								}
+							}).addBoton({
+								tipo: 'link',
 								icono: 'key',
 								clases: 'password',
 								title: 'Enviar nueva contraseña',
@@ -212,6 +221,19 @@
 		    			datos: res.resultados.participante
 		    		}).mostrar();
 		    	});
+			}).on('click', '.escuela', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				$.obtener($data.accion, {
+		    		"id": $data.id
+		    	}, function(res){
+		    		$('#escuelas .idParticipante').val($data.id);
+		    		$('#escuelas .nombreCompleto').val(res.resultados.socio.apellidos + ", " + res.resultados.socio.nombre)
+		    		$('#escuelas').cargarDatos({
+		    			datos: res.resultados.socio
+		    		}).mostrar();
+		    	});
 			}).on('click', '.password', function(e){
 				e.stopPropagation();
 				var $data = $(this).data();
@@ -263,6 +285,92 @@
 					recargar = true;
 				});
 			});
+			
+			$('#escuelas').on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, ".id").val("");
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#escuelas').on('click', '.guardar', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				$('#escuelas').enviar(data.accion, function(res){
+					$('#detalle').trigger("reload", {id: res.resultados.id, accion: "participantes"});
+					$('#escuelas').modal("hide");
+					recargar = true;
+				});
+			}).on('click', '.buscarSocio', function(e){
+				e.stopPropagation();
+				$('#buscadorSocios').modal("show");
+			});
+			
+			$('#buscadorSocios').on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, "form").limpiar();
+// 		    	$(this, ".dtalle").html('');
+		    }).on('click', '.buscar', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				
+				$('#buscadorSocios').enviar(data.accion, function(res){
+					$('#buscadorSocios table.detalle').reloadTable(res.resultados.socios);
+				});
+			}).on('click', '.asignar', function(e){
+				e.stopPropagation();
+				
+				var data = $(this).data();
+				$('#escuelas .id').val(data.id);
+				$('#escuelas .nombreCompleto').val(data.nombre);
+				
+				$('#buscadorSocios').modal("hide");
+			});
+			
+			$('#buscadorSocios table.detalle').DataTable({
+				language: {
+					"emptyTable": "No se encontraron socios"
+				},
+    			columns: [
+    				{ data: "nombre", title: "Nombre" },
+    	            { data: "apellidos", title: "Apellidos" },
+    	            { data: "telefono", title: "Teléfono" },
+    	            { data: "email", title: "Teléfono" },
+    	            { data: "sexo.descripcion", title: "Sexo" },
+    	            { data: function ( row, type, val, meta ) {
+						var $buttons = $('<p>').addBoton({
+								tipo: 'link',
+								icono: 'check',
+								clases: 'asignar',
+								title: 'Asignar',
+								data: {
+									id: row.id,
+									nombre: row.nombreCompleto
+								}
+							});
+							return $.toHtml($buttons);
+						}, 
+						title: "",
+						className: 'text-nowrap text-center'
+	    	    	}
+    	        ]
+    		});
+			
+			$('#editarSocio').on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, "form").limpiar();
+// 		    	$(this, ".dtalle").html('');
+		    }).on('click', '.nuevoSocio', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				
+				$('#editarSocio').enviar(data.accion, function(res){
+					$('#editarSocio').modal("hide");
+					$('#buscadorSocios .buscar').click();
+				});
+			})
 			
 			$('#documentos table.detalle').DataTable({
 				language: {
@@ -445,6 +553,13 @@
 			<div class="col-md-12">
 				<form:form action="buscar" cssClass="form-horizontal" method="post" modelAttribute="buscador">
 					<div class="row form-group">
+						<label for="tipo" class="col-sm-1 col-form-label">Estado</label>
+						<div class="col-md-3">
+							<form:select path="estado.id" cssClass="form-control" >
+								<form:option value="" label="--Selecciona estado"/>
+								<form:options items="${estadosActividad}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
+						</div>
 						<label for="tipo" class="col-sm-1 col-form-label">Tipo</label>
 						<div class="col-md-3">
 							<form:select path="tipo.id" cssClass="form-control" >
@@ -452,7 +567,7 @@
 								<form:options items="${tipos}" itemValue="id" itemLabel="descripcion"/>
 							</form:select>
 						</div>
-						<label for="descripcion" class="col-sm-1 col-form-label">Actividad</label>
+						<label for="descripcion" class="col-sm-1 col-form-label">Descripción</label>
 						<div class="col-sm-3">
 							<form:input path="descripcion" cssClass="form-control"/>
 						</div>
@@ -1020,6 +1135,296 @@
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 					<button type="button" class="btn btn-primary" data-limpiar="#nuevoDocumentoParticipante">Limpiar</button>
 					<button type="button" class="btn btn-primary guardar" data-accion="guardarDocumentoParticipante" >Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="escuelas" tabindex="-1" role="dialog" aria-labelledby="Inscripción Escuelas Deportivas" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Inscripción Escuelas Deportivas</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="inscribirEscuela" class="form-horizontal validation" method="post" modelAttribute="sociosCurso">
+						<input type="hidden" name="id" class="idParticipante"/>
+						
+						<div class="form-group row">
+							<label for="curso.id" class="col-form-label col-md-3 text-nowrap">Socio:</label>
+							<div class="col-md-9">
+								<div class="input-group">
+									<input type="text" name="auxiliar" class="nombreCompleto required form-control" readonly="readonly"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-rwo btn-default buscarSocio" data-accion="inscribir" ><span class="fa fa-pencil"></span></button>
+									</span>
+								</div>
+								<input type="hidden" name="socio.id" class="id required form-control"/>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="curso" class="col-form-label col-md-3">Curso:</label>
+							<div class="col-md-9">
+								<select name="curso.id" class="curso_id form-control required">
+									<option value=""></option>
+									<c:forEach var="curso" items="${cursos}">
+										<option value="${curso.id}">${curso.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="escuela.id" class="col-form-label col-md-3 text-nowrap">Escuela:</label>
+							<div class="col-md-9">
+								<select name="escuela.id" class="escuela_id required form-control">
+									<option value=""></option>
+									<c:forEach var="escuela" items="${escuelas}">
+										<option value="${escuela.id}">${escuela.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="categoria.id" class="col-form-label col-md-3 text-nowrap">Categoria:</label>
+							<div class="col-md-9">
+								<select name="categoria.id" class="categoria_id required form-control">
+									<option value=""></option>
+									<c:forEach var="categoria" items="${categorias}">
+										<option value="${categoria.id}">${categoria.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="entrada.id" class="col-form-label col-md-3 text-nowrap">Entrada:</label>
+							<div class="col-md-9">
+								<select name="entrada.id" class="entrada_id form-control">
+									<option value=""></option>
+									<c:forEach var="mes" items="${meses}">
+										<option value="${mes.id}">${mes.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="salida.id" class="col-form-label col-md-3 text-nowrap">Salida:</label>
+							<div class="col-md-9">
+								<select name="salida.id" class="salida_id form-control">
+									<option value=""></option>
+									<c:forEach var="mes" items="${meses}">
+										<option value="${mes.id}">${mes.descripcion}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" data-limpiar="#escuelas">Limpiar</button>
+					<button type="button" class="btn btn-primary guardar" data-accion="inscribirEscuela" >Inscribir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="buscadorSocios" tabindex="1" role="dialog" aria-labelledby="Buscador socios" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Buscador socios</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+								<form action="buscadorSocios" class="form-horizontal validation" method="post" modelAttribute="socio">
+									<div class="form-group row">
+										<label for="curso" class="col-form-label col-md-2">Nombre:</label>
+										<div class="col-md-4">
+											<input type="text" name="nombre" class="form-control"/>
+										</div>
+										<label for="curso" class="col-form-label col-md-2">Apellidos:</label>
+										<div class="col-md-4">
+											<input type="text" name="apellidos" class="form-control"/>
+										</div>
+									</div>
+									<div class="row form-group">
+										<div class="col-md-6 text-left">
+											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarSocio">Nuevo Socio</button>
+										</div>
+										<div class="col-md-6 text-right">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+											<button type="button" class="btn btn-primary" data-limpiar="#buscadorSocios .buscador form">Limpiar</button>
+											<button type="button" class="btn btn-primary buscar" data-accion="buscarSocio">Buscar</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+					<table class="table table-striped table-bordered dataTable no-footer detalle">
+					</table>
+					
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="editarSocio" tabindex="-1" role="dialog" aria-labelledby="Editar Socio" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Editar Socio</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="socio">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group row">
+									<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+									<div class="col-sm-10">
+										<input type="text" name="nombre" class="form-control nombre required" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="apellidos" class="col-sm-2 col-form-label">Apellidos</label>
+									<div class="col-sm-10">
+										<input type="text" name="apellidos" class="form-control apellidos required" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="apellidos" class="col-sm-2 col-form-label">DNI</label>
+									<div class="col-sm-10">
+										<input type="text" name="dni" class="form-control dni" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="email" class="col-sm-2 col-form-label">Email:</label>
+							<div class="col-sm-10">
+								<input type="text" name="email" class="form-control email required" placeholder="ejemplo@host.com" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="email" class="col-sm-2 col-form-label">Email 2:</label>
+							<div class="col-sm-10">
+								<input type="text" name="email2" class="form-control email2" placeholder="ejemplo@host.com" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="email" class="col-sm-2 col-form-label">Talla:</label>
+							<div class="col-sm-10">
+								<input type="text" nameh="talla" class="form-control talla"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="fechaNacimiento" class="col-sm-4 col-form-label">F. Nac.:</label>
+									<div class="col-sm-8">
+											<input type="text" name="fechaNacimiento" 
+												data-date-format="mm/dd/yyyy"
+												data-date-container='#editar'
+												class="form-control datepicker fecha_corta fechaNacimiento required" 
+												placeholder="dd/mm/aaaa"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="telefono" class="col-sm-4 col-form-label">Teléfono:</label>
+									<div class="col-sm-8">
+										<input type="text" name="telefono" class="form-control telefono required" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="sexo" class="col-sm-4 col-form-label">Sexo:</label>
+									<div class="col-sm-8">
+										<select name="sexo.id" class="form-control sexo_id required" >
+											<option value=""></option>
+											<option value="1">Femenino</option>
+											<option value="2">Masculino</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="lopd" class="col-sm-4 col-form-label">Lopd:</label>
+									<div class="col-sm-8">
+										<select name="lopd" class="form-control lopd required" >
+											<option value=""></:option>
+											<option value="1">Si</option>
+											<option value="0">No</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="padre" class="col-sm-4 col-form-label">Padre:</label>
+									<div class="col-sm-8">
+										<input type="text" name="padre" class="form-control padre" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="madre" class="col-sm-4 col-form-label">Madre:</label>
+									<div class="col-sm-8">
+										<input type="text" name="madre" class="form-control madre" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="telefonoPadre" class="col-sm-4 col-form-label">Tlf. Padre:</label>
+									<div class="col-sm-8">
+										<input type="text" name="telefonoPadre" class="form-control telefonoPadre" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group row">
+									<label for="telefonoMadre" class="col-sm-4 col-form-label">Tlf. Madre:</label>
+									<div class="col-sm-8">
+										<input type="text" name="telefonoMadre" class="form-control telefonoMadre" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" data-limpiar="#editar form">Limpiar</button>
+					<button type="button" class="btn btn-primary nuevoSocio" data-accion="nuevoSocio">Guardar</button>
 				</div>
 			</div>
 		</div>

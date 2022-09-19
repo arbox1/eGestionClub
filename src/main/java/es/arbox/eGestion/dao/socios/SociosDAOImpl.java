@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -68,6 +67,9 @@ public class SociosDAOImpl implements SociosDAO{
 			socioCurso.where(predicadosSq.toArray(new Predicate[0]));
 			predicados.add(cb.exists(socioCurso));
 		}
+		
+		if(!StringUtils.isEmpty(socio.getDni()))
+			predicados.add(cb.equal(cb.upper(socios.get("dni")), socio.getDni().toUpperCase()));
 		
 		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.asc(socios.get("apellidos")),
 															  cb.asc(socios.get("nombre")));

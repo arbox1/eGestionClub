@@ -38,7 +38,7 @@ public class ActividadDAOImpl implements ActividadDAO {
 		}
 		
 		if(!StringUtils.isEmpty(actividad.getDescripcion()))
-			predicados.add(cb.equal(actividades.get("descripcion"), actividad.getDescripcion()));
+			predicados.add(cb.like(cb.upper(actividades.get("descripcion")), "%"+actividad.getDescripcion().toUpperCase()+"%"));
 		
 		if(!StringUtils.isEmpty(actividad.getFechaFinPlazo())) {
 			predicados.add(cb.greaterThanOrEqualTo(actividades.get("fechaFinPlazo").as(Date.class), actividad.getFechaFinPlazo()));

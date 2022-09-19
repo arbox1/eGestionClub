@@ -26,8 +26,14 @@ public class SociosCursoServiceImpl extends GenericServiceImpl implements Socios
 	
 	@Override
 	@Transactional
-	public List<SociosCurso> obtenerSociosFiltro(Integer idCurso, Integer idEscuela, Integer idCategoria) {
-		return sociosCursoDAO.obtenerSociosFiltro(idCurso, idEscuela, idCategoria);
+	public List<SociosCurso> obtenerSociosFiltro(Integer idSocio, Integer idCurso, Integer idEscuela, Integer idCategoria) {
+		return sociosCursoDAO.obtenerSociosFiltro(idSocio, idCurso, idEscuela, idCategoria);
+	}
+	
+	@Override
+	@Transactional
+	public SociosCurso getSocioCursoPorDni(String dni) {
+		return sociosCursoDAO.getSocioCursoPorDni(dni);
 	}
 
 //	@Override

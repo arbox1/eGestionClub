@@ -7,7 +7,8 @@ import es.arbox.eGestion.entity.socios.SociosCurso;
 
 public interface SociosCursoDAO {
 	public List<SociosCurso> getSociosCurso(Integer idSocio);
-	public List<SociosCurso> obtenerSociosFiltro(Integer idCurso, Integer idEscuela, Integer idCategoria);
+	public List<SociosCurso> obtenerSociosFiltro(Integer idSocio, Integer idCurso, Integer idEscuela, Integer idCategoria);
+	public SociosCurso getSocioCursoPorDni(String dni);
 //	public List<Curso> getCursos();
 //	public List<Escuela> getEscuelas();
 //	public List<Categoria> getCategorias();

@@ -135,6 +135,7 @@ public class CalendarioController extends BaseController{
 		calendario = calendarioService.obtenerPorId(Calendario.class, calendario.getId());
 		
 		List<SociosCurso> sociosCurso = sociosCursoService.obtenerSociosFiltro(
+				null,
 				calendario.getCurso().getId()/*Curso*/,
 				calendario.getEscuela().getId()/*Escuela*/,
 				calendario.getCategoria().getId()/*Categoría*/);

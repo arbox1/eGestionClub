@@ -158,7 +158,7 @@ public class MailService {
         GregorianCalendar calendar = new GregorianCalendar();
         Meses mesActual = cuotaService.obtenerPorId(Meses.class, calendar.get(Calendar.MONTH)+1);
         
-        for(SociosCurso socioCurso : sociosCursoService.obtenerSociosFiltro(buscador.getCurso().getId(), buscador.getEscuela().getId(), buscador.getCategoria().getId())) {
+        for(SociosCurso socioCurso : sociosCursoService.obtenerSociosFiltro(null, buscador.getCurso().getId(), buscador.getEscuela().getId(), buscador.getCategoria().getId())) {
     		boolean pendiente = false;
     		SimpleMailMessage message = new SimpleMailMessage(); 
             message.setFrom("atleticoalbaida@gmail.com");

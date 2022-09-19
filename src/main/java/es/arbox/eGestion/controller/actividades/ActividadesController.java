@@ -38,6 +38,12 @@ import es.arbox.eGestion.entity.actividades.EstadosParticipante;
 import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.actividades.TiposActividad;
 import es.arbox.eGestion.entity.documento.Documento;
+import es.arbox.eGestion.entity.socios.Categoria;
+import es.arbox.eGestion.entity.socios.Curso;
+import es.arbox.eGestion.entity.socios.Escuela;
+import es.arbox.eGestion.entity.socios.Meses;
+import es.arbox.eGestion.entity.socios.Socios;
+import es.arbox.eGestion.entity.socios.SociosCurso;
 import es.arbox.eGestion.enums.FamiliasDocumento;
 import es.arbox.eGestion.enums.TiposDocumento;
 import es.arbox.eGestion.enums.TiposMensaje;
@@ -45,6 +51,8 @@ import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoParticipanteService;
 import es.arbox.eGestion.service.config.MailService;
+import es.arbox.eGestion.service.socios.SociosCursoService;
+import es.arbox.eGestion.service.socios.SociosService;
 import es.arbox.eGestion.utils.PasswordGenerator;
 import es.arbox.eGestion.utils.Utilidades;
 
@@ -54,6 +62,12 @@ public class ActividadesController extends BaseController {
 	
 	@Autowired
 	ActividadService actividadService;
+	
+	@Autowired
+	SociosCursoService sociosCursoService;
+	
+	@Autowired
+	SociosService sociosService;
 	
 	@Autowired
 	DocumentoActividadService documentoActividadService;
@@ -72,6 +86,12 @@ public class ActividadesController extends BaseController {
 		model.addAttribute("tiposDocumentos", documentoActividadService.getTipoDocumento(FamiliasDocumento.ACTIVIDAD));
 		model.addAttribute("estadosActividad", actividadService.obtenerTodosOrden(EstadosActividad.class, " descripcion "));
 		model.addAttribute("estadosParticipante", actividadService.obtenerTodosOrden(EstadosParticipante.class, " descripcion "));
+		
+		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
+		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
+		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
+		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
+		
 		return "/actividades/actividades";
 	}
 	
@@ -81,6 +101,11 @@ public class ActividadesController extends BaseController {
 		model.addAttribute("tiposDocumentos", documentoActividadService.getTipoDocumento(FamiliasDocumento.ACTIVIDAD));
 		model.addAttribute("estadosActividad", actividadService.obtenerTodosOrden(EstadosActividad.class, " descripcion "));
 		model.addAttribute("estadosParticipante", actividadService.obtenerTodosOrden(EstadosParticipante.class, " descripcion "));
+		
+		model.addAttribute("cursos", sociosCursoService.obtenerTodos(Curso.class));
+		model.addAttribute("escuelas", sociosCursoService.obtenerTodos(Escuela.class));
+		model.addAttribute("categorias", sociosCursoService.obtenerTodos(Categoria.class));
+		model.addAttribute("meses", sociosCursoService.obtenerTodos(Meses.class));
 		
 		List<Actividad> actividades = actividadService.getActividadesFiltro(actividad);
 		for(Actividad act : actividades) {
@@ -392,4 +417,88 @@ public class ActividadesController extends BaseController {
 		
 		return getInforme(valores.getDescripcion(), "prueba", datos, mapa);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/socio", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String socio(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		Socios socio = new Socios();
+		socio.setDni(actividadService.obtenerPorId(Participante.class, valores.getId()).getDni());
+		
+		List<Socios> lista = sociosService.getBusqueda(socio);
+		
+		Socios resultado = null;
+		if(lista != null && lista.size() > 0) {
+			resultado = sociosService.getBusqueda(socio).get(0);
+		}
+		
+		
+		result.setResultado("socio", resultado.getMapa());
+		
+		return sociosService.serializa(result);
+	}
+	
+	@PostMapping(value = "/inscribirEscuela")
+    public @ResponseBody RespuestaAjax inscribirEscuela(@ModelAttribute SociosCurso sociosCurso, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		Participante p = actividadService.obtenerPorId(Participante.class, sociosCurso.getId());
+		EstadosParticipante estado = new EstadosParticipante();
+		estado.setId(8);
+		p.setEstado(estado);
+		actividadService.guardar(p, getUsuarioLogado());
+		
+		sociosCurso.setId(null);
+		
+		List<SociosCurso> lista = sociosCursoService.obtenerSociosFiltro(sociosCurso.getSocio().getId(), sociosCurso.getCurso().getId(), sociosCurso.getEscuela().getId(), sociosCurso.getCategoria().getId());
+		
+		if(lista != null && lista.size() <= 0) {
+			if(sociosCurso.getEntrada() != null && sociosCurso.getEntrada().getId() == null) {
+				sociosCurso.setEntrada(null);
+			}
+			
+			if(sociosCurso.getSalida() != null && sociosCurso.getSalida().getId() == null) {
+				sociosCurso.setSalida(null);
+			}
+			
+			sociosCursoService.guardar(sociosCurso, getUsuarioLogado());
+			
+			Mensajes mensajes = new Mensajes();
+			mensajes.mensaje(TiposMensaje.success, "Participante inscrito correctamente.");
+			result.setMensajes(mensajes.getMensajes());
+		} else {
+			Mensajes mensajes = new Mensajes();
+			mensajes.mensaje(TiposMensaje.info, "Participante ya se encuentra inscrito.");
+			result.setMensajes(mensajes.getMensajes());
+		}
+		
+		result.setResultado("id", p.getActividad().getId());
+		result.setResultado("ok", "S");
+		
+		return result;
+    }
+	
+	@PostMapping(value = "/buscarSocio")
+    public @ResponseBody RespuestaAjax buscarSocio(@ModelAttribute Socios socio, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		result.setResultado("socios", sociosService.getBusqueda(socio));
+		
+		return result;
+    }
+	
+	@PostMapping(value = "/nuevoSocio")
+    public @ResponseBody RespuestaAjax nuevoSocio(@ModelAttribute Socios socio, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		sociosService.guardar(socio, getUsuarioLogado());
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.info, "Socio creado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+		return result;
+    }
 }

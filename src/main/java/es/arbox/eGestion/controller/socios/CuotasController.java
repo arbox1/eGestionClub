@@ -68,6 +68,7 @@ public class CuotasController extends BaseController{
 		
 		Double totales = (double) 0;
 		List<SociosCurso> sociosCurso = sociosCursoService.obtenerSociosFiltro(
+				null,
 				socio.getCurso().getId()/*Curso*/,
 				socio.getEscuela().getId()/*Escuela*/,
 				socio.getCategoria().getId()/*Categoría*/);
@@ -144,6 +145,7 @@ public class CuotasController extends BaseController{
 	public ModelAndView exportarExcel(Model model, @ModelAttribute("buscador") SociosCurso socio, RedirectAttributes redirectAttrs){
 		List<Meses> meses = sociosCursoService.getMeses();
 		List<SociosCurso> sociosCurso = sociosCursoService.obtenerSociosFiltro(
+				null,
 				socio.getCurso().getId()/*Curso*/,
 				socio.getEscuela().getId()/*Escuela*/,
 				socio.getCategoria().getId()/*Categoría*/);
