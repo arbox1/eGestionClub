@@ -131,7 +131,7 @@
     	            { data: "telefono", title: "Teléfono" },
     	            { data: function(row, type, val, meta){
             			return moment(row.fechaNacimiento).format('DD/MM/YYYY');
-            		}, title: "F. Nacimiento", className: 'text-nowrap text-center' },
+            		}, title: "F. Nac.", className: 'text-nowrap text-center' },
     	            { data: "email", title: "Email" },
     	            { data: "cantidad", title: "Cantidad", className: 'text-nowrap text-center' },
     	            { data: "importe", title: "Importe", className: 'text-nowrap text-center' },
@@ -311,7 +311,7 @@
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
-// 		    	$(this, ".dtalle").html('');
+		    	$('#buscadorSocios table.detalle').DataTable().clear().draw();
 		    }).on('click', '.buscar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
@@ -330,6 +330,9 @@
 			});
 			
 			$('#buscadorSocios table.detalle').DataTable({
+				searching: false,
+				info: false,
+				buttons: [],
 				language: {
 					"emptyTable": "No se encontraron socios"
 				},
@@ -589,7 +592,7 @@
 			<c:when test="${actividades.size() > 0}">
 				<div class="panel panel-info">
 					<div class="panel-body">
-						<table class="table table-striped table-bordered extendida actividades" id="tablaActividades">
+						<table class="table table-striped table-bordered table-hover extendida actividades" id="tablaActividades">
 							<thead>
 								<tr>
 									<th class="text-center">Tipo</th>
@@ -849,7 +852,7 @@
 				<div class="modal-body">
 					<div class="panel panel-info">
 						<div class="panel-body">
-							<table class="table table-striped table-bordered dataTable no-footer detalle">
+							<table class="table table-hover table-striped table-bordered dataTable no-footer detalle">
 								<tfoot>
 									<tr>
 										<th colspan="3" class="text-right">Total:</th>
@@ -1235,7 +1238,7 @@
 	</div>
 	
 	<div class="modal" id="buscadorSocios" tabindex="1" role="dialog" aria-labelledby="Buscador socios" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-		<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Buscador socios</h5>

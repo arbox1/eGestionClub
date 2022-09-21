@@ -138,6 +138,16 @@ div.buscador {
     padding: 0.0rem 0.2rem;
 }
 
+.dataTable .btn{
+	border: 0px solid transparent;
+    padding: 0.0rem 0.2rem;
+}
+
+.table, table {
+/*     font-size: .875em; */
+	font-size: .800em;
+}
+
 div.cajaBoton {
 	border-right: 2px solid #ffffff;
 	border-bottom: 2px solid #ffffff;
