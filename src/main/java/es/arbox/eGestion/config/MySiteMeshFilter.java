@@ -15,6 +15,7 @@ public class MySiteMeshFilter extends ConfigurableSiteMeshFilter {
 			   .addDecoratorPath("/economica/*", "/WEB-INF/views/decorators/decorator.jsp")
 			   .addDecoratorPath("/comunicacion/*", "/WEB-INF/views/decorators/decorator.jsp")
 			   .addDecoratorPath("/actividades/*", "/WEB-INF/views/decorators/decorator.jsp")
+			   .addDecoratorPath("/liga/*", "/WEB-INF/views/decorators/decorator.jsp")
 			   .addDecoratorPath("/servicios/*", "/WEB-INF/views/decorators/decoratorBase.jsp");
 	}
 
