@@ -7,9 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import es.arbox.eGestion.entity.BaseEntidad;
+
 @Entity
 @Table(name = "tarifas")
-public class Tarifa {
+public class Tarifa extends BaseEntidad{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

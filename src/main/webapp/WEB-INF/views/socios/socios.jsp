@@ -444,6 +444,7 @@
 									<th class="text-center">Apellidos</th>
 									<th class="text-center">Telefono</th>
 									<th class="text-center">Email</th>
+									<th class="text-center">Talla</th>
 									<th class="text-center">Sexo</th>
 									<th></th>
 								</tr>
@@ -455,6 +456,7 @@
 										<td>${socio.apellidos}</td>
 										<td>${socio.telefono}</td>
 										<td>${socio.email}</td>
+										<td>${socio.talla}</td>
 										<td>${socio.sexo.descripcion}</td>
 										<td class="text-center text-nowrap">
 											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${socio.id}"><i class="fas fa-pencil-alt"></i></button>

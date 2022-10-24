@@ -109,10 +109,11 @@
 	<header>
 		<div class="container">
 			<div class="row logado">
-				<div class="col-sm-9">
+				<div class="col-sm-8">
 				</div>
-				<div class="col-sm-3 text-right" style="background-color: #dddddd; border-radius: 10px;">
+				<div class="col-sm-4 text-right" style="background-color: #dddddd; border-radius: 10px;">
 					<strong><span class="nombreCompleto"></span></strong>
+					<button type="button" class="btn btn-link password"><i class="fa fa-2x fa-solid fa-key" data-toggle="modal" data-target="#login"></i></button>
 					<button type="button" class="btn btn-link logout"><i class="fas fa-2x fa-sign-out-alt"></i></button>
 				</div>
 			</div>
@@ -132,6 +133,51 @@
 		<a href="https://www.facebook.com/atletico.albaida.7" target="_blank" ><i class="fa fa-brands fa-facebook"></i></a>
 		<a href="https://instagram.com/atleticoalbaida" target="_blank" ><i class="fa fa-brands fa-instagram"></i></a>
 		@ClubAtleticoAlbaida
+	</div>
+	
+	<div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="Cambiar contraseña" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Cambiar contraseña</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="${context}login/cambiarPassword" class="form-horizontal validation form" modelAttribute="usuario" id="login" method="post">
+						<div class="form-group row">
+							<label for="tipo" class="col-sm-4 col-form-label">Contraseña</label>
+							<div class="col-sm-8">
+								<input type="password" name="password" class="form-control required" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="descripcion" class="col-sm-4 col-form-label">Nueva Contraseña</label>
+							<div class="col-sm-8">
+								<input type="password" name="passwordNew" class="form-control required" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="descripcion" class="col-sm-4 col-form-label">Repetir Contraseña</label>
+							<div class="col-sm-8">
+								<input type="password" name="passwordRepeat" class="form-control required" />
+							</div>
+						</div>
+						<div class="form-group text-right row">
+							<div class="col-sm-12">
+								
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary aceptar" data-submit="#login.form">Aceptar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </body>

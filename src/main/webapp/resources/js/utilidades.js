@@ -424,6 +424,8 @@ var ventana=null;
 					if(value==$(this).val())
 						$(this).prop('checked', value==$(this).val()).trigger('click');
 				} else if($(this).is('select')) {
+//					var r = value.toString().replace('.', ',');
+//					console.log(r);
 					$(this).val(value).data('loaded', value);
 				} else {
 					$(this).val(value).format();
@@ -509,6 +511,7 @@ var ventana=null;
 	    				
 	    				var data2 = new FormData($form[0]);
 	    				data2.append('iehack', "&#9760;");
+	    				
 						if(1==1){
 						 $.ajax({
 								type : "POST",

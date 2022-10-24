@@ -92,6 +92,12 @@ public class Usuario extends BaseEntidad implements UserDetails{
 	@Transient
 	private Set<Rol> roles;
 	
+	@Transient
+	private String passwordNew;
+	
+	@Transient
+	private String passwordRepeat;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -257,5 +263,21 @@ public class Usuario extends BaseEntidad implements UserDetails{
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getPasswordRepeat() {
+		return passwordRepeat;
+	}
+
+	public void setPasswordRepeat(String passwordRepeat) {
+		this.passwordRepeat = passwordRepeat;
+	}
+
+	public String getPasswordNew() {
+		return passwordNew;
+	}
+
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
 	}
 }

@@ -150,11 +150,11 @@
 		</c:if>
 	</div>
 
-	<div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="Editar Actividad" aria-hidden="true">
+	<div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="Login de Usuario" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Actividad</h5>
+					<h5 class="modal-title">Logado</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>

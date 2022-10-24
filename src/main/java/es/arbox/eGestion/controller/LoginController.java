@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.entity.config.Usuario;
@@ -98,4 +101,27 @@ public class LoginController extends BaseController {
 		
 		return "redirect:/login/";
 	}
+	
+	@PostMapping(value = "/cambiarPassword")
+    public String cambiarPassword(@ModelAttribute("Usuario") Usuario usuario, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		Mensajes mensajes = new Mensajes();
+		Usuario usuarioSesion = getUsuarioLogado();
+		
+		
+		if(!StringUtils.isBlank(usuario.getPassword())
+				&& !StringUtils.isBlank(usuario.getPasswordNew())
+				&& !StringUtils.isBlank(usuario.getPasswordRepeat())
+				&& usuario.getPasswordNew().equals(usuario.getPasswordRepeat()) 
+				&& Utilidades.getMd5(usuario.getPassword()).equals(usuarioSesion.getPassword())) {
+			usuarioSesion.setPassword(Utilidades.getMd5(usuario.getPasswordNew()));
+			menuService.guardar(usuarioSesion, getUsuarioLogado());
+			mensajes.mensaje(TiposMensaje.success, "Contraseña actualizada corréctamente");
+		} else {
+			mensajes.mensaje(TiposMensaje.danger, "Error al cambiar la contraseña");
+		}
+		
+		redirectAttrs.addFlashAttribute("mensajes", mensajes.getMensajes());
+		
+		return "redirect:/principal/";
+    }
 }
