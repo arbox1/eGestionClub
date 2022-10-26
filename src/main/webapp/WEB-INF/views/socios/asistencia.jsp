@@ -182,7 +182,7 @@
 				</div>
 				<div class="modal-body">
 					<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="nuevo">
-						<input type="hidden" name="id" class="id no-limpiar"/>
+						<input type="hidden" name="id" class="id"/>
 
 						<div class="form-group row">
 							<label for="tarifa" class="col-sm-2 col-form-label">Tarifa</label>
