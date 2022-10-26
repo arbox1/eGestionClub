@@ -19,7 +19,6 @@ import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.entity.economica.Pago;
-import es.arbox.eGestion.entity.economica.Tarifa;
 import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.economica.PagosService;
@@ -36,7 +35,6 @@ public class PagosController extends BaseController {
 		model.addAttribute("nuevo", new Pago());
 		model.addAttribute("pagos", new ArrayList<Pago>());
 		model.addAttribute("usuarios", pagosService.obtenerTodosOrden(Usuario.class, " apellido1, apellido2, nombre "));
-		model.addAttribute("tarifas", pagosService.obtenerTodosOrden(Tarifa.class, " descripcion "));
 		model.addAttribute("meses", pagosService.obtenerTodosOrden(Meses.class, " numero "));
 		model.addAttribute("buscador", pago == null ? new Pago() : pago);
 		return "/economica/pagos";
@@ -48,7 +46,6 @@ public class PagosController extends BaseController {
 		model.addAttribute("nuevo", new Pago());
 		model.addAttribute("pagos", pagosService.getBusqueda(pago));
 		model.addAttribute("usuarios", pagosService.obtenerTodosOrden(Usuario.class, " apellido1, apellido2, nombre "));
-		model.addAttribute("tarifas", pagosService.obtenerTodosOrden(Tarifa.class, " descripcion "));
 		model.addAttribute("meses", pagosService.obtenerTodosOrden(Meses.class, " numero "));
 		model.addAttribute("buscador", pago);
 		

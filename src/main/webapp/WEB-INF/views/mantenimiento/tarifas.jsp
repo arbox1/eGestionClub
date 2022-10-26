@@ -57,6 +57,7 @@
 								<tr>
 									<th class="text-center">Descripcion</th>
 									<th class="text-center">Importe</th>
+									<th class="text-center">Activa</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -65,6 +66,7 @@
 									<tr>
 										<td class="text-center">${dato.descripcion}</td>
 										<td class="text-center">${dato.importe}</td>
+										<td >${dato.activoTexto}</td>
 										<td class="text-center text-nowrap">
 											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${dato.id}"><i class="fas fa-pencil-alt"></i></button>
 											<button type="button" class="btn btn-link eliminar" data-accion="eliminar" data-modelo="nuevo" data-id="${dato.id}"><i class="fas fa-trash"></i></button>
@@ -103,6 +105,16 @@
 							<label for="descripcion" class="col-sm-2 col-form-label">Importe</label>
 							<div class="col-sm-10">
 								<form:input path="importe" cssClass="form-control importe required" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="activo" class="col-sm-2 col-form-label">Activa</label>
+							<div class="col-sm-10">
+								<form:select path="activo" cssClass="form-control activo required">
+									<form:option value="" label=""/>
+									<form:option value="S" label="Si"/>
+									<form:option value="N" label="No"/>
+								</form:select>
 							</div>
 						</div>
 					</form:form>

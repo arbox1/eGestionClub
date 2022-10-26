@@ -3,31 +3,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
-<title>Pagos</title>
+	
+	<title>Resumen Asistencias</title>
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
+			var recargar = false;
 			
-			$('#tablaPagos').on('click', '.eliminar', function(e){
+			$('.buscador').on('click', '.accion', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
-				bootbox.confirm("¿Está seguro que desea eliminar el gasto seleccionado?", function(result){
-		    		if(result){
-		    			$.enviarFormAjax(data.accion, {
-		    				"id": data.id
-		    			}, function(res){
-							$('.buscador form').submit();
-						});
-		    		}
-		    	});
+				
+				$('.buscador form').prop('action', data.accion).submit();
+				
+			}).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#tablaAsistencias').on("click", 'td.pago', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				
+				if(data.importe) {
+					var fecha = moment().set({'year': data.anyo, 'month': data.mes, 'date': 1}).endOf('month').format('DD/MM/YYYY');
+				
+					console.log(fecha);
+				}
+				
+				data = $.extend({}, data, {
+					"fecha": fecha
+				});
+				
+				$('#pago').cargarDatos({
+	    			datos: data
+	    		}).modal("show");
 			});
 			
 			$('#pago').on('click', '.guardar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
-// 				$.loading("Guardando");
 				$('#pago').enviar("guardar", function(res){
-					$('#editar').modal("hide");
+					$('#pago').modal("hide");
 					$('.buscador form').submit();
 				});
 			}).on('change', '.tarifa_id', function(e){
@@ -39,11 +57,7 @@
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
-		    }).on('show.bs.modal', function(e){
-		    	e.stopPropagation();
-		    	if($("#pago .fecha").val() == '')
-		    		$("#pago .fecha").val(moment().format('DD/MM/YYYY'));
-		    });
+		    })
 		});
 	</script>
 </head>
@@ -54,69 +68,96 @@
 			<div class="col-md-12">
 				<form:form action="buscar" cssClass="form-horizontal" method="post" modelAttribute="buscador">
 					<div class="row form-group">
-						<label for="tipo" class="col-sm-1 col-form-label">Usuario</label>
-						<div class="col-md-5">
-							<form:select path="usuario.id" cssClass="form-control" >
+						<label for="tarifa" class="col-xs-3 col-sm-3 col-md-2 col-form-label">Usuario</label>
+						<div class="col-xs-9 col-sm-9 col-md-4">
+							<form:select path="monitor.id" cssClass="form-control" >
 								<form:option value="" label="--Selecciona un usuario"/>
 								<form:options items="${usuarios}" itemValue="id" itemLabel="nombreCompleto"/>
 							</form:select>
 						</div>
-						<label for="fecha" class="col-sm-1 col-form-label">Mes</label>
-						<div class="col-md-5">
-							<form:select path="mes" cssClass="form-control" >
-								<form:option value="" label="--Selecciona un mes"/>
-								<form:options items="${meses}" itemValue="numero" itemLabel="descripcion"/>
+						<label for="curso" class="col-xs-3 col-sm-3 col-md-2 col-form-label">Curso</label>
+						<div class="col-xs-9 col-sm-9 col-md-4">
+							<form:select path="observaciones" cssClass="form-control no-limpiar" >
+								<form:options items="${cursos}" itemValue="descripcion" itemLabel="descripcion" />
 							</form:select>
 						</div>
 					</div>
 					<div class="row form-group">
-						<div class="col-md-6" >
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pago">Nuevo Pago</button>
+						<label for="tarifa" class="col-xs-3 col-sm-3 col-md-2 col-form-label">Tarifa</label>
+						<div class="col-xs-9 col-sm-9 col-md-4">
+							<form:select path="tarifa.id" cssClass="form-control" >
+								<form:option value="" label="--Selecciona una tarifa"/>
+								<form:options items="${tarifas}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
 						</div>
-						<div class="col-md-6 text-right">
+						<label for="escuela" class="col-xs-3 col-sm-3 col-md-2 col-form-label">Escuela</label>
+						<div class="col-xs-9 col-sm-9 col-md-4">
+							<form:select path="escuela.id" cssClass="form-control" >
+								<form:option value="" label="--Selecciona una escuela"/>
+								<form:options items="${escuelas}" itemValue="id" itemLabel="descripcion"/>
+							</form:select>
+						</div>
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-xs-4 col-sm-4 col-md-4 text-left">
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-8 text-right">
 							<button type="button" class="btn btn-primary" data-limpiar=".buscador form">Limpiar</button>
-							<button type="button" class="btn btn-primary" data-submit=".buscador form">Buscar</button>
+							<button type="button" class="btn btn-primary accion" data-accion="buscar">Buscar</button>
 						</div>
 					</div>
 				</form:form>
 			</div>
 		</div>
 		<c:choose>
-			<c:when test="${pagos.size() > 0}">
+			<c:when test="${asistencias.size() > 0}">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-info">
 							<div class="panel-body">
-								<table class="table table-striped table-bordered extendida pagos" id="tablaPagos">
+								<table class="table table-striped table-bordered socios dataTable no-footer" id="tablaAsistencias">
 									<thead>
 										<tr>
-											<th class="text-center">Usuario</th>
-											<th class="text-center">Fecha</th>
-											<th class="text-center sumatorio" data-column="2">Importe</th>
-											<th class="text-center" >Observaciones</th>
-											<th></th>
+											<th class="text-center">Nombre</th>
+											<c:forEach var="mes" items="${meses}">
+												<c:if test="${mes.orden != 0}">
+													<th>${mes.descripcion}</th>
+												</c:if>
+											</c:forEach>
+											<th>Total</th>
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="pago" items="${pagos}">
+										<c:forEach var="usuario" items="${asistencias}">
 											<tr>
-												<td class="text-center">${pago.usuario.nombreCompleto}</td>
-												<td class="text-center"><fmt:formatDate pattern = "dd/MM/yyyy" value = "${pago.fecha}" /></td>
-												<td class="text-right" name="importe"><fmt:formatNumber pattern="########0.00" value="${pago.importe}"/> &euro;</td>
-												<td class="text-right">${pago.observacion}</td>
-												<td class="text-center text-nowrap">
-		<%-- 											<button type="button" class="btn btn-link cargar" data-accion="cargar" data-id="${ingreso.id}"><i class="fas fa-pencil-alt"></i></button> --%>
-													<button type="button" class="btn btn-link eliminar" data-accion="eliminar" data-modelo="nuevo" data-id="${pago.id}"><i class="fas fa-trash"></i></button>
-												</td>
+												<td>${usuario.monitor.nombreCompleto}</td>
+												<c:forEach var="mes" items="${meses}" varStatus="i">
+													<c:if test="${mes.orden != 0}">
+														<td class="text-right text-nowrap pago" role="button" 
+																		data-importe="${usuario.asistencia(mes.numero - 1).importe}"
+																		data-mes="${mes.numero - 1}"
+																		data-anyo="${usuario.asistencia(mes.numero - 1).anyo}"  
+																		data-usuario-id="${usuario.monitor.id}"
+																		data-usuario-nombre="${usuario.monitor.nombreCompleto}">
+															<fmt:formatNumber pattern="#,##0.00" value="${usuario.asistencia(mes.numero - 1).importe}"/> &euro;
+														</td>
+													</c:if>
+												</c:forEach>
+												<td class="text-right text-nowrap"><fmt:formatNumber pattern="#,##0.00" value="${usuario.total}"/> &euro;</td>
 											</tr>
 										</c:forEach>
 									</tbody>
 									<tfoot>
 										<tr>
-											<th colspan="2" style="text-align:right" rowspan="1">
-												Total:
-											</th>
-											<th rowspan="1" colspan="3"></th></tr>
+											<th></th>
+											<c:forEach var="mes" items="${meses}">
+												<c:if test="${mes.orden != 0}">
+													<th class="text-right text-nowrap"><fmt:formatNumber pattern="#,##0.00" value="${mes.total}"/> &euro;</th>
+												</c:if>
+											</c:forEach>
+											<th class="text-right text-nowrap"><fmt:formatNumber pattern="#,##0.00" value="${totales}"/> &euro;</th>
+										</tr>
 									</tfoot>
 								</table>
 							</div>
@@ -125,7 +166,7 @@
 				</div>
 			</c:when>
 			<c:otherwise>
-				No se han encontrado resultados
+				No hay datos que mostrar
 			</c:otherwise>
 		</c:choose>
 	</div>
@@ -149,12 +190,8 @@
 								<div class="form-group row">
 									<label for="usuario.id" class="col-sm-4 col-form-label">Usuario:</label>
 									<div class="col-sm-8">
-										<select name="usuario.id" class="usuario_id form-control required">
-											<option value="">--Selecciona un usuario</option>
-											<c:forEach items="${usuarios}" var="usuario">{
-												<option value="${usuario.id}">${usuario.nombreCompleto}</option>
-											</c:forEach>
-										</select>
+										<input type="hidden" name="usuario.id" class="usuarioId">
+										<input type="text" class="usuarioNombre form-control required " readonly="readonly">
 									</div>
 								</div>
 							</div>

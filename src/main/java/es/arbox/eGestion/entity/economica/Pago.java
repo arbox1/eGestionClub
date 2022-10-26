@@ -33,19 +33,12 @@ public class Pago {
 	@JoinColumn(name = "p_us_id")
 	private Usuario usuario;
 	
-	@ManyToOne
-	@JoinColumn(name = "p_t_id")
-	private Tarifa tarifa;
-	
 	@Column(name = "p_fecha")
 	@JsonDeserialize(using = StringDateConverter.class, as = Date.class)
 	private Date fecha;
 	
 	@Column(name = "p_importe")
 	private Double importe;
-	
-	@Column(name = "p_cantidad")
-	private Double cantidad;
 	
 	@Column(name = "p_observacion")
 	private String observacion;
@@ -85,14 +78,6 @@ public class Pago {
 		this.usuario = usuario;
 	}
 
-	public Tarifa getTarifa() {
-		return tarifa;
-	}
-
-	public void setTarifa(Tarifa tarifa) {
-		this.tarifa = tarifa;
-	}
-
 	public Date getFecha() {
 		return fecha;
 	}
@@ -109,14 +94,6 @@ public class Pago {
 		this.importe = importe;
 	}
 
-	public Double getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(Double cantidad) {
-		this.cantidad = cantidad;
-	}
-
 	public String getObservacion() {
 		return observacion;
 	}
@@ -125,10 +102,6 @@ public class Pago {
 		this.observacion = observacion;
 	}
 	
-	public Double getTotal() {
-		return (importe != null ? importe : 0) * (cantidad != null ? cantidad : 0);
-	}
-
 	public Integer getMes() {
 		return mes;
 	}

@@ -77,10 +77,17 @@ public class GenericDAOImpl implements GenericDAO {
         return objeto;
     }
     
-	@SuppressWarnings("unchecked")
 	public <T> List<T> obtenerTodosOrden(Class<T> clazz, String orders) {
+//    	Session session = sessionFactory.getCurrentSession();
+//    	return session.createQuery(String.format("from %1$s %2$s", clazz.getName(), StringUtils.isEmpty(orders) ? "" : " order by " + orders)).list();
+    	
+    	return obtenerTodosFiltroOrden(clazz, null, orders);
+    }
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> obtenerTodosFiltroOrden(Class<T> clazz, String where, String orders) {
     	Session session = sessionFactory.getCurrentSession();
-    	return session.createQuery(String.format("from %1$s %2$s", clazz.getName(), StringUtils.isEmpty(orders) ? "" : " order by " + orders)).list();
+    	return session.createQuery(String.format("from %1$s %2$s %3$s", clazz.getName(), StringUtils.isEmpty(where) ? "" : " where " + where, StringUtils.isEmpty(orders) ? "" : " order by " + orders)).list();
     }
 	
 	@Override

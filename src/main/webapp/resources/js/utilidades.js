@@ -704,7 +704,7 @@ var ventana=null;
 		$('table.extendida').DataTable({
 			"footerCallback": function ( row, data, start, end, display ) {
 	            var api = this.api(), data;
-	            var column = $('table.extendida .sumatorio').data("column")
+	            var column = $('table.extendida .sumatorio').data("column");
 	            
 	            var pattern = ' ';
 	            var replacement = '';

@@ -19,5 +19,7 @@ public interface GenericDAO {
 	
 	public <T> List<T> obtenerTodosOrden(Class<T> clazz, String orders);
 	
+	public <T> List<T> obtenerTodosFiltroOrden(Class<T> clazz, String where, String orders);
+	
 	public <T> List<T> obtenerFiltros(Class<T> clazz, List<Predicate> where, List<Order> order);
 }

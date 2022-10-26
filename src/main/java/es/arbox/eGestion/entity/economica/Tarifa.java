@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
@@ -23,6 +25,9 @@ public class Tarifa extends BaseEntidad{
 	
 	@Column(name = "t_importe")
 	private Double importe;
+	
+	@Column(name = "t_activo")
+	private String activo;
 
 	public Integer getId() {
 		return id;
@@ -46,5 +51,17 @@ public class Tarifa extends BaseEntidad{
 
 	public void setImporte(Double importe) {
 		this.importe = importe;
+	}
+
+	public String getActivo() {
+		return activo;
+	}
+
+	public void setActivo(String activo) {
+		this.activo = activo;
+	}
+	
+	public String getActivoTexto() {
+		return StringUtils.isNotBlank(activo) && activo.equals("S") ? "Si" : "No";
 	}
 }

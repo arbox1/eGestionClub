@@ -24,6 +24,8 @@ public interface GenericService {
 	public <T> List<T> obtenerTodosOrden(Class<T> clazz, String orden);
 	
 	public String serializa(Object o) throws JsonProcessingException;
+	
+	public <T> List<T> obtenerTodosFiltroOrden(Class<T> clazz, String where, String orders);
 
 	public <T> List<T> obtenerFiltros(Class<T> clazz, List<Predicate> where, List<Order> order);
 }

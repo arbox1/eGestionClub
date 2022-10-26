@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -40,6 +41,9 @@ public class Meses extends BaseEntidad{
 	
 	@Column(name="m_numero")
 	protected Integer numero;
+	
+	@Transient
+	protected Double total;
 	
 	public Integer getId() {
 		return id;
@@ -87,5 +91,13 @@ public class Meses extends BaseEntidad{
 
 	public void setNumero(Integer numero) {
 		this.numero = numero;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 }

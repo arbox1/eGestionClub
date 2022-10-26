@@ -64,6 +64,12 @@ public class GenericServiceImpl implements GenericService{
 		return genericDAO.obtenerFiltros(clazz, where, order);
 	}
 	
+	@Override
+	@Transactional
+	public <T> List<T> obtenerTodosFiltroOrden(Class<T> clazz, String where, String orders){
+		return genericDAO.obtenerTodosFiltroOrden(clazz, where, orders);
+	}
+	
 	public String serializa(Object o) throws JsonProcessingException {
 		ObjectMapper Obj = new ObjectMapper();
 		Obj.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
