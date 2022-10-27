@@ -110,25 +110,26 @@ var ventana=null;
 				timeout : 100000,
 		        success: callback,
 		        error: function(e) {
-		        	console.log("ERROR: ", e);
+		        	bootbox.alert('Se ha producido un error en una de las consultas realizadas. La aplicación no puede' +
+		        				  'funcionar correctamente.');
 //		        	var html = Handlebars.compile(
 //		        			' <div class="row"> ' +
 //		        			' 	<div class="col-xs-3 text-center"> ' +
 //		        			'       <span class="fa fa-exclamation-circle text-danger fa-5x"></span> ' +
 //		        			' 	</div> ' +
 //		        			' 	<div class="col-xs-8 text-justify"> ' +
-//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicaci�n podr�a no ' +
+//		        			' 		<p>Se ha producido un error en una de las consultas realizadas. La aplicación no puede' +
 //		        			' 		funcionar correctamente. El mensaje de error ha sido el siguiente:</p> ' +
 //		        			' 		<ul> ' +
 //		        			' 		{{#each mensajes}} ' +
 //		        			' 			<li>{{mensaje}}</li> ' +
 //		        			' 		{{/each}} ' +
 //		        			' 		</ul> ' +
-//		        			' 		<p>Por favor, contacte con el soporte t�cnico.</p> ' +
+//		        			' 		<p>Por favor, contacte con el soporte técnico.</p> ' +
 //		        			' 	</div> ' +
 //		        			' </div> '	
 //		        	);
-		        	bootbox.alert($.toHtml("ERROR: ", e));
+//		        	bootbox.alert($.toHtml("ERROR: ", e));
 		        },
 		       done: function(e){
 		    	   console.log("DONE");
@@ -768,6 +769,11 @@ var ventana=null;
 		  max: jQuery.validator.format("Por favor, escribe un valor menor o igual a {0}."),
 		  min: jQuery.validator.format("Por favor, escribe un valor mayor o igual a {0}.")
 		});
+		
+		moment.locale('es');
+		var meses = 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_');
+		var semanas = 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_');
+		moment.updateLocale('es', { months : meses, weekdays : semanas });
     });
 	
 })(jQuery);

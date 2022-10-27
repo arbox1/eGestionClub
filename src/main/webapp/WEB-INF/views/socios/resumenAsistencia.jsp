@@ -28,17 +28,15 @@
 				
 				if(data.importe) {
 					var fecha = moment().set({'year': data.anyo, 'month': data.mes, 'date': 1}).endOf('month').format('DD/MM/YYYY');
-				
-					console.log(fecha);
+					
+					$('#pago').data(data);
+					
+					$('#pago').cargarDatos({
+		    			datos: $.extend({}, data, {
+							"fecha": fecha
+						})
+		    		}).modal("show");
 				}
-				
-				data = $.extend({}, data, {
-					"fecha": fecha
-				});
-				
-				$('#pago').cargarDatos({
-	    			datos: data
-	    		}).modal("show");
 			});
 			
 			$('#pago').on('click', '.guardar', function(e){
@@ -46,18 +44,73 @@
 				var data = $(this).data();
 				$('#pago').enviar("guardar", function(res){
 					$('#pago').modal("hide");
-					$('.buscador form').submit();
+					bootbox.alert("Pago realizado correctamente", function(){ 
+						$('.buscador form').submit(); 
+					});
 				});
-			}).on('change', '.tarifa_id', function(e){
+			}).on('click', '.asistencias', function(e){
 				e.stopPropagation();
-				var string = '#pago .tarifa_'+$(this).val();
-				var valor = $(string).data("importe");
-				$('#pago .importe').val(valor);
+				var data =  $.extend({}, $('#pago').data(), $(this).data());
+				
+				$('#asistencias').trigger('reload', data).mostrar();
+				
 			}).on('hide.bs.modal', function(e){
 		    	e.stopPropagation();
 		    	
 		    	$(this, "form").limpiar();
-		    })
+		    });
+			
+			$('#asistencias').on("reload", function(e, data){
+				e.stopPropagation();
+				
+				var fechaDesde = moment().set({'year': data.anyo, 'month': data.mes, 'date': 1}).startOf('month');
+				var fechaHasta = moment().set({'year': data.anyo, 'month': data.mes, 'date': 1}).endOf('month')
+				
+				$('#asistencias .modal-title').html("Asistencia de " + data.usuarioNombre + " en " + fechaDesde.format("MMMM") + " de " + data.anyo);
+				
+		    	$.obtener(data.accion, {
+		    		"id": data.usuarioId,
+		    		"fechaDesde": fechaDesde,
+		    		"fechaHasta": fechaHasta
+		    	}, function(res){
+		    		$('#asistencias table.detalle').reloadTable(res.resultados.asistencias);
+		    	});
+		    }).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    });
+			
+			$('#asistencias table.detalle').DataTable({
+				language: {
+					"emptyTable": "El monitor no tiene asistencia"
+				},
+    			columns: [
+    				{ data: "tarifa.descripcion", title: "Tarifa", className: 'text-center' },
+    				{ data: "escuela.descripcion", title: "Escuela", className: 'text-center' },
+    	            { data: function(row, type, val, meta){
+            			return moment(row.fecha).format('DD/MM/YYYY');
+            		}, title: "Fecha", className: 'text-nowrap text-center' },
+    	            { data: "horas", title: "Horas", className: 'text-center' },
+    	            { data: function(row, type, val, meta){
+            			return row.tarifa.importe;
+            		}, title: "Importe Tarifa", className: 'importe text-nowrap text-center' },
+    	            { data: function(row, type, val, meta){
+            			return row.horas * row.tarifa.importe;
+            		}, title: "Importe", className: 'importe text-nowrap text-center' },
+    	            { data: "observaciones", title: "Observaciones" }
+    	        ]
+//     	        "footerCallback": function ( row, data, start, end, display ) {
+//     	            total = this.api()
+// 		                .column(6)//numero de columna a sumar
+// 		                //.column(1, {page: 'current'})//para sumar solo la pagina actual
+// 		                .data()
+// 		                .reduce(function (a, b) {
+// 		                    return parseInt(a) + parseInt(b);
+// 		                }, 0 );
+    	            
+    	            
+//     	            $(this.api().column(6).footer()).html(total);
+//     	        }
+    		});
 		});
 	</script>
 </head>
@@ -241,9 +294,53 @@
 					</form>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-primary asistencias" data-accion="asistencias">Asistencias</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 					<button type="button" class="btn btn-primary" data-limpiar="#pago form">Limpiar</button>
 					<button type="button" class="btn btn-primary btn-fv-submit guardar">Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="asistencias" tabindex="-1" role="dialog" aria-labelledby="Asistencias" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Asistencias</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-info">
+						<div class="panel-body">
+							<table class="table table-hover table-striped table-bordered dataTable no-footer detalle">
+<!-- 								<tfoot> -->
+<!-- 									<tr> -->
+<!-- 										<th colspan="3" class="text-right">Total:</th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 										<th></th> -->
+<!-- 									</tr> -->
+<!-- 								</tfoot> -->
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

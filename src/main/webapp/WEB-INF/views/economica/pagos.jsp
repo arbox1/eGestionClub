@@ -55,18 +55,25 @@
 				<form:form action="buscar" cssClass="form-horizontal" method="post" modelAttribute="buscador">
 					<div class="row form-group">
 						<label for="tipo" class="col-sm-1 col-form-label">Usuario</label>
-						<div class="col-md-5">
+						<div class="col-md-3">
 							<form:select path="usuario.id" cssClass="form-control" >
 								<form:option value="" label="--Selecciona un usuario"/>
 								<form:options items="${usuarios}" itemValue="id" itemLabel="nombreCompleto"/>
 							</form:select>
 						</div>
 						<label for="fecha" class="col-sm-1 col-form-label">Mes</label>
-						<div class="col-md-5">
-							<form:select path="mes" cssClass="form-control" >
-								<form:option value="" label="--Selecciona un mes"/>
-								<form:options items="${meses}" itemValue="numero" itemLabel="descripcion"/>
-							</form:select>
+						<div class="col-md-3">
+							<form:input path="fechaDesde" cssClass="form-control datepicker" 
+								data-date-format="mm/dd/yyyy"
+								data-date-container='.buscador'
+								placeholder="dd/mm/aaaa" />
+						</div>
+						<label for="fecha" class="col-sm-1 col-form-label">Mes</label>
+						<div class="col-md-3">
+							<form:input path="fechaHasta" cssClass="form-control datepicker" 
+								data-date-format="mm/dd/yyyy"
+								data-date-container='.buscador'
+								placeholder="dd/mm/aaaa" />
 						</div>
 					</div>
 					<div class="row form-group">

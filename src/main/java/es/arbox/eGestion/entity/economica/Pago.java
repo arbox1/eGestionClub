@@ -12,17 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import es.arbox.eGestion.annotations.Auditoria;
 import es.arbox.eGestion.converter.StringDateConverter;
+import es.arbox.eGestion.entity.BaseEntidad;
 import es.arbox.eGestion.entity.config.Usuario;
 
 @Entity
 @Table(name = "pagos")
-public class Pago {
+public class Pago extends BaseEntidad {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,9 +59,6 @@ public class Pago {
 	@Auditoria("UPDATE")
 	protected Date fechaActualizacion;
 	
-	@Transient
-	protected Integer mes;
-
 	public Integer getId() {
 		return id;
 	}
@@ -100,14 +97,6 @@ public class Pago {
 
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
-	}
-	
-	public Integer getMes() {
-		return mes;
-	}
-
-	public void setMes(Integer mes) {
-		this.mes = mes;
 	}
 	
 	public String getStringFecha() {

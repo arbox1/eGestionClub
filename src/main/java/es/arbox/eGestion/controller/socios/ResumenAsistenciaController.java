@@ -1,5 +1,6 @@
 package es.arbox.eGestion.controller.socios;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,14 +14,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ResumenAsistenciaDTO;
+import es.arbox.eGestion.entity.actividades.Participante;
 import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.entity.economica.Pago;
 import es.arbox.eGestion.entity.economica.Tarifa;
@@ -90,7 +95,6 @@ public class ResumenAsistenciaController extends BaseController{
 		
 		return "/socios/resumenAsistencia";
     }
-	
 
 	
 	@PostMapping(value = "/guardar", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -109,4 +113,21 @@ public class ResumenAsistenciaController extends BaseController{
 		
         return result;
     }
+	
+	@PostMapping(value = "/asistencias", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public @ResponseBody String asistencias(@RequestBody AsistenciaMonitor asistencia) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		Usuario usuario = new Usuario();
+		usuario.setId(asistencia.getId());
+		asistencia.setId(null);
+		asistencia.setMonitor(usuario);
+		
+		List<AsistenciaMonitor> asistencias = asistenciaMonitorService.getAsistencias(asistencia);
+		
+		result.setResultado("asistencias", Participante.getListaMapa(asistencias));
+		
+		return asistenciaMonitorService.serializa(result);
+	}
 }

@@ -1,5 +1,7 @@
 package es.arbox.eGestion.dto;
 
+import java.sql.Date;
+
 import es.arbox.eGestion.entity.BaseEntidad;
 
 public class ValoresDTO extends BaseEntidad {
@@ -16,6 +18,10 @@ public class ValoresDTO extends BaseEntidad {
 	private String hiddenCaptcha;
 	
 	private String realCaptcha;
+	
+	private Date fechaDesde;
+	
+	private Date fechaHasta;
 	
 	public Integer getId() {
 		return id;
@@ -71,5 +77,21 @@ public class ValoresDTO extends BaseEntidad {
 
 	public void setRealCaptcha(String realCaptcha) {
 		this.realCaptcha = realCaptcha;
+	}
+
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
 	}
 }

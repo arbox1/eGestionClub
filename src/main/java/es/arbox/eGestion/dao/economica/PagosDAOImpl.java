@@ -32,17 +32,13 @@ public class PagosDAOImpl implements PagosDAO {
 		if(pago.getUsuario() != null && pago.getUsuario().getId() != null)
 			predicados.add(cb.equal(pagos.get("usuario").get("id"), pago.getUsuario().getId()));
 		
-		if(pago.getMes() != null) {
-			predicados.add(cb.equal(cb.function("month", Integer.class, pagos.get("fecha")), pago.getMes()));
+		if(pago.getFechaDesde() != null) {
+			predicados.add(cb.greaterThanOrEqualTo(pagos.get("fecha"), pago.getFechaDesde()));
 		}
-//		
-//		if(ingresosGastos.getFechaDesde() != null) {
-//			predicados.add(cb.greaterThanOrEqualTo(gastos.get("fecha"), ingresosGastos.getFechaDesde()));
-//		}
-//		
-//		if(ingresosGastos.getFechaHasta() != null) {
-//			predicados.add(cb.lessThanOrEqualTo(gastos.get("fecha"), ingresosGastos.getFechaHasta()));
-//		}
+		
+		if(pago.getFechaHasta() != null) {
+			predicados.add(cb.lessThanOrEqualTo(pagos.get("fecha"), pago.getFechaHasta()));
+		}
 		
 		q.where(predicados.toArray(new Predicate[0])).orderBy(cb.desc(pagos.get("fecha")));
     	

@@ -5,11 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Transient;
+
 public abstract class BaseEntidad {
+	
+	@Transient
+	private Date fechaDesde;
+	
+	@Transient
+	private Date fechaHasta;
 	
 	public static <T> Collection<Map<String, Object>> getListaMapa(Collection<T> datos){
 		List<Map<String, Object>> result = new ArrayList<>();
@@ -63,4 +72,20 @@ public abstract class BaseEntidad {
 	}
 	
 	public abstract Integer getId();
+
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
 }

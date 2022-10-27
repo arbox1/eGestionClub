@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -67,12 +66,6 @@ public class AsistenciaMonitor extends BaseEntidad {
 	@Auditoria("UPDATE")
 	protected Date fechaActualizacion;
 	
-	@Transient
-	protected Date fechaDesde;
-	
-	@Transient
-	protected Date fechaHasta;
-
 	public Integer getId() {
 		return id;
 	}
@@ -159,21 +152,5 @@ public class AsistenciaMonitor extends BaseEntidad {
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
-	}
-
-	public Date getFechaDesde() {
-		return fechaDesde;
-	}
-
-	public void setFechaDesde(Date fechaDesde) {
-		this.fechaDesde = fechaDesde;
-	}
-
-	public Date getFechaHasta() {
-		return fechaHasta;
-	}
-
-	public void setFechaHasta(Date fechaHasta) {
-		this.fechaHasta = fechaHasta;
 	}
 }
