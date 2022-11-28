@@ -39,8 +39,14 @@ public class Liga extends BaseEntidad{
 	@Column(name = "l_lugar")
 	protected String lugar;
 	
+	@Column(name = "l_grupos")
+	protected Integer grupos;
+	
 	@Column(name = "l_set")
 	protected Integer set;
+	
+	@Column(name = "l_ida_vuelta")
+	protected String idaVuelta;
 	
 	@Column(name = "l_puntos_partido_ganado")
 	protected Integer puntosPartidoGanado;
@@ -110,12 +116,28 @@ public class Liga extends BaseEntidad{
 		this.lugar = lugar;
 	}
 
+	public Integer getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(Integer grupos) {
+		this.grupos = grupos;
+	}
+
 	public Integer getSet() {
 		return set;
 	}
 
 	public void setSet(Integer set) {
 		this.set = set;
+	}
+
+	public String getIdaVuelta() {
+		return idaVuelta;
+	}
+
+	public void setIdaVuelta(String idaVuelta) {
+		this.idaVuelta = idaVuelta;
 	}
 
 	public Integer getPuntosPartidoGanado() {

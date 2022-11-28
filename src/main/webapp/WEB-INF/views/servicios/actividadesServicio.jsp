@@ -18,7 +18,6 @@
 		    		"id": $data.id
 		    	}, function(res){
 		    		var result = res.resultados.actividades;
-		    		console.log(res.resultados);
 		    		result = result.map((act) => {
 		    			  act.fechaFinPlazo = moment(act.fechaFinPlazo).format('DD/MM/YYYY HH:mm:ss');
 		    			  return act;
@@ -31,8 +30,6 @@
 								"context": context
 							}));
 					});
-		 		    
-		 		    
 		    	});
 		    }).on("click", ".inscribir", function(e){//Cargar
 		    	e.stopPropagation();

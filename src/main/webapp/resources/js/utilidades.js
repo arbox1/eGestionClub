@@ -25,7 +25,7 @@ var ventana=null;
 //	});
 	
 	$.fn.dataTable.defaults = $.extend({}, $.fn.dataTable.defaults, {
-		"paging":   true,
+		"paging":   false,
         "ordering": true,
         "info":     true,
         "language": {

@@ -1,0 +1,57 @@
+	<div class="panel panel-info" id="liga">
+		<div class="panel-body">
+			{{#each grupos}}
+				<div class="clasificacion">
+					<div class="row">
+						<div class="col-md-12 text-center font-weight-bold">
+							Clasificacion
+						</div>
+					</div>
+					<div class="panel panel-info">
+						<div class="panel-body">
+							<table class="table table-striped table-bordered table-hover extendida clasificacion" id="tablaClasificacion">
+								<thead>
+									<tr>
+										<th class="text-center">Pos.</th>
+										<th class="text-center">Equipo</th>
+										<th class="text-center">Puntos</th>
+										<th class="text-center">PJ</th>
+										<th class="text-center">PG</th>
+										<th class="text-center">PE</th>
+										<th class="text-center">PP</th>
+										<th class="text-center">PNP</th>
+										<th class="text-center">TF</th>
+										<th class="text-center">TC</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each grupos}}
+										<tr>
+											<td class="text-center">{{posicion}}</td>
+											<td class="">{{equipo}}</td>
+											<td class="text-center">{{puntos}}</td>
+											<td class="text-center">{{encuentrosJugados}}</td>
+											<td class="text-center">{{encuentrosGanados}}</td>
+											<td class="text-center">{{encuentrosEmpatados}}</td>
+											<td class="text-center">{{encuentrosPerdidos}}</td>
+											<td class="text-center">{{encuentrosNoPresentados}}</td>
+											<td class="text-center">{{tantosFavor}}</td>
+											<td class="text-center">{{tantosContra}}</td>
+											<td class="text-center text-nowrap">
+												<button type="button" class="btn btn-link resultadosEquipo"
+													data-accion="resultadosEquipo" data-id="{{idEquipo}}" data-titulo="Resultados de {{equipo}}">
+													<i class="fas fa-eye"></i>
+												</button>
+											</td>
+										</tr>
+									{{//each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				a
+			{{//each}}
+		</div>
+	</div>

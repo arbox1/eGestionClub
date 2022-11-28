@@ -48,6 +48,7 @@
 <script type="text/javascript" src="${context}resources/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="${context}resources/js/bootstrap-datepicker.es.min.js"></script>
 <script type="text/javascript" src="${context}resources/js/utilidades.js"></script>
+<script type="text/javascript" src="${context}resources/js/select.js"></script>
 <script type="text/javascript" src="${context}resources/js/handlebars.js"></script>
 <script type="text/javascript" src="${context}resources/js/autoNumeric.js"></script>
 <script type="text/javascript" src="${context}resources/js/utilDataTable.js"></script>

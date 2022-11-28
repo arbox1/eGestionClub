@@ -1,0 +1,37 @@
+<form action="guardar" class="form-horizontal validation" method="post" modelAttribute="resultado">
+	<div class="row resultado">
+		<div class="col-md-5 text-center">
+			<input type="checkbox" name="calendario.noPresentadoa" value="S" class="" {{#if calendario.noPresentadoa}}checked="checked"{{/if}}/> {{calendario.equipoa.descripcion}}
+		</div>
+		{{#each calendario.resultados}}
+			<div class="col-md-1 text-center">
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<input type="hidden" name="id" value="{{id}}" />
+						<input type="text" name="resultadoa" value="{{resultadoa}}" class="digits form-control" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1 text-center">
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<input type="text" name="resultadob" value="{{resultadob}}" class="digits form-control" />
+					</div>
+				</div>
+			</div>
+		{{/each}}
+		<div class="col-md-5 text-center">
+			{{calendario.equipob.descripcion}} <input type="checkbox" name="calendario.noPresentadob" value="S" class="" {{#if calendario.noPresentadob}}checked="checked"{{/if}} />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group row">
+				<label for="liga" class="col-sm-1 col-form-label">Comentario</label>
+				<div class="col-sm-11">
+					<input type="text" name="calendario.comentario" value="{{calendario.comentario}}" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

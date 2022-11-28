@@ -1,7 +1,6 @@
 package es.arbox.eGestion.entity.ligas;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,48 +13,45 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import es.arbox.eGestion.annotations.Auditoria;
-import es.arbox.eGestion.dto.PuestoDTO;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
-@Table(name = "grupo")
-public class Grupo extends BaseEntidad{
+@Table(name = "resultados_liga")
+public class Resultado extends BaseEntidad {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "g_id")
+	@Column(name = "rl_id")
 	protected Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name = "g_l_id")
-	protected Liga liga;
+	@JoinColumn(name = "rl_cl_id")
+	protected CalendarioLiga calendario;
 	
-	@Column(name = "g_descripcion")
-	protected String descripcion;
+	@Column(name = "rl_resultadoa")
+	protected Integer resultadoa;
 	
-	@Column(name = "g_u_creacion")
+	@Column(name = "rl_resultadob")
+	protected Integer resultadob;
+	
+	@Column(name = "rl_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
 	
-	@Column(name = "g_f_creacion")
+	@Column(name = "rl_f_creacion")
 	@Auditoria("INSERT")
 	protected Date fechaCreacion;
 	
-	@Column(name = "g_u_actu")
+	@Column(name = "rl_u_actu")
 	@Auditoria("UPDATE")
 	protected Integer idUsuarioActualizacion;
 	
-	@Column(name = "g_f_actu")
+	@Column(name = "rl_f_actu")
 	@Auditoria("UPDATE")
 	protected Date fechaActualizacion;
 	
 	@Transient
-	protected List<Jornada> jornadas;
-	
-	@Transient
-	protected List<Equipo> equipos;
-	
-	@Transient
-	protected List<PuestoDTO> puestos;
+	protected String clase;
 
 	public Integer getId() {
 		return id;
@@ -65,20 +61,28 @@ public class Grupo extends BaseEntidad{
 		this.id = id;
 	}
 
-	public Liga getLiga() {
-		return liga;
+	public CalendarioLiga getCalendario() {
+		return calendario;
 	}
 
-	public void setLiga(Liga liga) {
-		this.liga = liga;
+	public void setCalendario(CalendarioLiga calendario) {
+		this.calendario = calendario;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Integer getResultadoa() {
+		return resultadoa;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setResultadoa(Integer resultadoa) {
+		this.resultadoa = resultadoa;
+	}
+
+	public Integer getResultadob() {
+		return resultadob;
+	}
+
+	public void setResultadob(Integer resultadob) {
+		this.resultadob = resultadob;
 	}
 
 	public Integer getIdUsuarioCreacion() {
@@ -113,27 +117,11 @@ public class Grupo extends BaseEntidad{
 		this.fechaActualizacion = fechaActualizacion;
 	}
 
-	public List<Jornada> getJornadas() {
-		return jornadas;
+	public String getClase() {
+		return clase;
 	}
 
-	public void setJornadas(List<Jornada> jornadas) {
-		this.jornadas = jornadas;
-	}
-
-	public List<PuestoDTO> getPuestos() {
-		return puestos;
-	}
-
-	public void setPuestos(List<PuestoDTO> puestos) {
-		this.puestos = puestos;
-	}
-
-	public List<Equipo> getEquipos() {
-		return equipos;
-	}
-
-	public void setEquipos(List<Equipo> equipos) {
-		this.equipos = equipos;
+	public void setClase(String clase) {
+		this.clase = clase;
 	}
 }

@@ -1,0 +1,20 @@
+<div class="row jornada">
+	<div class="text-center col-md-1">Jornada</div>
+	<div class="text-center col-md-4">Local</div>
+	<div class="text-center col-md-1"></div>
+	<div class="text-center col-md-1"></div>
+	<div class="text-center col-md-1"></div>
+	<div class="text-center col-md-4">Visitante</div>
+</div>
+<div class="calendario">
+{{#each resultados}}
+	<div class="row resultado">
+		<div class="text-center col-md-1">{{calendario.jornada.numero}}</div>
+		<div class="col-md-4 {{#if calendario.noPresentadoa}}black{{/if}}">{{calendario.equipoa.descripcion}}</div>
+		<div class="text-center col-md-1 {{clase}}">{{resultadoa}}</div>
+		<div class="text-center col-md-1 {{clase}}">-</div>
+		<div class="text-center col-md-1 {{clase}}">{{resultadob}}</div>
+		<div class="col-md-4 {{#if calendario.noPresentadob}}black{{/if}}">{{calendario.equipob.descripcion}}</div>
+	</div>
+{{/each}}
+</div>

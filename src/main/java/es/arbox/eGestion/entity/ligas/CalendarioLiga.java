@@ -14,48 +14,56 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import es.arbox.eGestion.annotations.Auditoria;
-import es.arbox.eGestion.dto.PuestoDTO;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
-@Table(name = "grupo")
-public class Grupo extends BaseEntidad{
+@Table(name = "calendario_liga")
+public class CalendarioLiga extends BaseEntidad {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "g_id")
+	@Column(name = "cl_id")
 	protected Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name = "g_l_id")
-	protected Liga liga;
+	@JoinColumn(name = "cl_jl_id")
+	protected Jornada jornada;
 	
-	@Column(name = "g_descripcion")
-	protected String descripcion;
+	@ManyToOne
+	@JoinColumn(name = "cl_e_id_a")
+	protected Equipo equipoa;
 	
-	@Column(name = "g_u_creacion")
+	@ManyToOne
+	@JoinColumn(name = "cl_e_id_b")
+	protected Equipo equipob;
+	
+	@Column(name = "cl_no_presentadoa")
+	protected String noPresentadoa;
+	
+	@Column(name = "cl_no_presentadob")
+	protected String noPresentadob;
+	
+	@Column(name ="cl_comentario")
+	protected String comentario;
+	
+	@Column(name = "cl_u_creacion")
 	@Auditoria("INSERT")
 	protected Integer idUsuarioCreacion;
 	
-	@Column(name = "g_f_creacion")
+	@Column(name = "cl_f_creacion")
 	@Auditoria("INSERT")
 	protected Date fechaCreacion;
 	
-	@Column(name = "g_u_actu")
+	@Column(name = "cl_u_actu")
 	@Auditoria("UPDATE")
 	protected Integer idUsuarioActualizacion;
 	
-	@Column(name = "g_f_actu")
+	@Column(name = "cl_f_actu")
 	@Auditoria("UPDATE")
 	protected Date fechaActualizacion;
 	
 	@Transient
-	protected List<Jornada> jornadas;
-	
-	@Transient
-	protected List<Equipo> equipos;
-	
-	@Transient
-	protected List<PuestoDTO> puestos;
+	protected List<Resultado> resultados;
 
 	public Integer getId() {
 		return id;
@@ -65,20 +73,28 @@ public class Grupo extends BaseEntidad{
 		this.id = id;
 	}
 
-	public Liga getLiga() {
-		return liga;
+	public Jornada getJornada() {
+		return jornada;
 	}
 
-	public void setLiga(Liga liga) {
-		this.liga = liga;
+	public void setJornada(Jornada jornada) {
+		this.jornada = jornada;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Equipo getEquipoa() {
+		return equipoa;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setEquipoa(Equipo equipoa) {
+		this.equipoa = equipoa;
+	}
+
+	public Equipo getEquipob() {
+		return equipob;
+	}
+
+	public void setEquipob(Equipo equipob) {
+		this.equipob = equipob;
 	}
 
 	public Integer getIdUsuarioCreacion() {
@@ -113,27 +129,35 @@ public class Grupo extends BaseEntidad{
 		this.fechaActualizacion = fechaActualizacion;
 	}
 
-	public List<Jornada> getJornadas() {
-		return jornadas;
+	public List<Resultado> getResultados() {
+		return resultados;
 	}
 
-	public void setJornadas(List<Jornada> jornadas) {
-		this.jornadas = jornadas;
+	public void setResultados(List<Resultado> resultados) {
+		this.resultados = resultados;
 	}
 
-	public List<PuestoDTO> getPuestos() {
-		return puestos;
+	public String getNoPresentadoa() {
+		return noPresentadoa;
 	}
 
-	public void setPuestos(List<PuestoDTO> puestos) {
-		this.puestos = puestos;
+	public void setNoPresentadoa(String noPresentadoa) {
+		this.noPresentadoa = noPresentadoa;
 	}
 
-	public List<Equipo> getEquipos() {
-		return equipos;
+	public String getNoPresentadob() {
+		return noPresentadob;
 	}
 
-	public void setEquipos(List<Equipo> equipos) {
-		this.equipos = equipos;
+	public void setNoPresentadob(String noPresentadob) {
+		this.noPresentadob = noPresentadob;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
 	}
 }

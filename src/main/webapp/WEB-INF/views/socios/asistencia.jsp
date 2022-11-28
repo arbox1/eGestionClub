@@ -62,7 +62,6 @@
 			$("#editar").on("click", ".guardar", function(e){
 		    	e.stopPropagation();
 		    	var data = $(this).data();
-		    	console.log($('#editar form .horas').val().toString().replace('.', ','));
 		    	$('#editar form .horasHidden').val($('#editar form .horas').val().toString().replace('.', ','));
     			$('#editar form').enviar(data.accion, function (res){
     				$('.buscador form').submit();
