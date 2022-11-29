@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import es.arbox.eGestion.comparator.RandomEquipoComparator;
 import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
@@ -99,7 +100,9 @@ public class LigasController extends BaseController {
 				ligaService.eliminar(Jornada.class, jornada.getId());
 			}
 			grupo.setJornadas(new ArrayList<>());
-			grupo.setEquipos(ligaService.obtenerTodosFiltroOrden(Equipo.class, String.format(" grupo.id = %1$s ", grupo.getId()), "descripcion"));
+			List<Equipo> equipos = ligaService.obtenerTodosFiltroOrden(Equipo.class, String.format(" grupo.id = %1$s ", grupo.getId()), "descripcion");
+			equipos.sort(new RandomEquipoComparator());
+			grupo.setEquipos(equipos);
 		}
 		
 		List<Grupo> gruposResultado = calendarioGeneratorService.calendario(grupos);
@@ -120,6 +123,33 @@ public class LigasController extends BaseController {
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, "Calendario generado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@PostMapping(value = "/eliminarCalendario")
+    public @ResponseBody RespuestaAjax eliminarCalendario(@ModelAttribute Liga liga, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		List<Grupo> grupos = ligaService.getDatosLiga(liga);
+		
+		for(Grupo grupo : grupos) {
+			for(Jornada jornada : grupo.getJornadas()) {
+				for(CalendarioLiga calendario : jornada.getCalendarios()) {
+					for(Resultado resultado : calendario.getResultados()) {
+						ligaService.eliminar(Resultado.class, resultado.getId());
+					}
+					ligaService.eliminar(CalendarioLiga.class, calendario.getId());
+				}
+				ligaService.eliminar(Jornada.class, jornada.getId());
+			}
+		}
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Calendario eliminado correctamente.");
 		result.setMensajes(mensajes.getMensajes());
 		
         return result;

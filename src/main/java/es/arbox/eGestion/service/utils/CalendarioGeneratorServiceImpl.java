@@ -20,6 +20,7 @@ public class CalendarioGeneratorServiceImpl implements CalendarioGeneratorServic
 	
 	private int[] equipos;
 	private Integer[][] matriz1,matriz2;
+	private String[][] jornadas,jornadas2;
 	
 	//Num de jornadas = (N-1)*2, con N = num equipos. (N-1) es una vuelta.
 	
@@ -35,13 +36,15 @@ public class CalendarioGeneratorServiceImpl implements CalendarioGeneratorServic
 			int indice = 0;
 			//Asigno posiciones del array a los equipos
 			for(Equipo equipo : grupo.getEquipos()) {
-				mEquipos.put(indice, equipo);
-				equipos[indice] = indice;
+				mEquipos.put(indice+1, equipo);
+				equipos[indice] = indice+1;
 				indice++;
 			}
 			
 			matriz1 = new Integer[N-1][N/2];
 			matriz2 = new Integer[N-1][N/2];
+			jornadas = new String[N-1][N/2]; //primera vuelta
+			jornadas2 = new String[N-1][N/2]; //segunda vuelta
 			
 			//Relleno las matrices
 			/*   Matriz 1    	 Matriz 2			 
@@ -61,17 +64,23 @@ public class CalendarioGeneratorServiceImpl implements CalendarioGeneratorServic
 			 */
 			
 			int cont = 0;
-			int cont2 = N-3;
+			int cont2 = N-2;
 			
 			Map<Integer, Jornada> mJornadas = new HashMap<>();
 			for(int i=0;i<N-1;i++){
-				Jornada jornada = new Jornada();
-				jornada.setGrupo(grupo);
-				jornada.setNumero(i+1);
-				Map<Integer, CalendarioLiga> mCalendarios = new HashMap<>();
+				Jornada jornadaIda = new Jornada();
+				jornadaIda.setGrupo(grupo);
+				jornadaIda.setNumero(i+1);
+				Jornada jornadaVuelta = new Jornada();
+				jornadaVuelta.setGrupo(grupo);
+				jornadaVuelta.setNumero(N+i);
+				Map<Integer, CalendarioLiga> mCalendariosIda = new HashMap<>();
+				Map<Integer, CalendarioLiga> mCalendariosVuelta = new HashMap<>();
 				for(int j=0;j<N/2;j++){
-					CalendarioLiga calendario = new CalendarioLiga();
-					calendario.setJornada(jornada);
+					CalendarioLiga calendarioIda = new CalendarioLiga();
+					calendarioIda.setJornada(jornadaIda);
+					CalendarioLiga calendarioVuelta = new CalendarioLiga();
+					calendarioVuelta.setJornada(jornadaVuelta);
 					//matriz1
 					matriz1[i][j] = equipos[cont];
 					
@@ -79,64 +88,110 @@ public class CalendarioGeneratorServiceImpl implements CalendarioGeneratorServic
 					if(cont==(N-1)) cont=0;
 					
 					//matriz2
-					if(j==0) matriz2[i][j] = N-1;
+					if(j==0) matriz2[i][j] = N;
 					else {
 						matriz2[i][j] = equipos[cont2];
 						cont2--;
-						if(cont2==-1) cont2 = N-3;
+						if(cont2==-1) cont2 = N-2;
 					}
 					
 					//Elaboro la matriz final de enfrentamientos por jornada (primera vuelta)
 					if(j==0){
 						if(i%2==0) {
-							calendario.setEquipoa(mEquipos.get(matriz2[i][j]));
-							calendario.setEquipob(mEquipos.get(matriz1[i][j]));
+							jornadas[i][j] = matriz2[i][j] + "-" + matriz1[i][j] + " ";
+							calendarioIda.setEquipoa(mEquipos.get(matriz2[i][j]));
+							calendarioIda.setEquipob(mEquipos.get(matriz1[i][j]));
 						}
 						else {
-							calendario.setEquipoa(mEquipos.get(matriz1[i][j]));
-							calendario.setEquipob(mEquipos.get(matriz2[i][j]));
+							jornadas[i][j] = matriz1[i][j] + "-" + matriz2[i][j] + " ";
+							calendarioIda.setEquipoa(mEquipos.get(matriz1[i][j]));
+							calendarioIda.setEquipob(mEquipos.get(matriz2[i][j]));
 						}
 					}
 					else { 
-						calendario.setEquipoa(mEquipos.get(matriz1[i][j]));
-						calendario.setEquipob(mEquipos.get(matriz2[i][j]));
+						jornadas[i][j] = matriz1[i][j] + "-" + matriz2[i][j] + " ";
+						calendarioIda.setEquipoa(mEquipos.get(matriz1[i][j]));
+						calendarioIda.setEquipob(mEquipos.get(matriz2[i][j]));
 					}
 					
+					Resultado resultado = new Resultado();
+					resultado.setCalendario(calendarioIda);
+					List<Resultado> resultados = new ArrayList<>();
+					resultados.add(resultado);
+					calendarioIda.setResultados(resultados);
+					
+					mCalendariosIda.put(j, calendarioIda);
 					
 					//segunda vuelta - al reves que la primera
 					if("S".equals(grupo.getLiga().getIdaVuelta())) {
 						if(j==0){
 							if (i%2==0) {
-								calendario.setEquipoa(mEquipos.get(matriz1[i][j]));
-								calendario.setEquipob(mEquipos.get(matriz2[i][j]));
+								jornadas2[i][j] = matriz1[i][j] + "-" + matriz2[i][j] + " ";
+								calendarioVuelta.setEquipoa(mEquipos.get(matriz1[i][j]));
+								calendarioVuelta.setEquipob(mEquipos.get(matriz2[i][j]));
 							}
 							else {
-								calendario.setEquipoa(mEquipos.get(matriz2[i][j]));
-								calendario.setEquipob(mEquipos.get(matriz1[i][j]));
+								jornadas2[i][j] = matriz2[i][j] + "-" + matriz1[i][j] + " ";
+								calendarioVuelta.setEquipoa(mEquipos.get(matriz2[i][j]));
+								calendarioVuelta.setEquipob(mEquipos.get(matriz1[i][j]));
 							}
 						}
 						else {
-							calendario.setEquipoa(mEquipos.get(matriz2[i][j]));
-							calendario.setEquipob(mEquipos.get(matriz1[i][j]));
+							jornadas2[i][j] = matriz2[i][j] + "-" + matriz1[i][j] + " ";
+							calendarioVuelta.setEquipoa(mEquipos.get(matriz2[i][j]));
+							calendarioVuelta.setEquipob(mEquipos.get(matriz1[i][j]));
 						}
+						
+						Resultado resultadoVuelta = new Resultado();
+						resultadoVuelta.setCalendario(calendarioVuelta);
+						List<Resultado> resultadosVuelta = new ArrayList<>();
+						resultadosVuelta.add(resultadoVuelta);
+						calendarioVuelta.setResultados(resultadosVuelta);
+						
+						mCalendariosVuelta.put(j, calendarioVuelta);
+						
 					}
-					
-					Resultado resultado = new Resultado();
-					resultado.setCalendario(calendario);
-					List<Resultado> resultados = new ArrayList<>();
-					resultados.add(resultado);
-					calendario.setResultados(resultados);
-					
-					mCalendarios.put(j, calendario);
 				}
 				
 				List<CalendarioLiga> lCalendarios = new ArrayList<>();
-				for(Integer ii : mCalendarios.keySet()) {
-					lCalendarios.add(mCalendarios.get(ii));
+				for(Integer ii : mCalendariosIda.keySet()) {
+					lCalendarios.add(mCalendariosIda.get(ii));
 				}
-				jornada.setCalendarios(lCalendarios);
+				jornadaIda.setCalendarios(lCalendarios);
 				
-				mJornadas.put(i, jornada);
+				mJornadas.put(i, jornadaIda);
+				
+				lCalendarios = new ArrayList<>();
+				if("S".equals(grupo.getLiga().getIdaVuelta())) {
+					lCalendarios = new ArrayList<>();
+					for(Integer ii : mCalendariosVuelta.keySet()) {
+						lCalendarios.add(mCalendariosVuelta.get(ii));
+					}
+					jornadaVuelta.setCalendarios(lCalendarios);
+					
+					mJornadas.put(N+i, jornadaVuelta);
+				}
+			}
+			
+			//Solo para mostrarlo por consola
+
+			int jorn = 1;
+			for(int i=0;i<N-1;i++){
+				for(int j=0;j<N/2;j++){
+					System.out.print("J"+jorn+" "+jornadas[i][j]); 
+					if(j==(N/2)-1) System.out.println();
+				}
+				jorn++;
+			}
+			
+			System.out.println();
+			jorn = N;
+			for(int i=0;i<N-1;i++){
+				for(int j=0;j<N/2;j++){
+					System.out.print("J"+jorn+" "+jornadas2[i][j]);
+					if(j==(N/2)-1) System.out.println();
+				}
+				jorn++;
 			}
 			
 			List<Jornada> lJornadas = new ArrayList<>();

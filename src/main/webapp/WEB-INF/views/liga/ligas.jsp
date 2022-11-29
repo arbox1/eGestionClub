@@ -64,6 +64,19 @@
 		    			});
 		    		}
 		    	});
+		    }).on("click", ".eliminarCalendario", function(e){//Eliminar
+		    	e.stopPropagation();
+		    	var data = $(this).data();
+
+		    	bootbox.confirm("¿Está seguro que desea eliminar el calendario de la liga?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax(data.accion, {
+		    				"id": data.id
+		    			}, function (res){
+		    				$('.buscador form').submit();
+		    			});
+		    		}
+		    	});
 		    });
 			
 			$('#editar').on("reload", function(e, data){
@@ -364,6 +377,10 @@
 										<td class="text-center">0</td>
 										<td class="text-center text-nowrap">
 											<c:if test="${liga.estado.id == 1}">
+												<button type="button" class="btn btn-link eliminarCalendario" title="Eliminar calendario"
+													data-accion="eliminarCalendario" data-id="${liga.id}">
+													<i class="fas fa-eraser"></i>
+												</button>
 												<button type="button" class="btn btn-link calendario" title="Generar calendario"
 													data-accion="calendario" data-id="${liga.id}">
 													<i class="fas fa-retweet"></i>
