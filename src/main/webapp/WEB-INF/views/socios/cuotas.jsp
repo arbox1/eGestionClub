@@ -118,7 +118,10 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<th colspan="14"></th>
+									<th></th>
+									<c:forEach var="entry" items="${totalesMeses}">
+										<th><c:out value="${entry.value}"/></th>
+									</c:forEach>
 									<th class="text-right text-nowrap"><fmt:formatNumber pattern="#,##0.00" value="${totales}"/> &euro;</th>
 								</tr>
 							</tfoot>

@@ -57,7 +57,7 @@ public class CuotasController extends BaseController{
 		model.addAttribute("sociosCurso", new ArrayList<SociosCurso>());
 		model.addAttribute("escuelas", cuotaService.obtenerTodosOrden(Escuela.class, "descripcion"));
 		model.addAttribute("categorias", cuotaService.obtenerTodosOrden(Categoria.class, "id"));
-		model.addAttribute("cursos", cuotaService.obtenerTodosOrden(Curso.class, "id"));
+		model.addAttribute("cursos", cuotaService.obtenerTodosOrden(Curso.class, "id desc"));
 		model.addAttribute("meses", sociosCursoService.getMeses());
 		model.addAttribute("buscador", socio == null ? new SociosCurso() : socio);
 		return "/socios/cuotas";
@@ -66,7 +66,13 @@ public class CuotasController extends BaseController{
 	@PostMapping("/buscar")
     public String buscar(Model model, @ModelAttribute("buscador") SociosCurso socio, RedirectAttributes redirectAttrs) {
 		
+		List<Meses> meses = sociosCursoService.getMeses();
 		Double totales = (double) 0;
+		Map<Integer, Double> totalesMeses = new HashMap<>();
+		for(Meses mes : meses) {
+			totalesMeses.put(mes.getOrden(), 0.0);
+		}
+		
 		List<SociosCurso> sociosCurso = sociosCursoService.obtenerSociosFiltro(
 				null,
 				socio.getCurso().getId()/*Curso*/,
@@ -77,17 +83,21 @@ public class CuotasController extends BaseController{
 			Map<Integer, Cuota> mCuotas = new HashMap<Integer, Cuota>();
 			for(Cuota cuota : cuotaService.getCuotas(socioCurso.getId())) {
 				mCuotas.put(cuota.getMes().getId(), cuota);
-				totales+= cuota.getImporte() != null ? cuota.getImporte() : 0;
+				Double importe = cuota.getImporte() != null ? cuota.getImporte() : 0;
+				Double totalMes = totalesMeses.get(cuota.getMes().getOrden()) != null ? totalesMeses.get(cuota.getMes().getOrden()) : 0;
+				totalesMeses.put(cuota.getMes().getOrden(), importe + totalMes);
+				totales+= importe;
 			}
 			socioCurso.setCuotas(mCuotas);
 		}
 		
 		model.addAttribute("totales", totales);
+		model.addAttribute("totalesMeses", totalesMeses);
 		model.addAttribute("sociosCurso", sociosCurso);
-		model.addAttribute("meses", sociosCursoService.getMeses());
+		model.addAttribute("cursos", cuotaService.obtenerTodosOrden(Curso.class, "id desc"));
 		model.addAttribute("escuelas", cuotaService.obtenerTodosOrden(Escuela.class, "descripcion"));
 		model.addAttribute("categorias", cuotaService.obtenerTodosOrden(Categoria.class, "id"));
-		model.addAttribute("cursos", cuotaService.obtenerTodosOrden(Curso.class, "id"));
+		model.addAttribute("meses", meses);
 		model.addAttribute("buscador", socio);
 		
 		return "/socios/cuotas";

@@ -129,93 +129,104 @@
 			<c:when test="${grupos.size() > 0}">
 				<div class="panel panel-info" id="liga">
 					<div class="panel-body">
-						<c:forEach items="${grupos}" var="grupo">
-							<div class="clasificacion">
-								<div class="row">
-									<div class="col-md-12 text-center font-weight-bold">
-										Clasificacion
-									</div>
-								</div>
-								<div class="panel panel-info">
-									<div class="panel-body">
-										<table class="table table-striped table-bordered table-hover extendida clasificacion" id="tablaClasificacion">
-											<thead>
-												<tr>
-													<th class="text-center">Pos.</th>
-													<th class="text-center">Equipo</th>
-													<th class="text-center">Puntos</th>
-													<th class="text-center">PJ</th>
-													<th class="text-center">PG</th>
-													<th class="text-center">PE</th>
-													<th class="text-center">PP</th>
-													<th class="text-center">PNP</th>
-													<th class="text-center">TF</th>
-													<th class="text-center">TC</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach var="puesto" items="${grupo.puestos}" varStatus="pos">
-													<tr>
-														<td class="text-center">${pos.index+1}</td>
-														<td class="">${puesto.equipo}</td>
-														<td class="text-center">${puesto.puntos}</td>
-														<td class="text-center">${puesto.encuentrosJugados}</td>
-														<td class="text-center">${puesto.encuentrosGanados}</td>
-														<td class="text-center">${puesto.encuentrosEmpatados}</td>
-														<td class="text-center">${puesto.encuentrosPerdidos}</td>
-														<td class="text-center">${puesto.encuentrosNoPresentados}</td>
-														<td class="text-center">${puesto.tantosFavor}</td>
-														<td class="text-center">${puesto.tantosContra}</td>
-														<td class="text-center text-nowrap">
-															<button type="button" class="btn btn-link resultadosEquipo"
-																data-accion="resultadosEquipo" data-id="${puesto.idEquipo}" data-titulo="Resultados de ${puesto.equipo}">
-																<i class="fas fa-eye"></i>
-															</button>
-														</td>
-													</tr>
-												</c:forEach>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							<div class="partidos">
-								<div class="row">
-									<div class="col-md-12 text-center font-weight-bold">
-										${grupo.descripcion}
-									</div>
-								</div>
-								<c:forEach items="${grupo.jornadas}" var="jornada" varStatus="j">
-									<div class="row">
-										<div class="col-md-12 jornada">
-											Jornada ${jornada.numero}
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<c:forEach items="${grupos}" var="grupo" varStatus="i">
+								<li class="nav-item">
+									<a class="nav-link <c:if test='${i.index == 0}'>active</c:if>" id="home-tab" data-toggle="tab" href="#grupo_${grupo.id}" role="tab" aria-controls="${grupo.descripcion}" aria-selected="true">${grupo.descripcion}</a>
+								</li>
+							</c:forEach>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<c:forEach items="${grupos}" var="grupo" varStatus="i">
+								<div class="tab-pane fade show <c:if test='${i.index == 0}'>active</c:if>" id="grupo_${grupo.id}" role="tabpanel" aria-labelledby="home-tab">
+									<div class="clasificacion">
+										<div class="row">
+											<div class="col-md-12 text-center font-weight-bold">
+												Clasificacion
+											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12 calendario">
-											<c:forEach items="${jornada.calendarios}" var="calendario" varStatus="i">
-												<div class="row resultado" data-calendario="${calendario.id}" data-accion="cargar">
-													<div class="col-md-4 resultado" data-calendario="${calendario.id}" data-accion="cargar">
-														${calendario.equipoa.descripcion}
-													</div>
-													<div class="col-md-4 text-center resultado" data-calendario="${calendario.id}" data-accion="cargar">
-														<c:forEach items="${calendario.resultados}" var="resultado">
-															<div class="resultado_${resultado.id}">
-																${resultado.resultadoa} - ${resultado.resultadob}
-															</div>
+										<div class="panel panel-info">
+											<div class="panel-body">
+												<table class="table table-striped table-bordered table-hover extendida clasificacion" id="tablaClasificacion">
+													<thead>
+														<tr>
+															<th class="text-center">Pos.</th>
+															<th class="text-center">Equipo</th>
+															<th class="text-center">Puntos</th>
+															<th class="text-center">PJ</th>
+															<th class="text-center">PG</th>
+															<th class="text-center">PE</th>
+															<th class="text-center">PP</th>
+															<th class="text-center">PNP</th>
+															<th class="text-center">TF</th>
+															<th class="text-center">TC</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														<c:forEach var="puesto" items="${grupo.puestos}" varStatus="pos">
+															<tr>
+																<td class="text-center">${pos.index+1}</td>
+																<td class="">${puesto.equipo}</td>
+																<td class="text-center">${puesto.puntos}</td>
+																<td class="text-center">${puesto.encuentrosJugados}</td>
+																<td class="text-center">${puesto.encuentrosGanados}</td>
+																<td class="text-center">${puesto.encuentrosEmpatados}</td>
+																<td class="text-center">${puesto.encuentrosPerdidos}</td>
+																<td class="text-center">${puesto.encuentrosNoPresentados}</td>
+																<td class="text-center">${puesto.tantosFavor}</td>
+																<td class="text-center">${puesto.tantosContra}</td>
+																<td class="text-center text-nowrap">
+																	<button type="button" class="btn btn-link resultadosEquipo"
+																		data-accion="resultadosEquipo" data-id="${puesto.idEquipo}" data-titulo="Resultados de ${puesto.equipo}">
+																		<i class="fas fa-eye"></i>
+																	</button>
+																</td>
+															</tr>
 														</c:forEach>
-													</div>
-													<div class="col-md-4 resultado" data-calendario="${calendario.id}" data-accion="cargar">
-														${calendario.equipob.descripcion}
-													</div>
-												</div>
-											</c:forEach>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
-								</c:forEach>
-							</div>
-						</c:forEach>
+									<div class="partidos">
+										<div class="row">
+											<div class="col-md-12 text-center font-weight-bold">
+												Calendario
+											</div>
+										</div>
+										<c:forEach items="${grupo.jornadas}" var="jornada" varStatus="j">
+											<div class="row">
+												<div class="col-md-12 jornada">
+													Jornada ${jornada.numero}
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12 calendario">
+													<c:forEach items="${jornada.calendarios}" var="calendario" varStatus="i">
+														<div class="row resultado" data-calendario="${calendario.id}" data-accion="cargar">
+															<div class="col-md-4 resultado" data-calendario="${calendario.id}" data-accion="cargar">
+																${calendario.equipoa.descripcion}
+															</div>
+															<div class="col-md-4 text-center resultado" data-calendario="${calendario.id}" data-accion="cargar">
+																<c:forEach items="${calendario.resultados}" var="resultado">
+																	<div class="resultado_${resultado.id}">
+																		${resultado.resultadoa} - ${resultado.resultadob}
+																	</div>
+																</c:forEach>
+															</div>
+															<div class="col-md-4 resultado" data-calendario="${calendario.id}" data-accion="cargar">
+																${calendario.equipob.descripcion}
+															</div>
+														</div>
+													</c:forEach>
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
 				</div>
 			</c:when>
