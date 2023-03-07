@@ -11,6 +11,7 @@
 <head><%@ page isELIgnored="false"%>
 
 <title>eGestion: <sitemesh:write property='title' /></title>
+<meta name="p:domain_verify" content="a425594b89bc3747a4d53d036f5545ea"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
 	var context = '${context}';
