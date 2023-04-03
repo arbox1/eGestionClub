@@ -1,5 +1,7 @@
 package es.arbox.eGestion.controller.mantenimiento;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,5 +19,10 @@ public class EscuelasController extends MantenimientoController<Escuela>{
 	@Override
 	public Escuela getDato() {
 		return new Escuela();
+	}
+
+	@Override
+	public Map<String, Object> addModel() {
+		return null;
 	}
 }

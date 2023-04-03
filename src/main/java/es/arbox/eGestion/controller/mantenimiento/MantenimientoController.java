@@ -1,6 +1,7 @@
 package es.arbox.eGestion.controller.mantenimiento;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -27,6 +28,14 @@ public abstract class MantenimientoController<T extends BaseEntidad> extends Bas
 		model.addAttribute("valor", new ValoresDTO());
 		model.addAttribute("dato", getDato());
 		model.addAttribute("datos", menuService.obtenerTodos(getDato().getClass()));
+		
+		Map<String, Object> mapa = addModel();
+		if (mapa != null) {
+			for(String key : mapa.keySet()) {
+				model.addAttribute(key, mapa.get(key));
+			}
+		}
+	
 		return getReturn();//"/mantenimiento/cursos";
 	}
 	
@@ -65,6 +74,8 @@ public abstract class MantenimientoController<T extends BaseEntidad> extends Bas
 		
 		return String.format("redirect:%1$s/", getReturn());
     }
+	
+	public abstract Map<String, Object> addModel();
 	
 	public abstract String getReturn();
 	

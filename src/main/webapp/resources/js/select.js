@@ -37,7 +37,6 @@
 						} else {
 							element.html('<option value="">'+settings.blank+'</option>');
 						}
-						console.log(data.resultados.datos);
 						if(data) {
 							$.each(data.resultados.datos, function(index, elem) {
 								var label = (typeof settings.label==='function') ? settings.label(elem, index) : elem[settings.label];

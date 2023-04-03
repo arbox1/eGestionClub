@@ -1,6 +1,9 @@
 package es.arbox.eGestion.dto;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import es.arbox.eGestion.entity.BaseEntidad;
 
@@ -22,6 +25,8 @@ public class ValoresDTO extends BaseEntidad {
 	private Date fechaDesde;
 	
 	private Date fechaHasta;
+	
+	private DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public Integer getId() {
 		return id;
@@ -93,5 +98,13 @@ public class ValoresDTO extends BaseEntidad {
 
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+	
+	public void setFechaDesdeString(String fechaDesde) throws ParseException {
+		this.fechaDesde = format.parse(fechaDesde);
+	}
+	
+	public String getFechaDesdeString() {
+		return format.format(this.fechaDesde);
 	}
 }
