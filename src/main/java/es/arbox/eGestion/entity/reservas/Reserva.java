@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import es.arbox.eGestion.converter.StringDateConverter;
 import es.arbox.eGestion.entity.BaseEntidad;
 
 @Entity
@@ -28,6 +31,7 @@ public class Reserva extends BaseEntidad {
 	protected Pista pista;
 
 	@Column(name = "r_fecha")
+	@JsonDeserialize(using = StringDateConverter.class, as = Date.class)
 	protected Date fecha;
 	
 	@Column(name = "r_email")
@@ -38,6 +42,12 @@ public class Reserva extends BaseEntidad {
 	
 	@Column(name = "r_telefono")
 	protected String telefono;
+	
+	@Column(name = "r_hash")
+	protected String hash;
+	
+	@Column(name = "r_fecha_creacion")
+	protected Date fechaCreacion;
 	
 	@Transient	
 	protected Integer hora;
@@ -96,5 +106,21 @@ public class Reserva extends BaseEntidad {
 
 	public void setHora(Integer hora) {
 		this.hora = hora;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 }

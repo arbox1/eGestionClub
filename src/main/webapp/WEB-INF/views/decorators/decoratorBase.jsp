@@ -27,7 +27,12 @@
 <link rel="stylesheet" href="${context}resources/css/animate.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/eGestion.css" type="text/css"/>
 <link rel="stylesheet" href="${context}resources/css/datatable.css" type="text/css"/>
+<link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
+<script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.js"></script>
 <script src="https://kit.fontawesome.com/16db5e2eb8.js" crossorigin="anonymous"></script>
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

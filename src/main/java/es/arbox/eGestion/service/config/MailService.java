@@ -1,5 +1,7 @@
 package es.arbox.eGestion.service.config;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import es.arbox.eGestion.entity.actividades.DocumentoActividad;
 import es.arbox.eGestion.entity.actividades.Participante;
+import es.arbox.eGestion.entity.reservas.Reserva;
 import es.arbox.eGestion.entity.socios.Cuota;
 import es.arbox.eGestion.entity.socios.Meses;
 import es.arbox.eGestion.entity.socios.SociosCurso;
@@ -313,5 +316,35 @@ public class MailService {
         }
         
         mailSender.send(mimeMessage);
+	}
+	
+	public void correoNuevaReserva(Reserva reserva, String password) {
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(reserva.getEmail()); 
+        
+    	message.setCc("atleticoalbaida@gmail.com");
+        
+        message.setSubject(String.format("[NUEVA RESERVA] %1$s ha realizado la reserva para la pista %2$s, fecha %3$s", 
+        		reserva.getNombre(), 
+        		reserva.getPista().getDescripcion(),
+        		format.format(reserva.getFecha()))); 
+        message.setText(String.format("Nueva reserva:\n\n"
+        		+ "- Pista: %1$s \n"
+        		+ "- Nombre: %2$s \n"
+        		+ "- Email: %3$s \n"
+        		+ "- Teléfono: %4$s \n"
+        		+ "- Fecha: %5$s \n\n"
+        		+ "Si desea anular la reserva pulse el siguiente enlace prueba. %6$s ",
+        		reserva.getPista().getId(),
+        		reserva.getNombre(),
+        		reserva.getEmail(),
+        		reserva.getTelefono(),
+        		format.format(reserva.getFecha()),
+        		password
+        		));
+        
+        mailSender.send(message);
 	}
 }

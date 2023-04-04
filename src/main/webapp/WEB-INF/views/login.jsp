@@ -32,7 +32,7 @@
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>
 	<div class="container">
-<!-- 		<div class="taggbox" style="width:100%;height:100%" data-widget-id="124516" data-tags="false" ></div><script src="https://widget.taggbox.com/embed-lite.min.js" type="text/javascript"></script> -->
+		<div class="taggbox" style="width:100%;height:100%" data-widget-id="124516" data-tags="false" ></div><script src="https://widget.taggbox.com/embed-lite.min.js" type="text/javascript"></script>
 	</div>
 </body>
 </html>

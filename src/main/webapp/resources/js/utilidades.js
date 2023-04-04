@@ -511,6 +511,7 @@ var ventana=null;
 	    					$.loading('Enviando...');
 	    				
 	    				var data2 = new FormData($form[0]);
+	    				console.log(data2);
 	    				data2.append('iehack', "&#9760;");
 	    				
 						if(1==1){
@@ -690,7 +691,7 @@ var ventana=null;
 			language: 'es',
 			autoclose: true
 		});
-		$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+		
 		$('.datepicker').datepicker({
             format: "dd/mm/yyyy",
             todayBtn: "linked",
