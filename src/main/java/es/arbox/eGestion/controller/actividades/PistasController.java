@@ -1,6 +1,7 @@
 package es.arbox.eGestion.controller.actividades;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.actividades.Participante;
+import es.arbox.eGestion.entity.reservas.BloqueoReserva;
 import es.arbox.eGestion.entity.reservas.HorarioPista;
 import es.arbox.eGestion.entity.reservas.Pista;
 import es.arbox.eGestion.entity.reservas.Sede;
@@ -165,6 +167,77 @@ public class PistasController extends MantenimientoController<Pista>{
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, "Pista copiada correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+		return result;
+    }
+	
+	@PostMapping(value = "/cargarBloqueos", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public @ResponseBody String cargarBloqueos(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+
+		BloqueoReserva br = new BloqueoReserva();
+		Pista pista = new Pista();
+		pista.setId(valores.getId());
+		br.setPista(pista);
+		List<BloqueoReserva> bloqueos = reservaService.getBloqueos(br);
+		
+		result.setResultado("bloqueos", Participante.getListaMapa(bloqueos));
+		
+		return reservaService.serializa(result);
+	}
+	
+	@PostMapping(value = "/eliminarBloqueo")
+    public @ResponseBody RespuestaAjax eliminarBloqueo(@ModelAttribute BloqueoReserva bloqueo, RedirectAttributes redirectAttrs) throws JsonProcessingException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		reservaService.eliminar(BloqueoReserva.class, bloqueo.getId());;
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, "Bloqueo eliminado correctamente.");
+		result.setMensajes(mensajes.getMensajes());
+		
+        return result;
+    }
+	
+	@ResponseBody
+	@PostMapping(value = "/editarBloqueo", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public String editarBloqueo(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+
+		RespuestaAjax result = new RespuestaAjax();
+		
+		BloqueoReserva bloqueo = reservaService.obtenerPorId(BloqueoReserva.class, valores.getId());
+		
+		result.setResultado("bloqueo", bloqueo.getMapa());
+		
+		return reservaService.serializa(result);
+	}
+	
+	@PostMapping(value = "/guardarBloqueo")
+    public @ResponseBody RespuestaAjax guardarBlqoueo(@ModelAttribute BloqueoReserva bloqueo, RedirectAttributes redirectAttrs) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		String opcion = bloqueo.getId() != null ? "actualizado" : "inscrito";
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(bloqueo.getFechaDesde());
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), bloqueo.getHoraDesde(), bloqueo.getMinutoDesde(), 0);
+		bloqueo.setFechaDesde(c.getTime());
+		
+		c = Calendar.getInstance();
+		c.setTime(bloqueo.getFechaHasta());
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), bloqueo.getHoraHasta(), bloqueo.getMinutoHasta(), 0);
+		bloqueo.setFechaHasta(c.getTime());
+		
+		reservaService.guardar(bloqueo, getUsuarioLogado());
+		
+		result.setResultado("ok", "S");
+		
+		Mensajes mensajes = new Mensajes();
+		mensajes.mensaje(TiposMensaje.success, String.format("Bloqueo %1$s correctamente.", opcion));
 		result.setMensajes(mensajes.getMensajes());
 		
 		return result;

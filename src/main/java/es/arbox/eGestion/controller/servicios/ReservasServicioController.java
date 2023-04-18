@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import cn.apiclub.captcha.Captcha;
 import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
@@ -28,10 +27,10 @@ import es.arbox.eGestion.entity.ligas.Grupo;
 import es.arbox.eGestion.entity.reservas.HorarioPista;
 import es.arbox.eGestion.entity.reservas.Pista;
 import es.arbox.eGestion.entity.reservas.Reserva;
+import es.arbox.eGestion.entity.reservas.UsuarioReserva;
 import es.arbox.eGestion.enums.TiposMensaje;
 import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.service.reservas.ReservaService;
-import es.arbox.eGestion.utils.CaptchaUtil;
 import es.arbox.eGestion.utils.PasswordGenerator;
 import es.arbox.eGestion.utils.Utilidades;
 
@@ -82,6 +81,12 @@ public class ReservasServicioController extends BaseController {
 
 		reservaService.guardar(reserva);
 		
+		UsuarioReserva usuarioReserva = reservaService.getUsuarioReserva(reserva.getEmail());
+		usuarioReserva.setEmail(reserva.getEmail());
+		usuarioReserva.setNombre(reserva.getNombre());
+		usuarioReserva.setTelefono(reserva.getTelefono());
+		reservaService.guardar(usuarioReserva);
+		
 		mailService.correoNuevaReserva(reservaService.obtenerPorId(Reserva.class, reserva.getId()), password);
 		
 		result.setResultado("ok", "S");
@@ -115,24 +120,5 @@ public class ReservasServicioController extends BaseController {
 		result.setResultado("datos", Grupo.getListaMapa(horarios));
 		
 		return reservaService.serializa(result);
-	}
-	
-	@PostMapping(value = "/captcha", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody String captcha(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
-		RespuestaAjax result = new RespuestaAjax();
-		
-		getCaptcha(valores);
-		result.setResultado("valor", valores.getMapa());
-		result.setResultado("ok", "S");
-		
-		return reservaService.serializa(result);
-    }
-	
-	private void getCaptcha(ValoresDTO valores) {
-		Captcha captcha = CaptchaUtil.createCaptcha(240, 70);
-		valores.setHiddenCaptcha(captcha.getAnswer());
-		valores.setCaptcha(""); // value entered by the User
-		valores.setRealCaptcha("data:realCaptcha/jpg;base64," + CaptchaUtil.encodeCaptcha(captcha));
-		
 	}
 }

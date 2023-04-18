@@ -40,6 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.apiclub.captcha.Captcha;
 import es.arbox.eGestion.config.PdfReportView;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
@@ -48,6 +49,7 @@ import es.arbox.eGestion.entity.config.MenuEstructura;
 import es.arbox.eGestion.entity.config.Usuario;
 import es.arbox.eGestion.entity.documento.Documento;
 import es.arbox.eGestion.service.config.MenuService;
+import es.arbox.eGestion.utils.CaptchaUtil;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -151,6 +153,25 @@ public class BaseController {
       header.add("Content-type", documento.getMime());
       
       return new HttpEntity<byte[]>(documento.getFichero(), header);
+	}
+	
+	@PostMapping(value = "/captcha", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody String captcha(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+		RespuestaAjax result = new RespuestaAjax();
+		
+		getCaptcha(valores);
+		result.setResultado("valor", valores.getMapa());
+		result.setResultado("ok", "S");
+		
+		return menuService.serializa(result);
+    }
+	
+	protected void getCaptcha(ValoresDTO valores) {
+		Captcha captcha = CaptchaUtil.createCaptcha(240, 70);
+		valores.setHiddenCaptcha(captcha.getAnswer());
+		valores.setCaptcha(""); // value entered by the User
+		valores.setRealCaptcha("data:realCaptcha/jpg;base64," + CaptchaUtil.encodeCaptcha(captcha));
+		
 	}
 	
 	public ModelAndView getInforme(String informe, String nombre, List<?> datos, Map<String, Object> mapa) throws IOException {

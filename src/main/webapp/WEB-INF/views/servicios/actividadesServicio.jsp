@@ -3,6 +3,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	
 	<title>Actividades</title>
 	
@@ -275,6 +277,11 @@
 		});
 	</script>
 	
+	<style type="text/css">
+		.actividades button {
+			margin-bottom: 10px;
+		}
+	</style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/inc/mensajes.jsp"%>

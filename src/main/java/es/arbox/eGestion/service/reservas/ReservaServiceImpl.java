@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.arbox.eGestion.dao.reservas.ReservaDAO;
+import es.arbox.eGestion.entity.reservas.BloqueoReserva;
 import es.arbox.eGestion.entity.reservas.HorarioPista;
 import es.arbox.eGestion.entity.reservas.Reserva;
+import es.arbox.eGestion.entity.reservas.UsuarioReserva;
 import es.arbox.eGestion.service.config.GenericServiceImpl;
 
 @Service
@@ -22,7 +24,19 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 	
 	@Autowired
 	private ReservaDAO reservaDAO;
+	
+	@Override
+	@Transactional
+	public UsuarioReserva getUsuarioReserva(String email) {
+		return reservaDAO.getUsuarioReserva(email);
+	}
 
+	@Override
+	@Transactional
+	public List<BloqueoReserva> getBloqueos(BloqueoReserva br) {
+		return reservaDAO.getBloqueos(br);
+	}
+	
 	@Override
 	@Transactional
 	public List<HorarioPista> getHorarios(HorarioPista h){
@@ -64,6 +78,18 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 					}
 				}
 			}
+			
+			
+			HorarioPista horarioDisponible = new HorarioPista();
+			horarioDisponible.setPista(h.getPista());
+			c = Calendar.getInstance();
+			c.setTime(h.getFechaDesde());
+			c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), horario.getHora(), horario.getMinuto(), 0);
+			horarioDisponible.setFechaDesde(c.getTime());
+			
+			if(reservaDAO.fechaBloqueada(horarioDisponible)) {
+				horariosEliminar.add(horario);
+			};
 		}
 		
 		horariosPista.removeAll(horariosEliminar);

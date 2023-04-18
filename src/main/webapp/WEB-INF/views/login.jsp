@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <title>Acceso eGestion</title>
 
 	<script src="https://apis.google.com/js/platform.js"></script>

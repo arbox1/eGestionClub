@@ -19,6 +19,12 @@
 		    	
 		    	$('#horarios').trigger("reload", data).mostrar();
 		    	
+		    }).on("click", ".bloqueos", function(e){
+		    	e.stopPropagation();
+		    	var data = $(this).data();
+		    	
+		    	$('#bloqueos').trigger("reload", data).mostrar();
+		    	
 		    }).on('click', '.eliminar', function(e){
 				e.stopPropagation();
 				var data = $(this).data();
@@ -166,6 +172,81 @@
 				var data = $(this).data();
 				$('#copiarPista').enviar(data.accion, function(res){
 					$('#copiarPista').modal("hide");
+				});
+			});
+			
+			$('#bloqueos').on("reload", function(e, data){
+				e.stopPropagation();
+				$('#bloqueos').data("id", data.id);
+				$('#bloqueo .pista_id').val(data.id);
+		    	$.obtener(data.accion, {
+		    		"id": data.id
+		    	}, function(res){
+		    		$('#bloqueos table.detalle').reloadTable(res.resultados.bloqueos);
+		    	});
+		    }).on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#bloqueos table.detalle').DataTable({
+				language: {
+					"emptyTable": "La pista no tiene bloqueos horario"
+				},
+    			columns: [
+    	            { data: function(row, type, val, meta){
+            			return moment(row.fechaDesde).format('DD/MM/YYYY HH:mm');
+            		}, title: "Fecha Desde", className: 'text-nowrap text-center' },
+            		{ data: function(row, type, val, meta){
+            			return moment(row.fechaHasta).format('DD/MM/YYYY HH:mm');
+            		}, title: "Fecha Hasta", className: 'text-nowrap text-center' },
+	   	            { data: function ( row, type, val, meta ) {
+							var $buttons = $('<p>').addBoton({
+								tipo: 'link',
+								icono: 'trash',
+								clases: 'eliminarBloqueo',
+								title: 'Eliminar',
+								data: {
+									id: row.id,
+									accion: 'eliminarBloqueo'
+								}
+							});
+							return $.toHtml($buttons);
+						}, 
+						title: "",
+						className: 'text-nowrap text-center'
+					}
+    	        ]
+    		});
+			
+			$('#bloqueos').on('click', '.eliminarBloqueo', function(e){
+				e.stopPropagation();
+				var $data = $(this).data();
+				
+				bootbox.confirm("¿Está seguro que desea eliminar el bloqueo?", function(result){
+		    		if(result){
+		    			$.enviarFormAjax($data.accion, {
+		    				"id": $data.id
+		    			}, function(res){
+		    				$('#bloqueos').trigger("reload", {id: $('#bloqueos').data("id"), accion: "cargarBloqueos"});
+		    			});
+		    		}
+		    	});
+			});
+			
+			$('#bloqueo').on('hide.bs.modal', function(e){
+		    	e.stopPropagation();
+		    	
+		    	$(this, ".id").val("");
+		    	$(this, "form").limpiar();
+		    });
+			
+			$('#bloqueo').on('click', '.guardar', function(e){
+				e.stopPropagation();
+				var data = $(this).data();
+				$('#bloqueo').enviar(data.accion, function(res){
+					$('#bloqueos').trigger("reload", {id: $('#bloqueos').data("id"), accion: "cargarBloqueos"});
+					$('#bloqueo').modal("hide");
 				});
 			});
 		});
@@ -500,6 +581,188 @@
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 					<button type="button" class="btn btn-primary" data-limpiar="#editar form">Limpiar</button>
 					<button type="button" class="btn btn-primary guardar" data-accion="copiarPista">Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="bloqueos" tabindex="-1" role="dialog" aria-labelledby="Bloqueos" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Bloqueos</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="panel panel-info">
+						<div class="panel-body">
+							<table class="table table-hover table-striped table-bordered dataTable no-footer detalle">
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bloqueo">Nuevo Bloqueo</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="bloqueo" tabindex="-1" role="dialog" aria-labelledby="Editar Bloqueo" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Bloqueo</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="guardarBloqueo" class="form-horizontal validation" method="post" modelAttribute="nuevo" enctype="multipart/form-data" acceptcharset="UTF-8">
+						<input type="hidden" name="id" class="id no-limpiar"/>
+						<input type="hidden" name="pista.id" class="pista_id no-limpiar"/>
+						
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="fechaDesde" class="col-sm-2 col-form-label">Desde</label>
+									<div class="col-sm-10">
+										<input type="text" name="fechaDesde" 
+												data-date-format="mm/dd/yyyy"
+												data-date-container='#reserva'
+												class="form-control datepicker fecha_corta fechaDesde required" 
+												placeholder="dd/mm/aaaa"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="horaDesde" class="col-sm-3 col-form-label">Hora</label>
+									<div class="col-sm-9">
+										<select name="horaDesde" class="form-control horaDesde required">
+											<option value=""></option>
+											<option value="1">01</option>
+											<option value="2">02</option>
+											<option value="3">03</option>
+											<option value="4">04</option>
+											<option value="5">05</option>
+											<option value="6">06</option>
+											<option value="7">07</option>
+											<option value="8">08</option>
+											<option value="9">09</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="minutoDesde" class="col-sm-3 col-form-label">Minuto</label>
+									<div class="col-sm-9">
+										<select name="minutoDesde" class="form-control minutoDesde required">
+											<option value=""></option>
+											<option value="0">00</option>
+											<option value="15">15</option>
+											<option value="30">30</option>
+											<option value="45">45</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="fechaHasta" class="col-sm-2 col-form-label">Hasta</label>
+									<div class="col-sm-10">
+										<input type="text" name="fechaHasta" 
+												data-date-format="mm/dd/yyyy"
+												data-date-container='#reserva'
+												class="form-control datepicker fecha_corta fechaHasta required" 
+												placeholder="dd/mm/aaaa"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="horaHasta" class="col-sm-3 col-form-label">Hora</label>
+									<div class="col-sm-9">
+										<select name="horaHasta" class="form-control horaHasta required">
+											<option value=""></option>
+											<option value="1">01</option>
+											<option value="2">02</option>
+											<option value="3">03</option>
+											<option value="4">04</option>
+											<option value="5">05</option>
+											<option value="6">06</option>
+											<option value="7">07</option>
+											<option value="8">08</option>
+											<option value="9">09</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group row">
+									<label for="minutoHasta" class="col-sm-3 col-form-label">Minuto</label>
+									<div class="col-sm-9">
+										<select name="minutoHasta" class="form-control minutoHasta required">
+											<option value=""></option>
+											<option value="0">00</option>
+											<option value="15">15</option>
+											<option value="30">30</option>
+											<option value="45">45</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" data-limpiar="#editar form">Limpiar</button>
+					<button type="button" class="btn btn-primary guardar" data-accion="guardarBloqueo">Guardar</button>
 				</div>
 			</div>
 		</div>

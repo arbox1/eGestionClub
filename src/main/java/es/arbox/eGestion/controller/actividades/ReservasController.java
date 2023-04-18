@@ -3,6 +3,8 @@ package es.arbox.eGestion.controller.actividades;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +28,13 @@ import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
 import es.arbox.eGestion.dto.ValoresDTO;
 import es.arbox.eGestion.entity.ligas.Grupo;
+import es.arbox.eGestion.entity.reservas.BloqueoReserva;
 import es.arbox.eGestion.entity.reservas.HorarioPista;
 import es.arbox.eGestion.entity.reservas.Pista;
 import es.arbox.eGestion.entity.reservas.Reserva;
+import es.arbox.eGestion.entity.reservas.UsuarioReserva;
 import es.arbox.eGestion.enums.TiposMensaje;
+import es.arbox.eGestion.service.config.MailService;
 import es.arbox.eGestion.service.reservas.ReservaService;
 import es.arbox.eGestion.utils.PasswordGenerator;
 import es.arbox.eGestion.utils.Utilidades;
@@ -40,6 +45,9 @@ public class ReservasController extends BaseController {
 	
 	@Autowired
 	private ReservaService reservaService;
+	
+	@Autowired
+	private MailService mailService;
 
 	@GetMapping("/")
 	public String inicio(Model model) {
@@ -53,14 +61,28 @@ public class ReservasController extends BaseController {
 	@PostMapping(value = "/eliminar")
     public @ResponseBody RespuestaAjax eliminar(@ModelAttribute Reserva reserva, RedirectAttributes redirectAttrs) throws JsonProcessingException {
 		RespuestaAjax result = new RespuestaAjax();
-		
-		reservaService.eliminar(reserva.getClass(), reserva.getId());
-		
-		result.setResultado("ok", "S");
-		
 		Mensajes mensajes = new Mensajes();
-		mensajes.mensaje(TiposMensaje.success, "Reserva eliminada correctamente.");
-		result.setMensajes(mensajes.getMensajes());
+		
+		reserva = reservaService.obtenerPorId(reserva.getClass(), reserva.getId());
+		
+		LocalDateTime fechaReserva = LocalDateTime.ofInstant(reserva.getFecha().toInstant(),
+                ZoneId.systemDefault());
+		
+		LocalDateTime fechaActual = LocalDateTime.now().minusHours(2);
+		
+		if(fechaActual.isBefore(fechaReserva)) {
+			reservaService.eliminar(reserva.getClass(), reserva.getId());
+			
+			mailService.correoAnularReserva(reserva);
+			
+			result.setResultado("ok", "S");
+			mensajes.mensaje(TiposMensaje.success, String.format("Reserva anulada correctamente."));
+			result.setMensajes(mensajes.getMensajes());
+		} else {
+			result.setResultado("ok", "N");
+			mensajes.mensaje(TiposMensaje.danger, String.format("La reserva no puede ser anulada ya que ha pasado el tiempo máximo de anulación."));
+			result.setMensajes(mensajes.getMensajes());
+		}
 		
         return result;
     }
@@ -85,6 +107,15 @@ public class ReservasController extends BaseController {
 		reserva.setHash(Utilidades.getMd5(password));
 
 		reservaService.guardar(reserva);
+		
+		UsuarioReserva usuarioReserva = reservaService.getUsuarioReserva(reserva.getEmail());
+		usuarioReserva.setEmail(reserva.getEmail());
+		usuarioReserva.setNombre(reserva.getNombre());
+		usuarioReserva.setTelefono(reserva.getTelefono());
+		reservaService.guardar(usuarioReserva);
+		
+		reserva = reservaService.obtenerPorId(reserva.getClass(), reserva.getId());
+		mailService.correoNuevaReserva(reserva, password);
 		
 		Mensajes mensajes = new Mensajes();
 		mensajes.mensaje(TiposMensaje.success, String.format("Reserva %1$s correctamente.", msg));
@@ -131,6 +162,21 @@ public class ReservasController extends BaseController {
 		
 		List<Reserva> reservas = reservaService.getReservas(reserva);
 		
+		BloqueoReserva br = new BloqueoReserva();
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(reserva.getFechaDesde());
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 1, 0, 0);
+		br.setFechaDesde(c.getTime());
+		
+		c = Calendar.getInstance();
+		c.setTime(reserva.getFechaHasta());
+		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 23, 59, 0);
+		br.setFechaHasta(c.getTime());
+		
+		List<BloqueoReserva> bloqueos = reservaService.getBloqueos(br);
+		
+		result.setResultado("bloqueos", bloqueos);
 		result.setResultado("reservas", reservas);
 		
 		return reservaService.serializa(result);

@@ -336,13 +336,42 @@ public class MailService {
         		+ "- Email: %3$s \n"
         		+ "- Teléfono: %4$s \n"
         		+ "- Fecha: %5$s \n\n"
-        		+ "Si desea anular la reserva pulse el siguiente enlace prueba. %6$s ",
-        		reserva.getPista().getId(),
+        		+ "Si desea anular la reserva pulse el siguiente enlace prueba. https://atleticoalbaida.com/eGestion/servicios/anularReservaServicio/?hash=%6$s",
+        		reserva.getPista().getDescripcion(),
         		reserva.getNombre(),
         		reserva.getEmail(),
         		reserva.getTelefono(),
         		format.format(reserva.getFecha()),
         		password
+        		));
+        
+        mailSender.send(message);
+	}
+	
+	public void correoAnularReserva(Reserva reserva) {
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("atleticoalbaida@gmail.com");
+        message.setTo(reserva.getEmail()); 
+        
+    	message.setCc("atleticoalbaida@gmail.com");
+        
+        message.setSubject(String.format("[ANULAR RESERVA] %1$s ha anulado la reserva para la pista %2$s, fecha %3$s", 
+        		reserva.getNombre(), 
+        		reserva.getPista().getDescripcion(),
+        		format.format(reserva.getFecha()))); 
+        message.setText(String.format("Reserva:\n\n"
+        		+ "- Pista: %1$s \n"
+        		+ "- Nombre: %2$s \n"
+        		+ "- Email: %3$s \n"
+        		+ "- Teléfono: %4$s \n"
+        		+ "- Fecha: %5$s \n\n"
+        		+ "Muchas gracias",
+        		reserva.getPista().getId(),
+        		reserva.getNombre(),
+        		reserva.getEmail(),
+        		reserva.getTelefono(),
+        		format.format(reserva.getFecha())
         		));
         
         mailSender.send(message);

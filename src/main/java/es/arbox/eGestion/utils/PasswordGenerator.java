@@ -9,7 +9,7 @@ public class PasswordGenerator {
  
 	public static String ESPECIALES = "ñÑ";
 	
-	public static String CARACTERES = ".-,+-<>=";
+	public static String CARACTERES = ".-,-<>";
  
 	//
 	public static String getPinNumber() {

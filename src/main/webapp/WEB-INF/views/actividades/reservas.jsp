@@ -4,6 +4,8 @@
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
 <title>Reservas</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 	<script type="text/javascript">
 		var dia = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -79,7 +81,7 @@
 			$('#calendarMio').on('click', '.toastui-calendar-event-time', function(e) {
 				var data = $(this).data();
 				
-				if (data) {
+				if (data && data.eventId > 0) {
 					$('#reserva').trigger('reload', data).mostrar();
 				}
 			});
@@ -136,6 +138,24 @@
 							    end: fechaFin,
 							    body: value.nombre,
 							    backgroundColor: value.pista.color
+							  }
+						]);
+	    			});
+		    		
+		    		$.each(res.resultados.bloqueos, function( index, value ) {
+		    			let fechaInicio = moment(value.fechaDesde);
+		    			let fechaFin = moment(value.fechaHasta);
+		    			calendar.createEvents([
+							  {
+							    id: -1*value.id,
+							    calendarId: '1',
+							    title: value.pista.descripcion,
+							    category: 'time',
+							    dueDateClass: '',
+							    start: fechaInicio,
+							    end: fechaFin,
+							    body: 'Bloqueo',
+							    backgroundColor: '#FA6C6C'
 							  }
 						]);
 	    			});
@@ -211,7 +231,7 @@
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reserva">Nueva Reserva</button>
 			<button type="button" class="btn btn-link refrescar" title="Refrescar"><i class="fas fa-sync"></i></button>
 			<button type="button" class="btn btn-link changeView" data-valor="week" title="Semanal"><i class="fas fa-calendar-week"></i></button>
-			<button type="button" class="btn btn-link changeView" data-valor="month" title="Mensual"><i class="fas fa-calendar-alt"></i></button>
+			<button type="button" class="btn btn-link changeView" data-valor="day" title="Diario"><i class="fas fa-calendar-alt"></i></button>
 		</div>
 		<div class="col-md-4 text-center">
 			<button type="button" class="btn btn-link offset" data-valor="-1" title="Anterior"><i class="fas fa-angle-double-left"></i></button>
@@ -276,21 +296,21 @@
 						<div class="form-group row">
 							<label for="nombre" class="col-sm-2 col-form-label">Nombre:</label>
 							<div class="col-sm-10">
-								<input type="text" name="nombre" class="form-control nombre"/>
+								<input type="text" name="nombre" class="form-control nombre required"/>
 							</div>
 						</div>
 						
 						<div class="form-group row">
 							<label for="email" class="col-sm-2 col-form-label">Email:</label>
 							<div class="col-sm-10">
-								<input type="text" name="email" class="form-control email" placeholder="ejemplo@host.com"/>
+								<input type="text" name="email" class="form-control email required" placeholder="ejemplo@host.com"/>
 							</div>
 						</div>
 						
 						<div class="form-group row">
 							<label for="telefono" class="col-sm-2 col-form-label">Teléfono:</label>
 							<div class="col-sm-10">
-								<input type="text" name="telefono" class="form-control telefono"/>
+								<input type="text" name="telefono" class="form-control telefono required"/>
 							</div>
 						</div>
 					</form>

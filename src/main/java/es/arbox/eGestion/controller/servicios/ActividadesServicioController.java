@@ -21,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cn.apiclub.captcha.Captcha;
 import es.arbox.eGestion.controller.BaseController;
 import es.arbox.eGestion.dto.Mensajes;
 import es.arbox.eGestion.dto.RespuestaAjax;
@@ -42,7 +41,6 @@ import es.arbox.eGestion.service.actividades.ActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoActividadService;
 import es.arbox.eGestion.service.actividades.DocumentoParticipanteService;
 import es.arbox.eGestion.service.config.MailService;
-import es.arbox.eGestion.utils.CaptchaUtil;
 import es.arbox.eGestion.utils.PasswordGenerator;
 import es.arbox.eGestion.utils.Utilidades;
 
@@ -157,17 +155,6 @@ public class ActividadesServicioController extends BaseController {
 		result.setMensajes(mensajes.getMensajes());
 		
 		return result;
-    }
-	
-	@PostMapping(value = "/captcha", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody String captcha(@RequestBody ValoresDTO valores) throws JsonProcessingException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
-		RespuestaAjax result = new RespuestaAjax();
-		
-		getCaptcha(valores);
-		result.setResultado("valor", valores.getMapa());
-		result.setResultado("ok", "S");
-		
-		return actividadService.serializa(result);
     }
 	
 	@PostMapping(value = "/consultar")
@@ -408,11 +395,11 @@ public class ActividadesServicioController extends BaseController {
         return result;
     }
 	
-	private void getCaptcha(ValoresDTO valores) {
-		Captcha captcha = CaptchaUtil.createCaptcha(240, 70);
-		valores.setHiddenCaptcha(captcha.getAnswer());
-		valores.setCaptcha(""); // value entered by the User
-		valores.setRealCaptcha("data:realCaptcha/jpg;base64," + CaptchaUtil.encodeCaptcha(captcha));
-		
-	}
+//	private void getCaptcha(ValoresDTO valores) {
+//		Captcha captcha = CaptchaUtil.createCaptcha(240, 70);
+//		valores.setHiddenCaptcha(captcha.getAnswer());
+//		valores.setCaptcha(""); // value entered by the User
+//		valores.setRealCaptcha("data:realCaptcha/jpg;base64," + CaptchaUtil.encodeCaptcha(captcha));
+//		
+//	}
 }

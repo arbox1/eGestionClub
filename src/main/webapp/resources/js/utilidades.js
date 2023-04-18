@@ -308,7 +308,7 @@ var ventana=null;
     		            valor = moment(valor).format('DD/MM/YYYY');
     		        } else if($(this).hasClass('fecha_corta_span')) {
     		            valor = moment(+valor).format('DD/MM/YYYY');
-    		        } else if($(this).hasClass('fecha_larga')) {
+    		        }else if($(this).hasClass('fecha_larga')) {
     		            valor = valor.substring(0,19);
     		        } else if($(this).hasClass('hora_larga')) {
     		        	valor = valor.substring(11,19);
@@ -511,7 +511,6 @@ var ventana=null;
 	    					$.loading('Enviando...');
 	    				
 	    				var data2 = new FormData($form[0]);
-	    				console.log(data2);
 	    				data2.append('iehack', "&#9760;");
 	    				
 						if(1==1){
