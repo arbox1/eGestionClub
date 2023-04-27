@@ -79,7 +79,7 @@ public class AnularReservaServicioController extends BaseController {
 			if(fechaActual.isBefore(fechaReserva)) {
 				reservaService.eliminar(r.getClass(), r.getId());
 				
-				mailService.correoAnularReserva(reserva);
+				mailService.correoAnularReserva(r);
 				
 				result.setResultado("ok", "S");
 				mensajes.mensaje(TiposMensaje.success, String.format("Reserva anulada correctamente."));

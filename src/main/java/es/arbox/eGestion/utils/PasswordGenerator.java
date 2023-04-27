@@ -23,6 +23,10 @@ public class PasswordGenerator {
 	public static String getPassword(int length) {
 		return getPassword(NUMEROS + MAYUSCULAS + MINUSCULAS+CARACTERES, length);
 	}
+	
+	public static String getPasswordSinCaracteres(int length) {
+		return getPassword(NUMEROS + MAYUSCULAS + MINUSCULAS, length);
+	}
  
 	public static String getPassword(String key, int length) {
 		String pswd = "";

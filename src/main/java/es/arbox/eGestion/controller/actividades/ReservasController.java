@@ -103,7 +103,7 @@ public class ReservasController extends BaseController {
 		if(reserva.getId() == null)
 			reserva.setFechaCreacion(new Date());
 		
-		String password = PasswordGenerator.getPassword(15);
+		String password = PasswordGenerator.getPasswordSinCaracteres(15);
 		reserva.setHash(Utilidades.getMd5(password));
 
 		reservaService.guardar(reserva);

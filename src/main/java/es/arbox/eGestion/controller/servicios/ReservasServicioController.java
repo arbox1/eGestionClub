@@ -74,7 +74,7 @@ public class ReservasServicioController extends BaseController {
 		c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), horario.getHora(), horario.getMinuto(), 0);
 		reserva.setFecha(c.getTime());
 		
-		String password = PasswordGenerator.getPassword(15);
+		String password = PasswordGenerator.getPasswordSinCaracteres(15);
 		reserva.setHash(Utilidades.getMd5(password));
 		
 		reserva.setFechaCreacion(new Date());

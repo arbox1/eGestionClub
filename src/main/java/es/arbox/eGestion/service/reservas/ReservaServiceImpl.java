@@ -2,6 +2,8 @@ package es.arbox.eGestion.service.reservas;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +48,15 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 	@Override
 	@Transactional
 	public List<HorarioPista> getHorariosDisponibles(HorarioPista h) {
+		
+		LocalDateTime fechaMaxima = LocalDateTime.now().plusDays(15);
+		
+		LocalDateTime fechaReserva = LocalDateTime.ofInstant(h.getFechaDesde().toInstant(),
+                ZoneId.systemDefault());
+		
+		if(fechaReserva.isAfter(fechaMaxima)) {
+			return new ArrayList<>();
+		}
 		
 		DateFormat horaFormat = new SimpleDateFormat("HH");
 		DateFormat minutoFormat = new SimpleDateFormat("mm");
