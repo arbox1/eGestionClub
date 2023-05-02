@@ -3,8 +3,6 @@ package es.arbox.eGestion.controller.actividades;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -65,24 +63,13 @@ public class ReservasController extends BaseController {
 		
 		reserva = reservaService.obtenerPorId(reserva.getClass(), reserva.getId());
 		
-		LocalDateTime fechaReserva = LocalDateTime.ofInstant(reserva.getFecha().toInstant(),
-                ZoneId.systemDefault());
+		reservaService.eliminar(reserva.getClass(), reserva.getId());
 		
-		LocalDateTime fechaActual = LocalDateTime.now().minusHours(2);
+		mailService.correoAnularReserva(reserva);
 		
-		if(fechaActual.isBefore(fechaReserva)) {
-			reservaService.eliminar(reserva.getClass(), reserva.getId());
-			
-			mailService.correoAnularReserva(reserva);
-			
-			result.setResultado("ok", "S");
-			mensajes.mensaje(TiposMensaje.success, String.format("Reserva anulada correctamente."));
-			result.setMensajes(mensajes.getMensajes());
-		} else {
-			result.setResultado("ok", "N");
-			mensajes.mensaje(TiposMensaje.danger, String.format("La reserva no puede ser anulada ya que ha pasado el tiempo máximo de anulación."));
-			result.setMensajes(mensajes.getMensajes());
-		}
+		result.setResultado("ok", "S");
+		mensajes.mensaje(TiposMensaje.success, String.format("Reserva anulada correctamente."));
+		result.setMensajes(mensajes.getMensajes());
 		
         return result;
     }
@@ -138,6 +125,7 @@ public class ReservasController extends BaseController {
 		h.setDia(c.get(Calendar.DAY_OF_WEEK)-1);
 		h.setFechaDesde(valores.getFechaDesde());
 		h.setFechaHasta(valores.getFechaDesde());
+		h.setHora(0);
 		
 		List<HorarioPista> horarios = reservaService.getHorariosDisponibles(h);
 		

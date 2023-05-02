@@ -73,7 +73,7 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 	        c.set(Calendar.SECOND, 0);
 	        c.set(Calendar.MINUTE, horario.getMinuto());
 	        c.set(Calendar.HOUR, horario.getHora());
-	        c.add(Calendar.HOUR, -2);
+	        c.add(Calendar.HOUR, -1 * h.getHora());
 			if(fechaActual.after(c.getTime())) {
 				horariosEliminar.add(horario);
 			} else {

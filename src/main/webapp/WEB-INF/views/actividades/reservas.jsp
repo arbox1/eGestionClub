@@ -16,6 +16,7 @@
 				defaultView: 'week',
 				useFormPopup: false,
 				useDetailPopup: false,
+				isReadOnly: true,
 				week: {
 					startDayOfWeek: 1,
 					dayNames: dia,
@@ -141,7 +142,7 @@
 							  }
 						]);
 	    			});
-		    		
+
 		    		$.each(res.resultados.bloqueos, function( index, value ) {
 		    			let fechaInicio = moment(value.fechaDesde);
 		    			let fechaFin = moment(value.fechaHasta);

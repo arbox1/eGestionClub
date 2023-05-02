@@ -111,6 +111,8 @@ public class ReservasServicioController extends BaseController {
 		h.setFechaDesde(valores.getFechaDesde());
 		h.setFechaHasta(valores.getFechaDesde());
 		
+		h.setHora(2);
+		
 		List<HorarioPista> horarios = reservaService.getHorariosDisponibles(h);
 		
 		for(HorarioPista horario : horarios) {
