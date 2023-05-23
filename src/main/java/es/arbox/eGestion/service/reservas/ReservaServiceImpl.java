@@ -48,6 +48,8 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 	@Override
 	@Transactional
 	public List<HorarioPista> getHorariosDisponibles(HorarioPista h) {
+		Integer desfase = -1*h.getHora();
+		h.setHora(null);
 		
 		LocalDateTime fechaMaxima = LocalDateTime.now().plusDays(15);
 		
@@ -73,7 +75,7 @@ public class ReservaServiceImpl extends GenericServiceImpl implements ReservaSer
 	        c.set(Calendar.SECOND, 0);
 	        c.set(Calendar.MINUTE, horario.getMinuto());
 	        c.set(Calendar.HOUR, horario.getHora());
-	        c.add(Calendar.HOUR, -1 * h.getHora());
+	        c.add(Calendar.HOUR, desfase);
 			if(fechaActual.after(c.getTime())) {
 				horariosEliminar.add(horario);
 			} else {

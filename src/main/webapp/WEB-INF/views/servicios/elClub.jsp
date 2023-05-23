@@ -285,14 +285,59 @@
 						</div>
 					</div>
 					<div class="card">
+						<div class="card-header" id="headingTwo">
+							<h5 class="mb-0">
+								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseTwo">
+									Patrocinadores
+								</button>
+							</h5>
+						</div>
+						<div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+							<div class="card-body">
+								<div class="row">
+									<c:forEach items="${patrocinadores}" var="patrocinador">
+										<div class="col-md-4">
+											<div class="row">
+												<div class="col-md-12 text-center">
+													<img src='data:${patrocinador.mime};base64,${patrocinador.imagen}' alt="Logo" class="foto" size="112" height="128"/>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12 text-center cargo">
+													${patrocinador.descripcion}
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12 text-center">
+													<c:if test="${patrocinador.email != null && patrocinador.email != ''}">
+														<a href="mailto:${patrocinador.email}"><i class="fas fa-solid fa-envelope"></i></a>
+													</c:if>
+													<c:if test="${patrocinador.facebook != null && patrocinador.facebook != ''}">
+														<a href="${patrocinador.facebook}" target="_blank" ><i class="fa fa-brands fa-facebook"></i></a>
+													</c:if>
+													<c:if test="${patrocinador.instagram != null && patrocinador.instagram != ''}">
+														<a href="${patrocinador.instagram}" target="_blank" ><i class="fa fa-brands fa-instagram"></i></a>
+													</c:if>
+													<c:if test="${patrocinador.twitter != null && patrocinador.twitter != ''}">
+														<a href="${patrocinador.twitter}" target="_blank" ><i class="fa fa-brands fa-twitter"></i></a>
+													</c:if>
+												</div>
+											</div>
+										</div>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
 						<div class="card-header" id="headingFive">
 							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseFive">
 									Instalaciones
 								</button>
 							</h5>
 						</div>
-						<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+						<div id="collapseSix" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
 							<div class="card-body">
 								Instalaciones
 							</div>
@@ -301,12 +346,12 @@
 					<div class="card">
 						<div class="card-header" id="headingSix">
 							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSix">
 									Contacto
 								</button>
 							</h5>
 						</div>
-						<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+						<div id="collapseSeven" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
 							<div class="card-body">
 								<div class="row">
 									<div class="col-md-7">

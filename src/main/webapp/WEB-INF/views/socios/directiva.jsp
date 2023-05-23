@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><%@ page isELIgnored="false"%>
-<title>Tarifas</title>
+<title>Directiva</title>
 	
 	<script type="text/javascript">
 		$( document ).ready(function() {
